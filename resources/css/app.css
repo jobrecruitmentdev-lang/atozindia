@@ -1,0 +1,40 @@
+@import 'tailwindcss';
+
+@source '../../vendor/laravel/framework/src/Illuminate/Pagination/resources/views/*.blade.php';
+@source '../../storage/framework/views/*.php';
+@source '../**/*.blade.php';
+@source '../**/*.js';
+
+@theme {
+    --font-sans: 'Plus Jakarta Sans', system-ui, -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+    
+    --color-brand-black: #111110;
+    --color-brand-charcoal: #1a1917;
+    --color-surface-card: #ffffff;
+    --color-surface-muted: #f8f9fa;
+    --color-border-subtle: #e5e7eb;
+    --color-border-focus: #111110;
+    --color-text-primary: #111827;
+    --color-text-secondary: #4b5563;
+    --color-text-tertiary: #9ca3af;
+}
+
+[x-cloak] {
+    display: none !important;
+}
+
+/* Custom Scrollbar for Luxury Aesthetic */
+::-webkit-scrollbar {
+    width: 6px;
+    height: 6px;
+}
+::-webkit-scrollbar-track {
+    background: #f8f9fa;
+}
+::-webkit-scrollbar-thumb {
+    background: #d1d5db;
+    border-radius: 9999px;
+}
+::-webkit-scrollbar-thumb:hover {
+    background: #9ca3af;
+}
