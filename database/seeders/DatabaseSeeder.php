@@ -14,6 +14,7 @@ class DatabaseSeeder extends Seeder
             StoreSettingsSeeder::class,
             CatalogSeeder::class,
             ComprehensiveCategorySeeder::class,
+            MarketplaceCatalogSeeder::class,
         ]);
     }
 }

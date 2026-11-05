@@ -431,6 +431,18 @@ class ComprehensiveCategorySeeder extends Seeder
 
             // 3. Smart Category Mapping for existing 21 Products
             $this->mapExistingProductsToNewCategories();
+
+            // 4. Retire old legacy categories so exactly 18 Departments are active at root
+            Category::whereIn('slug', [
+                'audio-acoustics',
+                'wearables',
+                'workspace-architecture',
+                'optics-cameras',
+                'power-mobility',
+                'smart-living',
+                'wireless-headphones',
+                'true-wireless-earbuds',
+            ])->update(['is_active' => false]);
         });
     }
 

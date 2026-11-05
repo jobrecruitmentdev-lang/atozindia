@@ -16,6 +16,7 @@ use App\Http\Controllers\Auth\CustomerAuthController;
 use App\Http\Controllers\CartController;
 use App\Http\Controllers\CheckoutController;
 use App\Http\Controllers\Customer\AccountController;
+use App\Http\Controllers\DepartmentController;
 use App\Http\Controllers\HomeController;
 use App\Http\Controllers\ProductViewController;
 use App\Http\Controllers\SeoController;
@@ -42,6 +43,7 @@ Route::get('/sitemap.xml', [SeoController::class, 'sitemap'])->name('sitemap');
 Route::get('/robots.txt', [SeoController::class, 'robots'])->name('robots');
 
 Route::get('/', [HomeController::class, 'index'])->name('home');
+Route::get('/departments', [DepartmentController::class, 'index'])->name('departments.index');
 Route::get('/shop', [ShopController::class, 'index'])->name('shop.index');
 Route::get('/api/search/suggestions', [ShopController::class, 'suggestions'])->name('search.suggestions');
 Route::get('/product/{slug}', [ProductViewController::class, 'show'])->name('product.show');

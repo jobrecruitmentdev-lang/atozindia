@@ -123,9 +123,21 @@ class ShopController extends Controller
         $priceMin = (float) Product::active()->min('price') ?: 0;
         $priceMax = (float) Product::active()->max('price') ?: 100000;
 
+        $activeCategory = null;
+        if ($request->filled('category')) {
+            $activeCategory = Category::where('slug', $request->category)
+                ->with(['children' => function ($q) {
+                    $q->where('is_active', true)->withCount('products')->orderBy('sort_order');
+                }, 'parent.children' => function ($q) {
+                    $q->where('is_active', true)->withCount('products')->orderBy('sort_order');
+                }])
+                ->first();
+        }
+
         return view('shop.index', compact(
             'products',
             'allCategories',
+            'activeCategory',
             'allBrands',
             'availableColors',
             'priceMin',

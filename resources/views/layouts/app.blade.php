@@ -112,14 +112,13 @@
             <nav class="hidden lg:flex items-center gap-7 text-[13px] font-semibold tracking-wide uppercase">
                 <a href="{{ route('home') }}" class="text-neutral-900 hover:text-neutral-500 transition-colors {{ request()->routeIs('home') ? 'border-b-2 border-black pb-1' : '' }}">Home</a>
                 
-                <!-- Mega Menu Departments Dropdown -->
-                <div class="relative" x-data="{ megaOpen: false, activeTab: '{{ $megaCategories->first()?->slug ?? 'fashion-clothing' }}' }" @click.outside="megaOpen = false">
-                    <button @click="megaOpen = !megaOpen" 
-                            type="button" 
-                            class="flex items-center gap-1.5 text-neutral-900 hover:text-neutral-500 transition-colors uppercase font-bold">
+                <!-- Mega Menu Departments Dropdown & Link -->
+                <div class="relative" x-data="{ megaOpen: false, activeTab: '{{ $megaCategories->first()?->slug ?? 'fashion-clothing' }}' }" @mouseenter="megaOpen = true" @mouseleave="megaOpen = false">
+                    <a href="{{ route('departments.index') }}" 
+                       class="flex items-center gap-1.5 text-neutral-900 hover:text-neutral-500 transition-colors uppercase font-bold {{ request()->routeIs('departments.index') ? 'border-b-2 border-black pb-1' : '' }}">
                         <span>Departments</span>
                         <svg class="w-3.5 h-3.5 transition-transform duration-200" :class="{ 'rotate-180': megaOpen }" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 9l-7 7-7-7"/></svg>
-                    </button>
+                    </a>
 
                     <!-- Full-Width Luxury Multi-Department Flyout -->
                     <div x-show="megaOpen" 
@@ -130,7 +129,7 @@
                          x-transition:leave="transition ease-in duration-150"
                          x-transition:leave-start="opacity-100 translate-y-0"
                          x-transition:leave-end="opacity-0 translate-y-2"
-                         class="absolute left-[-140px] top-full mt-4 w-[980px] bg-white rounded-3xl border border-neutral-200/90 shadow-2xl overflow-hidden z-50 flex divide-x divide-neutral-100 max-h-[580px]">
+                         class="absolute left-[-140px] top-full mt-2 w-[980px] bg-white rounded-3xl border border-neutral-200/90 shadow-2xl overflow-hidden z-50 flex divide-x divide-neutral-100 max-h-[580px]">
                         
                         <!-- Left Side: 18 Departments -->
                         <div class="w-64 bg-neutral-50/70 p-4 overflow-y-auto space-y-1">
@@ -180,7 +179,10 @@
                             
                             <div class="pt-4 border-t border-neutral-100 flex items-center justify-between text-[11px] text-neutral-400 mt-6">
                                 <span>Verified genuine authentic products &bull; Express delivery</span>
-                                <a href="{{ route('shop.index') }}" @click="megaOpen = false" class="font-bold text-neutral-900 hover:underline">Explore Full Catalogue &rarr;</a>
+                                <div class="flex items-center gap-4">
+                                    <a href="{{ route('departments.index') }}" @click="megaOpen = false" class="font-bold text-neutral-900 underline hover:text-black">All 18 Departments Page &rarr;</a>
+                                    <a href="{{ route('shop.index') }}" @click="megaOpen = false" class="font-bold text-neutral-600 hover:text-black">Full Catalogue &rarr;</a>
+                                </div>
                             </div>
                         </div>
                     </div>

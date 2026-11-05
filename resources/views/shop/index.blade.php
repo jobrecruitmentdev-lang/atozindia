@@ -104,6 +104,45 @@
         </div>
     @endif
 
+    <!-- Amazon-Style Subcategories Quick Filter Pills -->
+    @if(isset($activeCategory) && $activeCategory)
+        @if($activeCategory->children->isNotEmpty())
+            <div class="bg-white rounded-2xl border border-neutral-200/80 p-3.5 shadow-sm flex items-center gap-2 overflow-x-auto scrollbar-none">
+                <span class="text-[11px] font-bold uppercase tracking-wider text-neutral-400 shrink-0 font-mono mr-1">In {{ $activeCategory->name }}:</span>
+                <a href="{{ route('shop.index', ['category' => $activeCategory->slug]) }}" 
+                   class="px-3.5 py-1.5 rounded-full text-xs font-semibold whitespace-nowrap transition-all shrink-0 {{ request('category') === $activeCategory->slug ? 'bg-neutral-950 text-white shadow-sm' : 'bg-neutral-100 text-neutral-700 hover:bg-neutral-200' }}">
+                    All {{ $activeCategory->name }}
+                </a>
+                @foreach($activeCategory->children as $sub)
+                    <a href="{{ route('shop.index', ['category' => $sub->slug]) }}" 
+                       class="px-3.5 py-1.5 rounded-full text-xs font-semibold whitespace-nowrap transition-all shrink-0 {{ request('category') === $sub->slug ? 'bg-neutral-950 text-white shadow-sm' : 'bg-neutral-100 text-neutral-700 hover:bg-neutral-200' }}">
+                        {{ $sub->name }}
+                        @if($sub->products_count > 0)
+                            <span class="font-mono text-[10px] opacity-75">({{ $sub->products_count }})</span>
+                        @endif
+                    </a>
+                @endforeach
+            </div>
+        @elseif($activeCategory->parent && $activeCategory->parent->children->isNotEmpty())
+            <div class="bg-white rounded-2xl border border-neutral-200/80 p-3.5 shadow-sm flex items-center gap-2 overflow-x-auto scrollbar-none">
+                <span class="text-[11px] font-bold uppercase tracking-wider text-neutral-400 shrink-0 font-mono mr-1">In {{ $activeCategory->parent->name }}:</span>
+                <a href="{{ route('shop.index', ['category' => $activeCategory->parent->slug]) }}" 
+                   class="px-3.5 py-1.5 rounded-full text-xs font-semibold whitespace-nowrap transition-all shrink-0 bg-neutral-100 text-neutral-700 hover:bg-neutral-200">
+                    &larr; All {{ $activeCategory->parent->name }}
+                </a>
+                @foreach($activeCategory->parent->children as $sub)
+                    <a href="{{ route('shop.index', ['category' => $sub->slug]) }}" 
+                       class="px-3.5 py-1.5 rounded-full text-xs font-semibold whitespace-nowrap transition-all shrink-0 {{ request('category') === $sub->slug ? 'bg-neutral-950 text-white shadow-sm' : 'bg-neutral-100 text-neutral-700 hover:bg-neutral-200' }}">
+                        {{ $sub->name }}
+                        @if($sub->products_count > 0)
+                            <span class="font-mono text-[10px] opacity-75">({{ $sub->products_count }})</span>
+                        @endif
+                    </a>
+                @endforeach
+            </div>
+        @endif
+    @endif
+
     <!-- Main Catalog Layout (Sticky Sidebar + Product Grid) -->
     <div class="grid grid-cols-1 lg:grid-cols-12 gap-8 items-start">
         
