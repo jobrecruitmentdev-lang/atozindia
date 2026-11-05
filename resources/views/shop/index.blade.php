@@ -120,26 +120,40 @@
                 <!-- Department / Category Hierarchy -->
                 <div class="space-y-3">
                     <h3 class="text-xs font-bold uppercase tracking-[0.2em] text-neutral-950">Departments</h3>
-                    <div class="space-y-1.5 text-xs">
+                    <div class="space-y-1.5 max-h-[500px] overflow-y-auto pr-1">
                         <a href="{{ route('shop.index', request()->except(['category', 'page'])) }}" 
-                           class="flex items-center justify-between py-1 font-medium {{ !request('category') ? 'text-black font-bold' : 'text-neutral-600 hover:text-black' }}">
+                           class="flex items-center justify-between py-1.5 font-medium {{ !request('category') ? 'text-black font-bold' : 'text-neutral-600 hover:text-black' }}">
                             <span>All Departments</span>
                             <span class="font-mono text-neutral-400 text-[11px]">{{ \App\Models\Product::active()->count() }}</span>
                         </a>
                         @foreach($allCategories as $cat)
-                            <div class="space-y-1">
-                                <a href="{{ route('shop.index', array_merge(request()->except(['page']), ['category' => $cat->slug])) }}" 
-                                   class="flex items-center justify-between py-1 font-medium {{ request('category') === $cat->slug ? 'text-black font-bold' : 'text-neutral-600 hover:text-black' }}">
-                                    <span>{{ $cat->name }}</span>
-                                    <span class="font-mono text-neutral-400 text-[11px]">{{ $cat->products_count }}</span>
-                                </a>
+                            @php
+                                $isCatActive = request('category') === $cat->slug || $cat->children->pluck('slug')->contains(request('category'));
+                            @endphp
+                            <div class="border border-neutral-100 rounded-xl overflow-hidden" x-data="{ open: {{ $isCatActive ? 'true' : 'false' }} }">
+                                <div class="flex items-center justify-between py-2 px-2.5 bg-neutral-50/50 hover:bg-neutral-100/70 transition-colors">
+                                    <a href="{{ route('shop.index', array_merge(request()->except(['page']), ['category' => $cat->slug])) }}" 
+                                       class="flex-1 font-medium text-xs truncate {{ request('category') === $cat->slug ? 'text-black font-bold' : 'text-neutral-700 hover:text-black' }}">
+                                        <span>{{ $cat->name }}</span>
+                                        @if($cat->products_count > 0)
+                                            <span class="font-mono text-neutral-400 text-[10px] ml-1">({{ $cat->products_count }})</span>
+                                        @endif
+                                    </a>
+                                    @if($cat->children->isNotEmpty())
+                                        <button type="button" @click="open = !open" class="p-1 text-neutral-400 hover:text-black focus:outline-none">
+                                            <svg class="w-3 h-3 transition-transform" :class="{ 'rotate-180': open }" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 9l-7 7-7-7"/></svg>
+                                        </button>
+                                    @endif
+                                </div>
                                 @if($cat->children->isNotEmpty())
-                                    <div class="pl-3 space-y-1 border-l border-neutral-200">
+                                    <div x-show="open" x-cloak class="p-2 space-y-1 bg-white border-t border-neutral-100 text-[11px]">
                                         @foreach($cat->children as $sub)
                                             <a href="{{ route('shop.index', array_merge(request()->except(['page']), ['category' => $sub->slug])) }}" 
-                                               class="flex items-center justify-between py-0.5 text-[11px] {{ request('category') === $sub->slug ? 'text-black font-bold' : 'text-neutral-500 hover:text-black' }}">
-                                                <span>{{ $sub->name }}</span>
-                                                <span class="font-mono text-neutral-400">{{ $sub->products_count }}</span>
+                                               class="flex items-center justify-between py-1 px-2 rounded hover:bg-neutral-50 transition-colors {{ request('category') === $sub->slug ? 'text-black font-bold bg-neutral-50' : 'text-neutral-500 hover:text-black' }}">
+                                                <span class="truncate">{{ $sub->name }}</span>
+                                                @if($sub->products_count > 0)
+                                                    <span class="font-mono text-neutral-400 text-[10px]">({{ $sub->products_count }})</span>
+                                                @endif
                                             </a>
                                         @endforeach
                                     </div>
@@ -249,7 +263,14 @@
                             <select name="category" class="w-full text-xs bg-neutral-100 rounded-xl p-3 focus:outline-none">
                                 <option value="">All Departments</option>
                                 @foreach($allCategories as $c)
-                                    <option value="{{ $c->slug }}" {{ request('category') === $c->slug ? 'selected' : '' }}>{{ $c->name }}</option>
+                                    <option value="{{ $c->slug }}" class="font-bold" {{ request('category') === $c->slug ? 'selected' : '' }}>{{ $c->name }}</option>
+                                    @if($c->children->isNotEmpty())
+                                        <optgroup label="&nbsp;&nbsp;↳ {{ $c->name }} Subcategories">
+                                            @foreach($c->children as $sub)
+                                                <option value="{{ $sub->slug }}" {{ request('category') === $sub->slug ? 'selected' : '' }}>&nbsp;&nbsp;&nbsp;&nbsp;{{ $sub->name }}</option>
+                                            @endforeach
+                                        </optgroup>
+                                    @endif
                                 @endforeach
                             </select>
                         </div>

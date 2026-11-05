@@ -109,13 +109,87 @@
             </a>
 
             <!-- Navigation Links / Mega Menu (Desktop) -->
-            <nav class="hidden lg:flex items-center gap-8 text-[13px] font-semibold tracking-wide uppercase">
+            <nav class="hidden lg:flex items-center gap-7 text-[13px] font-semibold tracking-wide uppercase">
                 <a href="{{ route('home') }}" class="text-neutral-900 hover:text-neutral-500 transition-colors {{ request()->routeIs('home') ? 'border-b-2 border-black pb-1' : '' }}">Home</a>
+                
+                <!-- Mega Menu Departments Dropdown -->
+                <div class="relative" x-data="{ megaOpen: false, activeTab: '{{ $megaCategories->first()?->slug ?? 'fashion-clothing' }}' }" @click.outside="megaOpen = false">
+                    <button @click="megaOpen = !megaOpen" 
+                            type="button" 
+                            class="flex items-center gap-1.5 text-neutral-900 hover:text-neutral-500 transition-colors uppercase font-bold">
+                        <span>Departments</span>
+                        <svg class="w-3.5 h-3.5 transition-transform duration-200" :class="{ 'rotate-180': megaOpen }" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 9l-7 7-7-7"/></svg>
+                    </button>
+
+                    <!-- Full-Width Luxury Multi-Department Flyout -->
+                    <div x-show="megaOpen" 
+                         x-cloak 
+                         x-transition:enter="transition ease-out duration-200"
+                         x-transition:enter-start="opacity-0 translate-y-2"
+                         x-transition:enter-end="opacity-100 translate-y-0"
+                         x-transition:leave="transition ease-in duration-150"
+                         x-transition:leave-start="opacity-100 translate-y-0"
+                         x-transition:leave-end="opacity-0 translate-y-2"
+                         class="absolute left-[-140px] top-full mt-4 w-[980px] bg-white rounded-3xl border border-neutral-200/90 shadow-2xl overflow-hidden z-50 flex divide-x divide-neutral-100 max-h-[580px]">
+                        
+                        <!-- Left Side: 18 Departments -->
+                        <div class="w-64 bg-neutral-50/70 p-4 overflow-y-auto space-y-1">
+                            <span class="text-[10px] font-bold uppercase tracking-widest text-neutral-400 px-3 block mb-2 font-mono">18 Departments</span>
+                            @foreach($megaCategories as $parent)
+                                <button type="button" 
+                                        @mouseenter="activeTab = '{{ $parent->slug }}'"
+                                        @click="activeTab = '{{ $parent->slug }}'"
+                                        :class="activeTab === '{{ $parent->slug }}' ? 'bg-white shadow-sm text-neutral-950 font-bold border-l-2 border-black' : 'text-neutral-600 hover:text-black hover:bg-neutral-100/60'"
+                                        class="w-full text-left px-3 py-2 rounded-xl text-xs transition-all flex items-center justify-between group">
+                                    <span class="truncate">{{ $parent->name }}</span>
+                                    <svg class="w-3.5 h-3.5 text-neutral-400 group-hover:text-black shrink-0 ml-1" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 5l7 7-7 7"/></svg>
+                                </button>
+                            @endforeach
+                        </div>
+
+                        <!-- Right Side: Subcategories Grid for Active Department -->
+                        <div class="flex-1 p-8 overflow-y-auto bg-white flex flex-col justify-between">
+                            @foreach($megaCategories as $parent)
+                                <div x-show="activeTab === '{{ $parent->slug }}'" class="space-y-6">
+                                    <div class="flex items-center justify-between border-b border-neutral-100 pb-3">
+                                        <div>
+                                            <h3 class="text-base font-bold text-neutral-950">{{ $parent->name }}</h3>
+                                            <p class="text-xs text-neutral-500 mt-0.5">{{ $parent->description }}</p>
+                                        </div>
+                                        <a href="{{ route('shop.index', ['category' => $parent->slug]) }}" @click="megaOpen = false" class="text-xs font-bold uppercase tracking-wider text-black underline underline-offset-4 hover:text-neutral-600 shrink-0">
+                                            View Department &rarr;
+                                        </a>
+                                    </div>
+
+                                    <!-- Subcategories 3-Column Grid -->
+                                    <div class="grid grid-cols-3 gap-2.5">
+                                        @foreach($parent->children as $sub)
+                                            <a href="{{ route('shop.index', ['category' => $sub->slug]) }}" 
+                                               @click="megaOpen = false"
+                                               class="group p-2.5 rounded-xl hover:bg-neutral-50 border border-transparent hover:border-neutral-200 transition-all block">
+                                                <div class="text-xs font-bold text-neutral-900 group-hover:text-black truncate flex items-center justify-between">
+                                                    <span>{{ $sub->name }}</span>
+                                                    <span class="text-[10px] text-neutral-400 group-hover:translate-x-0.5 transition-transform">&rarr;</span>
+                                                </div>
+                                                <span class="text-[10px] text-neutral-400 truncate block mt-0.5">Explore collection</span>
+                                            </a>
+                                        @endforeach
+                                    </div>
+                                </div>
+                            @endforeach
+                            
+                            <div class="pt-4 border-t border-neutral-100 flex items-center justify-between text-[11px] text-neutral-400 mt-6">
+                                <span>Verified genuine authentic products &bull; Express delivery</span>
+                                <a href="{{ route('shop.index') }}" @click="megaOpen = false" class="font-bold text-neutral-900 hover:underline">Explore Full Catalogue &rarr;</a>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
                 <a href="{{ route('shop.index') }}" class="text-neutral-900 hover:text-neutral-500 transition-colors {{ request()->routeIs('shop.index') && !request('category') ? 'border-b-2 border-black pb-1' : '' }}">All Products</a>
-                <a href="{{ route('shop.index', ['category' => 'audio-acoustics']) }}" class="text-neutral-900 hover:text-neutral-500 transition-colors">Audio</a>
-                <a href="{{ route('shop.index', ['category' => 'wearables']) }}" class="text-neutral-900 hover:text-neutral-500 transition-colors">Wearables</a>
-                <a href="{{ route('shop.index', ['category' => 'workspace-architecture']) }}" class="text-neutral-900 hover:text-neutral-500 transition-colors">Desk</a>
-                <a href="{{ route('shop.index', ['category' => 'optics-cameras']) }}" class="text-neutral-900 hover:text-neutral-500 transition-colors">Optics</a>
+                <a href="{{ route('shop.index', ['category' => 'electronics-technology']) }}" class="text-neutral-900 hover:text-neutral-500 transition-colors">Tech</a>
+                <a href="{{ route('shop.index', ['category' => 'watches-jewellery']) }}" class="text-neutral-900 hover:text-neutral-500 transition-colors">Horology</a>
+                <a href="{{ route('shop.index', ['category' => 'home-living']) }}" class="text-neutral-900 hover:text-neutral-500 transition-colors">Living</a>
             </nav>
 
             <!-- Smart Search Bar (Desktop & Tablet) -->
@@ -238,6 +312,83 @@
             </div>
         </div>
     </header>
+
+    <!-- Mobile Navigation Drawer (Alpine.js) -->
+    <div x-show="mobileMenuOpen" 
+         x-cloak 
+         class="fixed inset-0 z-50 overflow-hidden lg:hidden" 
+         role="dialog" 
+         aria-modal="true">
+        
+        <!-- Backdrop -->
+        <div x-show="mobileMenuOpen"
+             x-transition:enter="ease-out duration-300"
+             x-transition:enter-start="opacity-0"
+             x-transition:enter-end="opacity-100"
+             x-transition:leave="ease-in duration-200"
+             x-transition:leave-start="opacity-100"
+             x-transition:leave-end="opacity-0"
+             @click="mobileMenuOpen = false"
+             class="fixed inset-0 bg-black/60 backdrop-blur-sm transition-opacity"></div>
+
+        <div class="fixed inset-y-0 left-0 pr-10 max-w-full flex">
+            <div x-show="mobileMenuOpen"
+                 x-transition:enter="transform transition ease-in-out duration-300"
+                 x-transition:enter-start="-translate-x-full"
+                 x-transition:enter-end="translate-x-0"
+                 x-transition:leave="transform transition ease-in-out duration-200"
+                 x-transition:leave-start="translate-x-0"
+                 x-transition:leave-end="-translate-x-full"
+                 class="w-screen max-w-sm bg-white shadow-2xl flex flex-col">
+                
+                <!-- Drawer Header -->
+                <div class="px-6 py-5 border-b border-neutral-100 flex items-center justify-between">
+                    <div class="flex items-center gap-2.5">
+                        <img src="{{ asset('assets/images/logo.jpeg') }}" class="w-8 h-8 rounded-full object-cover border border-neutral-300" alt="ATOZ">
+                        <span class="font-extrabold text-sm uppercase tracking-tight">ATOZ GADGETZ</span>
+                    </div>
+                    <button @click="mobileMenuOpen = false" class="p-2 text-neutral-400 hover:text-black rounded-full hover:bg-neutral-100 transition-colors">
+                        <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12"></path></svg>
+                    </button>
+                </div>
+
+                <!-- Navigation List -->
+                <div class="p-6 overflow-y-auto space-y-4 text-xs flex-1">
+                    <a href="{{ route('home') }}" @click="mobileMenuOpen = false" class="block py-2 text-sm font-bold uppercase tracking-wide text-neutral-900 border-b border-neutral-100">Home</a>
+                    <a href="{{ route('shop.index') }}" @click="mobileMenuOpen = false" class="block py-2 text-sm font-bold uppercase tracking-wide text-neutral-900 border-b border-neutral-100">Explore All Products</a>
+
+                    <div class="pt-2">
+                        <p class="text-[10px] font-bold uppercase tracking-widest text-neutral-400 mb-2 font-mono">18 Departments</p>
+                        <div class="space-y-1.5" x-data="{ expandedDept: null }">
+                            @foreach($megaCategories as $parent)
+                                <div class="border border-neutral-200/70 rounded-xl overflow-hidden">
+                                    <button type="button" 
+                                            @click="expandedDept = (expandedDept === '{{ $parent->slug }}' ? null : '{{ $parent->slug }}')" 
+                                            class="w-full py-2.5 px-3 flex items-center justify-between text-neutral-900 font-bold bg-neutral-50/70 hover:bg-neutral-100 text-left">
+                                        <span class="truncate">{{ $parent->name }}</span>
+                                        <svg class="w-3.5 h-3.5 transition-transform text-neutral-400" :class="{ 'rotate-180': expandedDept === '{{ $parent->slug }}' }" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 9l-7 7-7-7"/></svg>
+                                    </button>
+                                    <div x-show="expandedDept === '{{ $parent->slug }}'" x-cloak class="p-2.5 bg-white space-y-1 text-[11px] border-t border-neutral-100">
+                                        <a href="{{ route('shop.index', ['category' => $parent->slug]) }}" @click="mobileMenuOpen = false" class="block py-1.5 px-2 font-bold text-black underline">View All {{ $parent->name }} &rarr;</a>
+                                        @foreach($parent->children as $sub)
+                                            <a href="{{ route('shop.index', ['category' => $sub->slug]) }}" @click="mobileMenuOpen = false" class="block py-1 px-2 text-neutral-600 hover:text-black hover:bg-neutral-50 rounded">
+                                                {{ $sub->name }}
+                                            </a>
+                                        @endforeach
+                                    </div>
+                                </div>
+                            @endforeach
+                        </div>
+                    </div>
+                </div>
+
+                <div class="p-6 border-t border-neutral-100 bg-neutral-50 text-xs space-y-1">
+                    <p class="text-neutral-600 font-medium">Concierge Desk: 1800 200 9988</p>
+                    <p class="text-[10px] text-neutral-400">&copy; 2026 ATOZ GADGETZ Private Limited</p>
+                </div>
+            </div>
+        </div>
+    </div>
 
     <!-- Slide-Out Cart Drawer (Alpine.js) -->
     <div x-show="cartDrawerOpen" 
