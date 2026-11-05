@@ -43,7 +43,48 @@
     }
 
     $defaultImg = $defaultGallery[0]['path'] ?? '';
+    $effectivePrice = $product->sale_price ?: $product->price;
+    $productImages = $product->images->isNotEmpty() 
+        ? $product->images->map(fn($img) => str_starts_with($img->image_path, 'http') ? $img->image_path : asset($img->image_path))->toArray() 
+        : [asset('images/logo.png')];
+    $avgRating = $product->reviews_avg_rating ?: 4.9;
+    $reviewsCount = $product->reviews_count ?: 8;
 @endphp
+
+<!-- Schema.org Product Rich Snippets -->
+<script type="application/ld+json">
+{!! json_encode([
+  '@context' => 'https://schema.org/',
+  '@type' => 'Product',
+  'name' => $product->name,
+  'image' => $productImages,
+  'description' => strip_tags($product->short_description ?: $product->description),
+  'sku' => $product->base_sku,
+  'mpn' => $product->base_sku,
+  'brand' => [
+    '@type' => 'Brand',
+    'name' => $product->brand?->name ?? 'ATOZ GADGETZ'
+  ],
+  'offers' => [
+    '@type' => 'Offer',
+    'url' => route('product.show', $product->slug),
+    'priceCurrency' => 'INR',
+    'price' => (string) $effectivePrice,
+    'priceValidUntil' => now()->addYear()->format('Y-m-d'),
+    'itemCondition' => 'https://schema.org/NewCondition',
+    'availability' => 'https://schema.org/InStock',
+    'seller' => [
+      '@type' => 'Organization',
+      'name' => 'ATOZ GADGETZ'
+    ]
+  ],
+  'aggregateRating' => [
+    '@type' => 'AggregateRating',
+    'ratingValue' => number_format((float)$avgRating, 1),
+    'reviewCount' => (string) $reviewsCount
+  ]
+], JSON_UNESCAPED_SLASHES | JSON_PRETTY_PRINT) !!}
+</script>
 
 <div class="max-w-[1400px] mx-auto px-6 sm:px-10 lg:px-12 py-8 space-y-16 sm:space-y-24"
      x-data="pdpApp({

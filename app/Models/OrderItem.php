@@ -47,4 +47,31 @@ class OrderItem extends Model
     {
         return $this->belongsTo(ProductVariant::class, 'product_variant_id');
     }
+
+    public function getSkuAttribute(): ?string
+    {
+        return $this->variant_sku;
+    }
+
+    public function getVariantTitleAttribute(): ?string
+    {
+        return $this->variant_attributes_summary;
+    }
+
+    public function getHsnCodeAttribute(): string
+    {
+        $catName = strtolower($this->product?->categories?->first()?->name ?? '');
+        if (str_contains($catName, 'audio') || str_contains($catName, 'acoustic')) {
+            return '8518.30';
+        } elseif (str_contains($catName, 'horology') || str_contains($catName, 'wearable')) {
+            return '9102.12';
+        } elseif (str_contains($catName, 'desk') || str_contains($catName, 'keyboard')) {
+            return '8471.60';
+        } elseif (str_contains($catName, 'optic') || str_contains($catName, 'camera')) {
+            return '9006.59';
+        } elseif (str_contains($catName, 'power') || str_contains($catName, 'charg')) {
+            return '8504.40';
+        }
+        return '8517.62';
+    }
 }

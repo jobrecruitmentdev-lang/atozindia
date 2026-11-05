@@ -12,6 +12,54 @@
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
     <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@300;400;500;600;700;800&display=swap" rel="stylesheet">
 
+    <!-- Global Schema.org Structured Data -->
+    <script type="application/ld+json">
+    {!! json_encode([
+      '@context' => 'https://schema.org',
+      '@graph' => [
+        [
+          '@type' => 'Organization',
+          '@id' => url('/') . '/#organization',
+          'name' => 'ATOZ GADGETZ',
+          'url' => url('/'),
+          'logo' => asset('images/logo.png'),
+          'contactPoint' => [
+            '@type' => 'ContactPoint',
+            'telephone' => '+91-1800-200-9988',
+            'contactType' => 'Customer Concierge',
+            'areaServed' => 'IN',
+            'availableLanguage' => ['English', 'Hindi']
+          ],
+          'address' => [
+            '@type' => 'PostalAddress',
+            'streetAddress' => 'Plot No. 42, Sector 18, Udyog Vihar Phase IV',
+            'addressLocality' => 'Gurugram',
+            'addressRegion' => 'Haryana',
+            'postalCode' => '122015',
+            'addressCountry' => 'IN'
+          ]
+        ],
+        [
+          '@type' => 'WebSite',
+          '@id' => url('/') . '/#website',
+          'url' => url('/'),
+          'name' => 'ATOZ GADGETZ',
+          'publisher' => [
+            '@id' => url('/') . '/#organization'
+          ],
+          'potentialAction' => [
+            '@type' => 'SearchAction',
+            'target' => [
+              '@type' => 'EntryPoint',
+              'urlTemplate' => route('shop.index') . '?q={search_term_string}'
+            ],
+            'query-input' => 'required name=search_term_string'
+          ]
+        ]
+      ]
+    ], JSON_UNESCAPED_SLASHES | JSON_PRETTY_PRINT) !!}
+    </script>
+
     <!-- Vite Assets -->
     @vite(['resources/css/app.css', 'resources/js/app.js'])
 
@@ -20,7 +68,8 @@
 <body class="bg-[#FBFBFA] text-neutral-900 font-sans antialiased selection:bg-neutral-900 selection:text-white"
       x-data="globalApp()"
       @cart-updated.window="fetchCartDrawer()"
-      @toast.window="addToast($event.detail.message, $event.detail.type || 'success')">
+      @toast.window="addToast($event.detail.message, $event.detail.type || 'success')"
+      @open-quickview.window="openQuickView($event.detail)">
 
     <!-- Announcement Bar -->
     @if(\App\Models\StoreSetting::get('announcement_enabled', true))
@@ -448,6 +497,125 @@
         </div>
     </footer>
 
+    <!-- Quick View Modal -->
+    <div x-show="quickViewModalOpen" 
+         x-cloak
+         class="fixed inset-0 z-50 overflow-y-auto flex items-center justify-center p-4 sm:p-6"
+         role="dialog" 
+         aria-modal="true"
+         @keydown.escape.window="closeQuickView()">
+        
+        <!-- Backdrop -->
+        <div x-show="quickViewModalOpen"
+             x-transition:enter="ease-out duration-300"
+             x-transition:enter-start="opacity-0"
+             x-transition:enter-end="opacity-100"
+             x-transition:leave="ease-in duration-200"
+             x-transition:leave-start="opacity-100"
+             x-transition:leave-end="opacity-0"
+             class="fixed inset-0 bg-black/60 backdrop-blur-sm transition-opacity"
+             @click="closeQuickView()"></div>
+
+        <!-- Modal Dialog Card -->
+        <div x-show="quickViewModalOpen"
+             x-transition:enter="ease-out duration-300"
+             x-transition:enter-start="opacity-0 scale-95 translate-y-4"
+             x-transition:enter-end="opacity-100 scale-100 translate-y-0"
+             x-transition:leave="ease-in duration-200"
+             x-transition:leave-start="opacity-100 scale-100 translate-y-0"
+             x-transition:leave-end="opacity-0 scale-95 translate-y-4"
+             class="relative w-full max-w-4xl bg-white rounded-[32px] shadow-2xl border border-neutral-200 overflow-hidden z-10">
+            
+            <!-- Close Button -->
+            <button @click="closeQuickView()" 
+                    class="absolute top-5 right-5 z-20 w-9 h-9 rounded-full bg-neutral-100 hover:bg-neutral-200 flex items-center justify-center text-neutral-600 hover:text-black transition-colors"
+                    aria-label="Close modal">
+                <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12"/></svg>
+            </button>
+
+            <template x-if="quickViewProduct">
+                <div class="grid grid-cols-1 md:grid-cols-2">
+                    
+                    <!-- Left: High-Res Image Viewport -->
+                    <div class="relative bg-neutral-50 p-8 flex items-center justify-center border-b md:border-b-0 md:border-r border-neutral-100">
+                        <img :src="quickViewProduct.image" 
+                             :alt="quickViewProduct.name" 
+                             class="w-full max-h-[380px] object-contain rounded-2xl">
+                        
+                        <div class="absolute bottom-4 left-6 text-[10px] uppercase font-mono tracking-widest text-neutral-400">
+                            SKU: <span x-text="quickViewProduct.sku"></span>
+                        </div>
+                    </div>
+
+                    <!-- Right: Product Information & Acquisition Controls -->
+                    <div class="p-8 sm:p-10 flex flex-col justify-between space-y-6">
+                        <div class="space-y-4">
+                            <div>
+                                <span class="text-[10px] font-bold uppercase tracking-widest text-neutral-400 block font-mono" x-text="quickViewProduct.brand"></span>
+                                <h2 class="text-xl sm:text-2xl font-extrabold text-neutral-950 mt-1 leading-snug" x-text="quickViewProduct.name"></h2>
+                            </div>
+
+                            <!-- Pricing -->
+                            <div class="flex items-baseline gap-3">
+                                <span class="text-2xl font-black font-mono text-neutral-950" x-text="quickViewProduct.sale_price || quickViewProduct.price"></span>
+                                <template x-if="quickViewProduct.sale_price">
+                                    <span class="text-sm font-mono text-neutral-400 line-through" x-text="quickViewProduct.price"></span>
+                                </template>
+                            </div>
+
+                            <!-- Short Description -->
+                            <p class="text-xs sm:text-sm text-neutral-600 leading-relaxed" x-text="quickViewProduct.description"></p>
+
+                            <!-- Specifications Badges -->
+                            <template x-if="quickViewProduct.specs && Object.keys(quickViewProduct.specs).length > 0">
+                                <div class="space-y-2 pt-2 border-t border-neutral-100">
+                                    <span class="text-[10px] font-bold uppercase tracking-widest text-neutral-400 block font-mono">Precision Metrics</span>
+                                    <div class="grid grid-cols-2 gap-2 text-xs">
+                                        <template x-for="(specVal, specKey) in quickViewProduct.specs" :key="specKey">
+                                            <div class="p-2 rounded-xl bg-neutral-50 border border-neutral-100">
+                                                <div class="text-[9px] uppercase font-bold text-neutral-400" x-text="specKey"></div>
+                                                <div class="font-semibold text-neutral-900 truncate" x-text="specVal"></div>
+                                            </div>
+                                        </template>
+                                    </div>
+                                </div>
+                            </template>
+                        </div>
+
+                        <!-- Acquisition Footer -->
+                        <div class="space-y-4 pt-4 border-t border-neutral-100">
+                            <div class="flex items-center gap-3">
+                                <!-- Quantity Stepper -->
+                                <div class="inline-flex items-center border border-neutral-300 rounded-full p-1 bg-neutral-50">
+                                    <button @click="quickViewQty = Math.max(1, quickViewQty - 1)" class="w-7 h-7 rounded-full flex items-center justify-center hover:bg-white text-neutral-700 text-xs font-bold transition-colors">&minus;</button>
+                                    <span class="w-8 text-center text-xs font-mono font-bold text-neutral-900" x-text="quickViewQty"></span>
+                                    <button @click="quickViewQty = quickViewQty + 1" class="w-7 h-7 rounded-full flex items-center justify-center hover:bg-white text-neutral-700 text-xs font-bold transition-colors">&plus;</button>
+                                </div>
+
+                                <!-- Add to Bag -->
+                                <button type="button"
+                                        @click="addToCart(quickViewProduct.id, quickViewProduct.variant_id, quickViewQty); closeQuickView();"
+                                        class="flex-1 py-3 px-6 rounded-full bg-neutral-950 hover:bg-neutral-800 text-white font-bold text-xs uppercase tracking-widest transition-all shadow-lg flex items-center justify-center gap-2">
+                                    <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M16 11V7a4 4 0 00-8 0v4M5 9h14l1 12H4L5 9z"/></svg>
+                                    <span>Add to Bag</span>
+                                </button>
+                            </div>
+
+                            <div class="text-center">
+                                <a :href="quickViewProduct.url" class="text-xs font-bold text-neutral-900 hover:text-neutral-600 uppercase tracking-wider inline-flex items-center gap-1 transition-colors">
+                                    <span>Open Full Technical Dossier</span>
+                                    <span>&rarr;</span>
+                                </a>
+                            </div>
+                        </div>
+
+                    </div>
+                </div>
+            </template>
+
+        </div>
+    </div>
+
     <!-- Global Toast Container -->
     <div class="fixed bottom-6 right-6 z-50 flex flex-col gap-2 max-w-sm" x-cloak>
         <template x-for="toast in toasts" :key="toast.id">
@@ -473,6 +641,9 @@
                 scrolled: false,
                 mobileMenuOpen: false,
                 cartDrawerOpen: false,
+                quickViewModalOpen: false,
+                quickViewProduct: null,
+                quickViewQty: 1,
                 couponCodeInput: '',
                 cart: {
                     items: [],
@@ -587,6 +758,15 @@
                         const t = this.toasts.find(x => x.id === id);
                         if (t) t.visible = false;
                     }, 4000);
+                },
+                openQuickView(productData) {
+                    this.quickViewProduct = productData;
+                    this.quickViewQty = 1;
+                    this.quickViewModalOpen = true;
+                },
+                closeQuickView() {
+                    this.quickViewModalOpen = false;
+                    this.quickViewProduct = null;
                 }
             };
         }

@@ -36,6 +36,16 @@ class OrderAddress extends Model
         return trim("{$this->first_name} {$this->last_name}");
     }
 
+    public function getAddressLine1Attribute(): ?string
+    {
+        return $this->attributes['address_line_1'] ?? null;
+    }
+
+    public function getAddressLine2Attribute(): ?string
+    {
+        return $this->attributes['address_line_2'] ?? null;
+    }
+
     public function getFormattedAddressAttribute(): string
     {
         $parts = array_filter([

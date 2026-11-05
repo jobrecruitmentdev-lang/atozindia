@@ -3,11 +3,15 @@
 namespace App\Http\Controllers\Admin;
 
 use App\Http\Controllers\Controller;
+use App\Mail\OrderDispatchedMail;
 use App\Models\AuditLog;
 use App\Models\Order;
 use App\Models\OrderStatusHistory;
 use App\Services\OrderService;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Log;
+use Illuminate\Support\Facades\Mail;
+use Exception;
 
 class OrderController extends Controller
 {
@@ -94,6 +98,23 @@ class OrderController extends Controller
 
         AuditLog::log('status_updated', 'Order', $order->id, [$type => $oldStatus], [$type => $newStatus]);
 
+        // Send dispatch notification email if transitioned to shipped
+        if ($newStatus === 'shipped') {
+            try {
+                $shipment = $order->shipments()->latest()->first();
+                Mail::to($order->customer_email)->send(new OrderDispatchedMail($order, $shipment));
+            } catch (Exception $mailEx) {
+                Log::warning("Order dispatched email failed: " . $mailEx->getMessage());
+            }
+        }
+
         return back()->with('success', "Order status successfully updated to '{$newStatus}'.");
+    }
+
+    public function invoice(Order $order)
+    {
+        $order->load(['items.product.categories', 'items.variant', 'shippingAddress', 'billingAddress', 'payments']);
+
+        return view('shop.invoice', compact('order'));
     }
 }

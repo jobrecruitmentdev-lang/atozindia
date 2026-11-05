@@ -3,12 +3,16 @@
 namespace App\Http\Controllers\Auth;
 
 use App\Http\Controllers\Controller;
+use App\Mail\WelcomeCollectorMail;
 use App\Models\User;
 use App\Services\CartService;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Hash;
+use Illuminate\Support\Facades\Log;
+use Illuminate\Support\Facades\Mail;
 use Illuminate\Support\Facades\Session;
+use Exception;
 
 class CustomerAuthController extends Controller
 {
@@ -89,6 +93,13 @@ class CustomerAuthController extends Controller
 
         Auth::guard('web')->login($user);
         $request->session()->regenerate();
+
+        // Send luxury welcome email
+        try {
+            Mail::to($user->email)->send(new WelcomeCollectorMail($user));
+        } catch (Exception $mailEx) {
+            Log::warning("Welcome email failed: " . $mailEx->getMessage());
+        }
 
         // Merge guest cart
         $this->cartService->mergeGuestCart($oldSessionId, $user);

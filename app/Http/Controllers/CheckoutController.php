@@ -2,11 +2,14 @@
 
 namespace App\Http\Controllers;
 
+use App\Mail\OrderConfirmationMail;
 use App\Models\Order;
 use App\Services\CartService;
 use App\Services\OrderService;
 use App\Services\PaymentService;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Log;
+use Illuminate\Support\Facades\Mail;
 use Exception;
 
 class CheckoutController extends Controller
@@ -74,6 +77,13 @@ class CheckoutController extends Controller
             // Record initial payment record via Payment abstraction
             $this->paymentService->initiatePayment($order, $order->payment_method);
 
+            // Send luxury order confirmation email
+            try {
+                Mail::to($order->customer_email)->send(new OrderConfirmationMail($order));
+            } catch (Exception $mailEx) {
+                Log::warning("Order confirmation email failed: " . $mailEx->getMessage());
+            }
+
             return redirect()->route('checkout.confirmation', $order->order_number);
         } catch (Exception $e) {
             return back()->withInput()->withErrors(['checkout_error' => $e->getMessage()]);
@@ -87,5 +97,14 @@ class CheckoutController extends Controller
             ->firstOrFail();
 
         return view('shop.confirmation', compact('order'));
+    }
+
+    public function invoice(string $orderNumber)
+    {
+        $order = Order::with(['items.product.categories', 'items.variant', 'shippingAddress', 'billingAddress', 'payments'])
+            ->where('order_number', $orderNumber)
+            ->firstOrFail();
+
+        return view('shop.invoice', compact('order'));
     }
 }

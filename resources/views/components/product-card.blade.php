@@ -29,6 +29,21 @@
     if ($product->sale_price && $product->sale_price < $product->price) {
         $discountPct = round((($product->price - $product->sale_price) / $product->price) * 100);
     }
+
+    $cardPayload = [
+        'id' => $product->id,
+        'name' => $product->name,
+        'slug' => $product->slug,
+        'brand' => $product->brand?->name ?? 'ATOZ GADGETZ',
+        'sku' => $product->base_sku,
+        'image' => $primaryImg,
+        'price' => '₹' . number_format($product->price, 2),
+        'sale_price' => $product->sale_price ? '₹' . number_format($product->sale_price, 2) : null,
+        'description' => Str::limit(strip_tags($product->short_description ?: $product->description), 160),
+        'url' => route('product.show', $product->slug),
+        'variant_id' => $firstVariantId,
+        'specs' => is_array($product->specifications_json) ? array_slice($product->specifications_json, 0, 4) : [],
+    ];
 @endphp
 
 <div class="group relative flex flex-col bg-white rounded-3xl border border-neutral-200/80 p-4 transition-all duration-300 hover:shadow-xl hover:border-neutral-900"
@@ -36,7 +51,8 @@
         activeImg: '{{ $primaryImg }}',
         hoverImg: '{{ $secondaryImg }}',
         isHovered: false,
-        selectedVariantId: {{ $firstVariantId ?? 'null' }}
+        selectedVariantId: {{ $firstVariantId ?? 'null' }},
+        productPayload: {{ json_encode($cardPayload) }}
      }">
     
     <!-- Image Viewport with Hover Transition -->
@@ -75,13 +91,19 @@
             <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.75" d="M4.318 6.318a4.5 4.5 0 000 6.364L12 20.364l7.682-7.682a4.5 4.5 0 00-6.364-6.364L12 7.636l-1.318-1.318a4.5 4.5 0 00-6.364 0z"/></svg>
         </button>
 
-        <!-- Quick Add Hover Overlay Button -->
-        <div class="absolute inset-x-3 bottom-3 opacity-0 group-hover:opacity-100 transition-all duration-300 translate-y-2 group-hover:translate-y-0 z-10 hidden sm:block">
+        <!-- Quick Actions Overlay -->
+        <div class="absolute inset-x-3 bottom-3 opacity-0 group-hover:opacity-100 transition-all duration-300 translate-y-2 group-hover:translate-y-0 z-10 hidden sm:flex items-center gap-2">
+            <button type="button" 
+                    @click.prevent="window.dispatchEvent(new CustomEvent('open-quickview', { detail: productPayload }))"
+                    class="flex-1 py-2.5 rounded-xl bg-white/95 hover:bg-white text-neutral-900 border border-neutral-200/80 font-bold text-[11px] uppercase tracking-wider transition-all shadow-lg flex items-center justify-center gap-1.5 backdrop-blur-md">
+                <svg class="w-3.5 h-3.5 text-neutral-600" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 12a3 3 0 11-6 0 3 3 0 016 0z"/><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M2.458 12C3.732 7.943 7.523 5 12 5c4.478 0 8.268 2.943 9.542 7-1.274 4.057-5.064 7-9.542 7-4.477 0-8.268-2.943-9.542-7z"/></svg>
+                <span>Quick View</span>
+            </button>
             <button type="button" 
                     @click.prevent="addToCart({{ $product->id }}, selectedVariantId, 1)"
-                    class="w-full py-3 rounded-xl bg-neutral-950/90 hover:bg-black backdrop-blur-md text-white font-bold text-xs uppercase tracking-wider transition-all shadow-xl flex items-center justify-center gap-2">
-                <svg class="w-3.5 h-3.5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M16 11V7a4 4 0 00-8 0v4M5 9h14l1 12H4L5 9z"/></svg>
-                <span>Add to Bag</span>
+                    class="p-2.5 rounded-xl bg-neutral-950/90 hover:bg-black text-white transition-all shadow-lg flex items-center justify-center backdrop-blur-md"
+                    title="Add to Bag">
+                <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M16 11V7a4 4 0 00-8 0v4M5 9h14l1 12H4L5 9z"/></svg>
             </button>
         </div>
     </a>

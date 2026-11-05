@@ -18,6 +18,7 @@ use App\Http\Controllers\CheckoutController;
 use App\Http\Controllers\Customer\AccountController;
 use App\Http\Controllers\HomeController;
 use App\Http\Controllers\ProductViewController;
+use App\Http\Controllers\SeoController;
 use App\Http\Controllers\ShopController;
 use Illuminate\Support\Facades\Route;
 
@@ -26,6 +27,9 @@ use Illuminate\Support\Facades\Route;
 | Public Storefront Routes
 |--------------------------------------------------------------------------
 */
+Route::get('/sitemap.xml', [SeoController::class, 'sitemap'])->name('sitemap');
+Route::get('/robots.txt', [SeoController::class, 'robots'])->name('robots');
+
 Route::get('/', [HomeController::class, 'index'])->name('home');
 Route::get('/shop', [ShopController::class, 'index'])->name('shop.index');
 Route::get('/api/search/suggestions', [ShopController::class, 'suggestions'])->name('search.suggestions');
@@ -45,6 +49,7 @@ Route::post('/cart/coupon/remove', [CartController::class, 'removeCoupon'])->nam
 Route::get('/checkout', [CheckoutController::class, 'index'])->name('checkout.index');
 Route::post('/checkout', [CheckoutController::class, 'process'])->name('checkout.process');
 Route::get('/order/{orderNumber}/confirmation', [CheckoutController::class, 'confirmation'])->name('checkout.confirmation');
+Route::get('/order/{orderNumber}/invoice', [CheckoutController::class, 'invoice'])->name('order.invoice');
 
 // Wishlist
 Route::post('/wishlist/toggle', [AccountController::class, 'toggleWishlist'])->name('wishlist.toggle');
@@ -121,6 +126,7 @@ Route::prefix('admin')->name('admin.')->group(function () {
         // Orders Management
         Route::get('/orders', [AdminOrderController::class, 'index'])->name('orders.index');
         Route::get('/orders/{order}', [AdminOrderController::class, 'show'])->name('orders.show');
+        Route::get('/orders/{order}/invoice', [AdminOrderController::class, 'invoice'])->name('orders.invoice');
         Route::post('/orders/{order}/status', [AdminOrderController::class, 'updateStatus'])->name('orders.status.update');
 
         // Customers

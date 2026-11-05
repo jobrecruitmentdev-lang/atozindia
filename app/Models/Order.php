@@ -78,6 +78,31 @@ class Order extends Model
         return $this->hasMany(Shipment::class);
     }
 
+    public function getGrandTotalAttribute()
+    {
+        return $this->total_amount;
+    }
+
+    public function getTaxTotalAttribute()
+    {
+        return $this->tax_amount;
+    }
+
+    public function getShippingTotalAttribute()
+    {
+        return $this->shipping_amount;
+    }
+
+    public function getDiscountTotalAttribute()
+    {
+        return $this->discount_amount;
+    }
+
+    public function getCustomerNameAttribute(): string
+    {
+        return $this->user?->name ?? ($this->shippingAddress?->full_name ?? $this->customer_email);
+    }
+
     public static function generateOrderNumber(): string
     {
         return 'AG-' . date('Ymd') . '-' . strtoupper(substr(uniqid(), -5));
