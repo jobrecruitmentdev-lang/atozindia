@@ -58,18 +58,24 @@ class ProductController extends Controller
     {
         $brands = Brand::where('is_active', true)->orderBy('name')->get();
         $categories = Category::where('is_active', true)->orderBy('name')->get();
+        $rootCategories = Category::where('is_active', true)
+            ->whereNull('parent_id')
+            ->with(['children' => fn($q) => $q->where('is_active', true)->orderBy('name')])
+            ->orderBy('name')
+            ->get();
         $attributes = Attribute::with('values')->get();
 
-        return view('admin.products.create', compact('brands', 'categories', 'attributes'));
+        return view('admin.products.create', compact('brands', 'categories', 'rootCategories', 'attributes'));
     }
 
     public function store(Request $request)
     {
         $data = $request->validate([
             'name' => 'required|string|max:255',
-            'base_sku' => 'required|string|max:64|unique:products,base_sku',
+            'base_sku' => 'nullable|string|max:64|unique:products,base_sku',
+            'barcode' => 'nullable|string|max:64',
             'brand_id' => 'nullable|exists:brands,id',
-            'categories' => 'required|array',
+            'categories' => 'required|array|min:1',
             'categories.*' => 'exists:categories,id',
             'price' => 'required|numeric|min:0',
             'sale_price' => 'nullable|numeric|min:0',
@@ -91,7 +97,16 @@ class ProductController extends Controller
             'seo_title' => 'nullable|string|max:255',
             'seo_description' => 'nullable|string',
             'stock_quantity' => 'nullable|integer|min:0',
+            'primary_image' => 'nullable|image|mimes:jpeg,png,jpg,webp|max:5120',
+        ], [
+            'name.required' => 'Please enter a product name.',
+            'categories.required' => 'Please select at least one department or category.',
+            'price.required' => 'Please specify the regular price in INR ₹.',
         ]);
+
+        if (empty($data['base_sku'])) {
+            $data['base_sku'] = 'ATOZ-' . strtoupper(Str::random(7));
+        }
 
         $slug = Str::slug($data['name']);
         $originalSlug = $slug;
@@ -121,9 +136,23 @@ class ProductController extends Controller
             unset($data['categories']);
             $stockQty = $data['stock_quantity'] ?? 0;
             unset($data['stock_quantity']);
+            $primaryImage = $data['primary_image'] ?? null;
+            unset($data['primary_image']);
 
             $product = Product::create($data);
             $product->categories()->sync($categories);
+
+            // If an image was uploaded directly during creation, save it as primary thumbnail
+            if ($request->hasFile('primary_image')) {
+                $path = $request->file('primary_image')->store('products', 'public');
+                ProductImage::create([
+                    'product_id' => $product->id,
+                    'image_path' => Storage::url($path),
+                    'alt_text' => $product->name,
+                    'is_primary' => true,
+                    'sort_order' => 1,
+                ]);
+            }
 
             // If not variable, create a single default variant
             if (!$product->is_variable) {
@@ -159,7 +188,7 @@ class ProductController extends Controller
         });
 
         return redirect()->route('admin.products.edit', $product->id)
-            ->with('success', 'Product created successfully! You can now manage multi-colour image galleries and variants below.');
+            ->with('success', "Product '{$product->name}' created successfully!");
     }
 
     public function edit(Product $product)
@@ -174,9 +203,15 @@ class ProductController extends Controller
 
         $brands = Brand::where('is_active', true)->orderBy('name')->get();
         $categories = Category::where('is_active', true)->orderBy('name')->get();
+        $rootCategories = Category::where('is_active', true)
+            ->whereNull('parent_id')
+            ->with(['children' => fn($q) => $q->where('is_active', true)->orderBy('name')])
+            ->orderBy('name')
+            ->get();
         $attributes = Attribute::with('values')->get();
+        $currentStock = $product->variants->first()?->inventory?->quantity ?? 0;
 
-        return view('admin.products.edit', compact('product', 'brands', 'categories', 'attributes'));
+        return view('admin.products.edit', compact('product', 'brands', 'categories', 'rootCategories', 'attributes', 'currentStock'));
     }
 
     public function update(Request $request, Product $product)
@@ -184,13 +219,15 @@ class ProductController extends Controller
         $data = $request->validate([
             'name' => 'required|string|max:255',
             'base_sku' => "required|string|max:64|unique:products,base_sku,{$product->id}",
+            'barcode' => 'nullable|string|max:64',
             'brand_id' => 'nullable|exists:brands,id',
-            'categories' => 'required|array',
+            'categories' => 'required|array|min:1',
             'categories.*' => 'exists:categories,id',
             'price' => 'required|numeric|min:0',
             'sale_price' => 'nullable|numeric|min:0',
             'cost_price' => 'nullable|numeric|min:0',
             'tax_rate' => 'nullable|numeric|min:0|max:100',
+            'stock_quantity' => 'nullable|integer|min:0',
             'short_description' => 'nullable|string',
             'description' => 'nullable|string',
             'weight' => 'nullable|numeric',
@@ -224,13 +261,52 @@ class ProductController extends Controller
             $data['specifications_json'] = $specs;
         }
 
-        DB::transaction(function () use ($data, $product) {
+        DB::transaction(function () use ($data, $product, $request) {
             $categories = $data['categories'];
             unset($data['categories']);
+
+            $stockQty = $request->input('stock_quantity');
+            unset($data['stock_quantity']);
 
             $old = $product->toArray();
             $product->update($data);
             $product->categories()->sync($categories);
+
+            // If simple product, update single default variant stock directly
+            if (!$product->is_variable && $stockQty !== null) {
+                $defaultVariant = $product->variants()->first();
+                if (!$defaultVariant) {
+                    $defaultVariant = ProductVariant::create([
+                        'product_id' => $product->id,
+                        'sku' => $product->base_sku,
+                        'status' => 'active',
+                    ]);
+                }
+
+                $inv = $defaultVariant->inventory;
+                if ($inv) {
+                    $oldQty = $inv->quantity;
+                    $inv->update(['quantity' => (int) $stockQty]);
+                    if ($oldQty != $stockQty) {
+                        InventoryMovement::create([
+                            'inventory_id' => $inv->id,
+                            'change_amount' => $stockQty - $oldQty,
+                            'previous_qty' => $oldQty,
+                            'new_qty' => (int) $stockQty,
+                            'type' => 'manual_adjust',
+                            'admin_id' => auth('admin')->id(),
+                            'notes' => 'Updated via Product Quick Edit',
+                        ]);
+                    }
+                } else {
+                    Inventory::create([
+                        'product_variant_id' => $defaultVariant->id,
+                        'quantity' => (int) $stockQty,
+                        'reserved_quantity' => 0,
+                        'low_stock_threshold' => 5,
+                    ]);
+                }
+            }
 
             AuditLog::log('updated', 'Product', $product->id, $old, $product->toArray());
         });
@@ -310,17 +386,33 @@ class ProductController extends Controller
      */
     public function storeVariant(Request $request, Product $product)
     {
+        // Filter out empty attribute selects (e.g. if only Size or only Colour is selected)
+        $rawValues = array_values(array_filter((array) $request->input('attribute_values', []), fn($v) => !empty($v)));
+        $request->merge(['attribute_values' => $rawValues]);
+
         $data = $request->validate([
-            'sku' => 'required|string|max:64|unique:product_variants,sku',
+            'sku' => 'nullable|string|max:64|unique:product_variants,sku',
             'barcode' => 'nullable|string|max:64',
             'price_override' => 'nullable|numeric|min:0',
             'sale_price_override' => 'nullable|numeric|min:0',
             'stock_quantity' => 'required|integer|min:0',
-            'attribute_values' => 'required|array',
+            'attribute_values' => 'required|array|min:1',
             'attribute_values.*' => 'exists:attribute_values,id',
+        ], [
+            'attribute_values.required' => 'Please select at least one attribute option (e.g. Size or Colour) for this variant.',
+            'attribute_values.min' => 'Please select at least one attribute option (e.g. Size or Colour) for this variant.',
         ]);
 
+        if (empty($data['sku'])) {
+            $data['sku'] = $product->base_sku . '-' . strtoupper(Str::random(4));
+        }
+
         DB::transaction(function () use ($data, $product) {
+            // Automatically mark product as variable when adding custom variants
+            if (!$product->is_variable) {
+                $product->update(['is_variable' => true]);
+            }
+
             $variant = ProductVariant::create([
                 'product_id' => $product->id,
                 'sku' => $data['sku'],
