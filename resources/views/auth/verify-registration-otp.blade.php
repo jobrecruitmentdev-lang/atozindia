@@ -33,6 +33,24 @@
             </div>
         @endif
 
+        @if(app()->environment('local') && session('registration_otp'))
+            <div class="p-4 rounded-2xl bg-amber-50 border border-amber-200 text-amber-900 text-xs text-center space-y-2 shadow-sm">
+                <div class="flex items-center justify-center gap-1.5 font-bold uppercase tracking-wider text-[10px] text-amber-800">
+                    <svg class="w-4 h-4 text-amber-600" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M13 16h-1v-4h-1m1-4h.01M21 12a9 9 0 11-18 0 9 9 0 0118 0z"/></svg>
+                    <span>Local Dev Mode &bull; Passcode Generated</span>
+                </div>
+                <div class="font-mono text-2xl font-black tracking-[0.3em] text-neutral-950">
+                    {{ session('registration_otp') }}
+                </div>
+                <button type="button" 
+                        @click="autoFill('{{ session('registration_otp') }}')" 
+                        class="inline-flex items-center gap-1 px-3 py-1 rounded-full bg-amber-200/60 hover:bg-amber-200 text-[11px] font-bold text-amber-900 transition-colors">
+                    <span>Auto-Fill 6 Digits</span>
+                    <span>&darr;</span>
+                </button>
+            </div>
+        @endif
+
         <!-- OTP Submission Form -->
         <form method="POST" action="{{ route('register.otp.verify') }}" class="space-y-6" @submit="submitOtp($event)">
             @csrf
@@ -118,6 +136,16 @@
             },
             get fullOtp() {
                 return this.digits.join('');
+            },
+            autoFill(code) {
+                const arr = String(code).split('');
+                for (let i = 0; i < 6; i++) {
+                    this.digits[i] = arr[i] || '';
+                }
+                this.$nextTick(() => {
+                    const lastInput = document.getElementById('otp-input-5');
+                    if (lastInput) lastInput.focus();
+                });
             },
             handleInput(index, event) {
                 const val = event.target.value.replace(/[^0-9]/g, '');

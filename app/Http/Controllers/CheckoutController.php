@@ -107,6 +107,7 @@ class CheckoutController extends Controller
             'success' => true,
             'message' => 'A 6-digit authorization code has been dispatched to ' . $user->email,
             'email' => $user->email,
+            'dev_otp' => app()->environment('local') ? $otp : null,
         ]);
     }
 
@@ -243,7 +244,8 @@ class CheckoutController extends Controller
 
         return response()->json([
             'success' => true,
-            'message' => 'A fresh 6-digit authorization code has been dispatched.'
+            'message' => 'A fresh 6-digit authorization code has been dispatched.',
+            'dev_otp' => app()->environment('local') ? $otp : null,
         ]);
     }
 

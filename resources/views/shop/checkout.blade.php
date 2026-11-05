@@ -17,12 +17,22 @@
         otpSubmitting: false,
         otpError: '',
         otpSuccessMsg: '',
+        devOtp: '',
         targetEmail: '{{ auth()->user()->email }}',
         timerSeconds: 60,
         timerInterval: null,
         
         get fullOtp() {
             return this.otpDigits.join('');
+        },
+        
+        autoFillDevOtp() {
+            if (!this.devOtp) return;
+            const arr = String(this.devOtp).split('');
+            for (let i = 0; i < 6; i++) {
+                this.otpDigits[i] = arr[i] || '';
+            }
+            this.confirmOrderWithOtp();
         },
         
         startTimer() {
@@ -106,6 +116,9 @@
                 this.otpModalOpen = true;
                 this.otpDigits = ['', '', '', '', '', ''];
                 this.otpSuccessMsg = data.message;
+                if (data.dev_otp) {
+                    this.devOtp = data.dev_otp;
+                }
                 this.startTimer();
                 setTimeout(() => {
                     if (this.$refs.otp0) this.$refs.otp0.focus();
@@ -132,6 +145,9 @@
                 const data = await res.json();
                 if (data.success) {
                     this.otpSuccessMsg = data.message;
+                    if (data.dev_otp) {
+                        this.devOtp = data.dev_otp;
+                    }
                     this.startTimer();
                 } else {
                     this.otpError = data.message || 'Could not resend authorization code.';
@@ -509,6 +525,23 @@
                 <div x-show="otpSuccessMsg" x-cloak class="mt-4 p-3 rounded-xl bg-emerald-950/40 border border-emerald-800/80 text-xs text-emerald-300 font-medium text-center">
                     <span x-text="otpSuccessMsg"></span>
                 </div>
+
+                <!-- Local Dev Mode Passcode Helper -->
+                <template x-if="devOtp">
+                    <div class="mt-4 p-3.5 rounded-2xl bg-amber-500/10 border border-amber-500/30 text-center space-y-1.5">
+                        <div class="flex items-center justify-center gap-1.5 text-[10px] font-bold uppercase tracking-wider text-amber-400">
+                            <svg class="w-3.5 h-3.5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M13 16h-1v-4h-1m1-4h.01M21 12a9 9 0 11-18 0 9 9 0 0118 0z"/></svg>
+                            <span>Local Dev Mode &bull; Passcode Generated</span>
+                        </div>
+                        <div class="font-mono text-xl font-black tracking-[0.3em] text-amber-200" x-text="devOtp"></div>
+                        <button type="button" 
+                                @click="autoFillDevOtp()" 
+                                class="inline-flex items-center gap-1 px-3 py-1 rounded-full bg-amber-400/20 hover:bg-amber-400/30 text-[10px] font-bold text-amber-300 transition-colors">
+                            <span>Auto-Fill & Authorize</span>
+                            <span>&rarr;</span>
+                        </button>
+                    </div>
+                </template>
 
                 <!-- 6-Box OTP Input -->
                 <div class="mt-6 flex justify-between gap-2 max-w-xs mx-auto">
