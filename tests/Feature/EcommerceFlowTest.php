@@ -96,6 +96,11 @@ class EcommerceFlowTest extends TestCase
         $this->assertNotNull($user);
         $this->actingAs($user);
 
+        // Clear cart for clean assertion
+        if ($user->cart) {
+            $user->cart->items()->delete();
+        }
+
         $product = Product::active()->first();
         $variant = $product->variants->first();
 
@@ -109,8 +114,8 @@ class EcommerceFlowTest extends TestCase
         // 2. Initial stock
         $initialStock = $variant ? $variant->inventory->quantity : 10;
 
-        // 3. Process checkout
-        $response = $this->post(route('checkout.process'), [
+        // 3. Request 6-digit Order Authorization OTP
+        $otpResponse = $this->postJson(route('checkout.send-otp'), [
             'email' => 'client@collector.com',
             'phone' => '+91 98765 00000',
             'payment_method' => 'cod',
@@ -126,7 +131,21 @@ class EcommerceFlowTest extends TestCase
             ],
         ]);
 
-        $response->assertStatus(302);
+        $otpResponse->assertStatus(200);
+        $otpResponse->assertJson(['success' => true]);
+
+        // Verify OTP was stored in session
+        $otp = session('order_otp');
+        $this->assertNotEmpty($otp);
+        $this->assertEquals(6, strlen($otp));
+
+        // 4. Verify 6-digit OTP and complete order
+        $verifyResponse = $this->postJson(route('checkout.verify-otp'), [
+            'otp' => $otp,
+        ]);
+
+        $verifyResponse->assertStatus(200);
+        $verifyResponse->assertJson(['success' => true]);
 
         // Verify order created in database
         $order = Order::where('customer_email', 'client@collector.com')->latest()->first();
@@ -140,7 +159,7 @@ class EcommerceFlowTest extends TestCase
             $this->assertEquals($initialStock - 1, $variant->inventory->quantity);
         }
 
-        // 4. Verify confirmation receipt page
+        // 5. Verify confirmation receipt page
         $confirmResponse = $this->get(route('checkout.confirmation', $order->order_number));
         $confirmResponse->assertStatus(200);
         $confirmResponse->assertSee($order->order_number);

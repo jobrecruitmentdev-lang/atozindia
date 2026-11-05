@@ -369,11 +369,19 @@
                             </div>
                         </div>
 
+                        @auth('web')
                         <a href="{{ route('checkout.index') }}" 
                            class="w-full bg-neutral-950 hover:bg-black text-white text-xs font-bold uppercase tracking-wider py-3.5 rounded-full text-center flex items-center justify-center gap-2 shadow-lg hover:shadow-xl transition-all">
                             <span>Proceed to Checkout</span>
                             <span>&rarr;</span>
                         </a>
+                        @else
+                        <a href="{{ route('login', ['redirect' => 'checkout']) }}" 
+                           class="w-full bg-neutral-950 hover:bg-black text-white text-xs font-bold uppercase tracking-wider py-3.5 rounded-full text-center flex items-center justify-center gap-2 shadow-lg hover:shadow-xl transition-all">
+                            <span>Sign In to Checkout</span>
+                            <span>&rarr;</span>
+                        </a>
+                        @endauth
                     </div>
                 </template>
             </div>

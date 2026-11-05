@@ -56,9 +56,14 @@ Route::post('/cart/remove/{id}', [CartController::class, 'remove'])->name('cart.
 Route::post('/cart/coupon/apply', [CartController::class, 'applyCoupon'])->name('cart.coupon.apply');
 Route::post('/cart/coupon/remove', [CartController::class, 'removeCoupon'])->name('cart.coupon.remove');
 
-// Checkout
-Route::get('/checkout', [CheckoutController::class, 'index'])->name('checkout.index');
-Route::post('/checkout', [CheckoutController::class, 'process'])->name('checkout.process');
+// Checkout (Strictly Protected: Mandatory Authentication & 6-Digit Order OTP)
+Route::middleware('auth:web')->group(function () {
+    Route::get('/checkout', [CheckoutController::class, 'index'])->name('checkout.index');
+    Route::post('/checkout', [CheckoutController::class, 'process'])->name('checkout.process');
+    Route::post('/checkout/send-otp', [CheckoutController::class, 'sendOrderOtp'])->name('checkout.send-otp');
+    Route::post('/checkout/verify-otp', [CheckoutController::class, 'verifyOrderOtp'])->name('checkout.verify-otp');
+    Route::post('/checkout/resend-otp', [CheckoutController::class, 'resendOrderOtp'])->name('checkout.resend-otp');
+});
 Route::get('/order/{orderNumber}/confirmation', [CheckoutController::class, 'confirmation'])->name('checkout.confirmation');
 Route::get('/order/{orderNumber}/invoice', [CheckoutController::class, 'invoice'])->name('order.invoice');
 
@@ -75,6 +80,9 @@ Route::middleware('guest:web')->group(function () {
     Route::post('/login', [CustomerAuthController::class, 'login']);
     Route::get('/register', [CustomerAuthController::class, 'showRegisterForm'])->name('register');
     Route::post('/register', [CustomerAuthController::class, 'register']);
+    Route::get('/register/verify-otp', [CustomerAuthController::class, 'showOtpForm'])->name('register.otp');
+    Route::post('/register/verify-otp', [CustomerAuthController::class, 'verifyOtp'])->name('register.otp.verify');
+    Route::post('/register/resend-otp', [CustomerAuthController::class, 'resendOtp'])->name('register.otp.resend');
 });
 Route::post('/logout', [CustomerAuthController::class, 'logout'])->name('logout');
 

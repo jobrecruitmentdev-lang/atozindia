@@ -45,7 +45,7 @@
 
         <div class="border-t border-neutral-100 pt-4 text-center text-xs text-neutral-500">
             Don't have an atelier account? 
-            <a href="{{ route('register') }}" class="font-bold text-neutral-950 underline hover:text-neutral-600">Register now</a>
+            <a href="{{ route('register', request('redirect') ? ['redirect' => request('redirect')] : []) }}" class="font-bold text-neutral-950 underline hover:text-neutral-600">Register now</a>
         </div>
     </div>
 </div>

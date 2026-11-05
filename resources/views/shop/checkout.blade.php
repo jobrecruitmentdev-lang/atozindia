@@ -1,14 +1,182 @@
 @extends('layouts.app')
 
 @section('title', 'Secure Checkout — ATOZ GADGETZ')
-@section('meta_description', 'Complete your order with encrypted concierge checkout.')
+@section('meta_description', 'Complete your order with 2FA encrypted concierge checkout.')
 
 @section('content')
 <div class="max-w-[1200px] mx-auto px-6 sm:px-10 py-12 space-y-8" 
      x-data="{ 
         sameAsShipping: true, 
         paymentMethod: 'cod',
-        selectedAddressId: null
+        selectedAddressId: null,
+        
+        // 2FA Order Authorization State
+        otpModalOpen: false,
+        otpDigits: ['', '', '', '', '', ''],
+        otpSending: false,
+        otpSubmitting: false,
+        otpError: '',
+        otpSuccessMsg: '',
+        targetEmail: '{{ auth()->user()->email }}',
+        timerSeconds: 60,
+        timerInterval: null,
+        
+        get fullOtp() {
+            return this.otpDigits.join('');
+        },
+        
+        startTimer() {
+            this.timerSeconds = 60;
+            if (this.timerInterval) clearInterval(this.timerInterval);
+            this.timerInterval = setInterval(() => {
+                if (this.timerSeconds > 0) {
+                    this.timerSeconds--;
+                } else {
+                    clearInterval(this.timerInterval);
+                }
+            }, 1000);
+        },
+        
+        handleDigitInput(index, event) {
+            const val = event.target.value.replace(/[^0-9]/g, '');
+            this.otpDigits[index] = val ? val[val.length - 1] : '';
+            if (val && index < 5) {
+                const nextField = this.$refs['otp' + (index + 1)];
+                if (nextField) nextField.focus();
+            }
+            if (this.fullOtp.length === 6) {
+                this.confirmOrderWithOtp();
+            }
+        },
+        
+        handleBackspace(index, event) {
+            if (!this.otpDigits[index] && index > 0) {
+                const prevField = this.$refs['otp' + (index - 1)];
+                if (prevField) prevField.focus();
+            }
+        },
+        
+        handlePaste(event) {
+            event.preventDefault();
+            const pasteData = (event.clipboardData || window.clipboardData).getData('text').trim();
+            const numbers = pasteData.replace(/[^0-9]/g, '').slice(0, 6);
+            for (let i = 0; i < 6; i++) {
+                this.otpDigits[i] = numbers[i] || '';
+            }
+            if (numbers.length > 0) {
+                const focusIdx = Math.min(numbers.length, 5);
+                const targetRef = this.$refs['otp' + focusIdx];
+                if (targetRef) targetRef.focus();
+            }
+            if (numbers.length === 6) {
+                this.confirmOrderWithOtp();
+            }
+        },
+        
+        async requestOrderOtp() {
+            const form = this.$refs.checkoutForm;
+            if (!form.checkValidity()) {
+                form.reportValidity();
+                return;
+            }
+            
+            this.otpSending = true;
+            this.otpError = '';
+            
+            const formData = new FormData(form);
+            
+            try {
+                const res = await fetch('{{ route('checkout.send-otp') }}', {
+                    method: 'POST',
+                    headers: {
+                        'X-CSRF-TOKEN': '{{ csrf_token() }}',
+                        'Accept': 'application/json'
+                    },
+                    body: formData
+                });
+                const data = await res.json();
+                
+                if (!res.ok || !data.success) {
+                    this.otpError = data.message || (data.errors ? Object.values(data.errors).flat().join(', ') : 'Unable to send authorization code.');
+                    this.otpSending = false;
+                    return;
+                }
+                
+                this.targetEmail = data.email || '{{ auth()->user()->email }}';
+                this.otpModalOpen = true;
+                this.otpDigits = ['', '', '', '', '', ''];
+                this.otpSuccessMsg = data.message;
+                this.startTimer();
+                setTimeout(() => {
+                    if (this.$refs.otp0) this.$refs.otp0.focus();
+                }, 250);
+            } catch (err) {
+                this.otpError = 'Network communication error. Please check your connection.';
+            } finally {
+                this.otpSending = false;
+            }
+        },
+        
+        async resendOrderOtp() {
+            if (this.timerSeconds > 0) return;
+            this.otpSending = true;
+            this.otpError = '';
+            try {
+                const res = await fetch('{{ route('checkout.resend-otp') }}', {
+                    method: 'POST',
+                    headers: {
+                        'X-CSRF-TOKEN': '{{ csrf_token() }}',
+                        'Accept': 'application/json'
+                    }
+                });
+                const data = await res.json();
+                if (data.success) {
+                    this.otpSuccessMsg = data.message;
+                    this.startTimer();
+                } else {
+                    this.otpError = data.message || 'Could not resend authorization code.';
+                }
+            } catch (e) {
+                this.otpError = 'Network error during resend. Please try again.';
+            } finally {
+                this.otpSending = false;
+            }
+        },
+        
+        async confirmOrderWithOtp() {
+            if (this.fullOtp.length !== 6) {
+                this.otpError = 'Please enter all 6 digits of the authorization code.';
+                return;
+            }
+            
+            this.otpSubmitting = true;
+            this.otpError = '';
+            
+            try {
+                const res = await fetch('{{ route('checkout.verify-otp') }}', {
+                    method: 'POST',
+                    headers: {
+                        'Content-Type': 'application/json',
+                        'X-CSRF-TOKEN': '{{ csrf_token() }}',
+                        'Accept': 'application/json'
+                    },
+                    body: JSON.stringify({ otp: this.fullOtp })
+                });
+                const data = await res.json();
+                
+                if (res.ok && data.success && data.redirect_url) {
+                    window.location.href = data.redirect_url;
+                } else {
+                    this.otpError = data.message || 'Invalid authorization code. Please verify.';
+                    this.otpDigits = ['', '', '', '', '', ''];
+                    if (this.$refs.otp0) this.$refs.otp0.focus();
+                }
+            } catch (err) {
+                this.otpError = 'Network communication failure during verification.';
+            } finally {
+                this.otpSubmitting = false;
+            }
+        }
      }">
 
     <!-- Breadcrumb -->
@@ -17,7 +185,7 @@
         <span>/</span>
         <a href="{{ route('cart.index') }}" class="hover:text-black">Shopping Bag</a>
         <span>/</span>
-        <span class="text-neutral-900 font-bold">Checkout</span>
+        <span class="text-neutral-900 font-bold">Encrypted Checkout</span>
     </nav>
 
     <!-- Error Notice if any -->
@@ -27,7 +195,12 @@
         </div>
     @endif
 
-    <form method="POST" action="{{ route('checkout.process') }}" class="grid grid-cols-1 lg:grid-cols-12 gap-12 items-start">
+    <div x-show="otpError && !otpModalOpen" x-cloak class="p-4 rounded-2xl bg-rose-50 border border-rose-200 text-xs text-rose-800 font-medium">
+        <span x-text="otpError"></span>
+    </div>
+
+    <!-- Main Checkout Form -->
+    <form x-ref="checkoutForm" method="POST" action="{{ route('checkout.process') }}" class="grid grid-cols-1 lg:grid-cols-12 gap-12 items-start">
         @csrf
 
         <!-- LEFT 7 COLS: SHIPPING, CONTACT & PAYMENT -->
@@ -36,30 +209,37 @@
             <!-- 1. Contact Information -->
             <div class="bg-white rounded-3xl border border-neutral-200/80 p-6 sm:p-8 shadow-sm space-y-4">
                 <div class="flex items-center justify-between border-b border-neutral-100 pb-3">
-                    <h3 class="text-sm font-bold uppercase tracking-wider text-neutral-950">1. Concierge Contact</h3>
-                    @guest
-                        <a href="{{ route('login') }}" class="text-xs font-semibold text-neutral-600 hover:text-black underline">Have an account? Log in &rarr;</a>
-                    @endguest
+                    <div class="flex items-center gap-2.5">
+                        <span class="w-6 h-6 rounded-full bg-neutral-950 text-white text-[11px] font-bold flex items-center justify-center">1</span>
+                        <h3 class="text-sm font-bold uppercase tracking-wider text-neutral-950">Concierge Collector Account</h3>
+                    </div>
+                    <span class="inline-flex items-center gap-1.5 px-3 py-1 rounded-full bg-emerald-50 border border-emerald-200 text-[11px] font-bold text-emerald-800">
+                        <span class="w-1.5 h-1.5 rounded-full bg-emerald-600"></span>
+                        Verified Collector
+                    </span>
                 </div>
 
                 <div class="grid grid-cols-1 sm:grid-cols-2 gap-4">
                     <div>
-                        <label class="block text-xs font-bold uppercase tracking-wider text-neutral-700 mb-1.5">Email Address *</label>
-                        <input type="email" name="email" value="{{ old('email', auth()->user()?->email) }}" required placeholder="concierge@example.com" class="w-full text-xs font-mono bg-neutral-50 border border-neutral-200 rounded-xl p-3 focus:outline-none focus:border-black">
-                        <span class="text-[10px] text-neutral-400 mt-1 block">Invoicing and track & trace links are sent here.</span>
+                        <label class="block text-xs font-bold uppercase tracking-wider text-neutral-700 mb-1.5">Registered Email *</label>
+                        <input type="email" name="email" value="{{ old('email', auth()->user()?->email) }}" required readonly class="w-full text-xs font-mono bg-neutral-100 border border-neutral-200 rounded-xl p-3 text-neutral-700 font-semibold cursor-not-allowed">
+                        <span class="text-[10px] text-neutral-400 mt-1 block">2FA security passcode will be sent to this email.</span>
                     </div>
 
                     <div>
                         <label class="block text-xs font-bold uppercase tracking-wider text-neutral-700 mb-1.5">Contact Phone *</label>
                         <input type="tel" name="phone" value="{{ old('phone', auth()->user()?->phone) }}" required placeholder="+91 98765 43210" class="w-full text-xs font-mono bg-neutral-50 border border-neutral-200 rounded-xl p-3 focus:outline-none focus:border-black">
-                        <span class="text-[10px] text-neutral-400 mt-1 block">For delivery coordination.</span>
+                        <span class="text-[10px] text-neutral-400 mt-1 block">For courier coordination.</span>
                     </div>
                 </div>
             </div>
 
             <!-- 2. Shipping Destination -->
             <div class="bg-white rounded-3xl border border-neutral-200/80 p-6 sm:p-8 shadow-sm space-y-4">
-                <h3 class="text-sm font-bold uppercase tracking-wider text-neutral-950 border-b border-neutral-100 pb-3">2. Shipping Destination</h3>
+                <div class="flex items-center gap-2.5 border-b border-neutral-100 pb-3">
+                    <span class="w-6 h-6 rounded-full bg-neutral-950 text-white text-[11px] font-bold flex items-center justify-center">2</span>
+                    <h3 class="text-sm font-bold uppercase tracking-wider text-neutral-950">Shipping Destination</h3>
+                </div>
 
                 @if($savedAddresses->isNotEmpty())
                     <div class="space-y-2 mb-4">
@@ -137,7 +317,10 @@
 
             <!-- 3. Payment Method -->
             <div class="bg-white rounded-3xl border border-neutral-200/80 p-6 sm:p-8 shadow-sm space-y-4">
-                <h3 class="text-sm font-bold uppercase tracking-wider text-neutral-950 border-b border-neutral-100 pb-3">3. Payment Protocol</h3>
+                <div class="flex items-center gap-2.5 border-b border-neutral-100 pb-3">
+                    <span class="w-6 h-6 rounded-full bg-neutral-950 text-white text-[11px] font-bold flex items-center justify-center">3</span>
+                    <h3 class="text-sm font-bold uppercase tracking-wider text-neutral-950">Payment Protocol</h3>
+                </div>
 
                 <div class="space-y-3">
                     <!-- COD Option -->
@@ -231,19 +414,159 @@
                     </div>
                 </div>
 
-                <!-- Submit Button -->
-                <button type="submit" class="w-full py-4 rounded-2xl bg-neutral-950 text-white font-bold text-xs uppercase tracking-widest hover:bg-neutral-800 transition-all shadow-xl flex items-center justify-center gap-2">
-                    <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 12l2 2 4-4m5.618-4.016A11.955 11.955 0 0112 2.944a11.955 11.955 0 01-8.618 3.04A12.02 12.02 0 003 9c0 5.591 3.824 10.29 9 11.622 5.176-1.332 9-6.03 9-11.622 0-1.042-.133-2.052-.382-3.016z"/></svg>
-                    <span>Confirm Order & Dispatch</span>
+                <!-- 2-Step Trigger Button -->
+                <button type="button" 
+                        @click="requestOrderOtp()" 
+                        :disabled="otpSending" 
+                        class="w-full py-4 rounded-2xl bg-neutral-950 text-white font-bold text-xs uppercase tracking-widest hover:bg-neutral-800 transition-all shadow-xl flex items-center justify-center gap-2 disabled:opacity-50 disabled:cursor-not-allowed">
+                    <template x-if="!otpSending">
+                        <span class="flex items-center gap-2">
+                            <svg class="w-4 h-4 text-emerald-400" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 12l2 2 4-4m5.618-4.016A11.955 11.955 0 0112 2.944a11.955 11.955 0 01-8.618 3.04A12.02 12.02 0 003 9c0 5.591 3.824 10.29 9 11.622 5.176-1.332 9-6.03 9-11.622 0-1.042-.133-2.052-.382-3.016z"/></svg>
+                            <span>Authorize & Place Order (2FA)</span>
+                        </span>
+                    </template>
+                    <template x-if="otpSending">
+                        <span class="flex items-center gap-2">
+                            <svg class="animate-spin w-4 h-4 text-white" fill="none" viewBox="0 0 24 24"><circle class="opacity-25" cx="12" cy="12" r="10" stroke="currentColor" stroke-width="4"></circle><path class="opacity-75" fill="currentColor" d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4z"></path></svg>
+                            <span>Dispatching Security Code...</span>
+                        </span>
+                    </template>
                 </button>
 
-                <div class="text-[10px] text-neutral-400 text-center leading-relaxed">
-                    By confirming this reservation, you agree to ATOZ GADGETZ terms of bespoke service, 14-day trial audition, and privacy policy.
+                <!-- Security Trust Note -->
+                <div class="flex items-center justify-center gap-2 text-[10px] text-neutral-400">
+                    <svg class="w-3.5 h-3.5 text-neutral-500" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 15v2m-6 4h12a2 2 0 002-2v-6a2 2 0 00-2-2H6a2 2 0 00-2 2v6a2 2 0 002 2zm10-10V7a4 4 0 00-8 0v4h8z"/></svg>
+                    <span>6-digit email authorization prevents unauthorized purchases</span>
                 </div>
             </div>
 
         </div>
 
     </form>
+
+    <!-- ======================================================== -->
+    <!-- 2FA ORDER AUTHORIZATION MODAL (LUXURY OBSIDIAN DIALOG)  -->
+    <!-- ======================================================== -->
+    <div x-show="otpModalOpen" 
+         x-cloak 
+         class="fixed inset-0 z-50 overflow-y-auto" 
+         aria-labelledby="modal-title" 
+         role="dialog" 
+         aria-modal="true">
+        
+        <!-- Backdrop -->
+        <div x-show="otpModalOpen" 
+             x-transition:enter="ease-out duration-300"
+             x-transition:enter-start="opacity-0"
+             x-transition:enter-end="opacity-100"
+             x-transition:leave="ease-in duration-200"
+             x-transition:leave-start="opacity-100"
+             x-transition:leave-end="opacity-0"
+             class="fixed inset-0 bg-neutral-950/80 backdrop-blur-md transition-opacity"></div>
+
+        <div class="flex min-h-full items-center justify-center p-4 text-center sm:p-0">
+            <div x-show="otpModalOpen" 
+                 x-transition:enter="ease-out duration-300"
+                 x-transition:enter-start="opacity-0 translate-y-4 sm:translate-y-0 sm:scale-95"
+                 x-transition:enter-end="opacity-100 translate-y-0 sm:scale-100"
+                 x-transition:leave="ease-in duration-200"
+                 x-transition:leave-start="opacity-100 translate-y-0 sm:scale-100"
+                 x-transition:leave-end="opacity-0 translate-y-4 sm:translate-y-0 sm:scale-95"
+                 @click.away="otpModalOpen = false"
+                 class="relative transform overflow-hidden rounded-3xl bg-[#141517] border border-[#27272a] text-left shadow-2xl transition-all sm:my-8 sm:w-full sm:max-w-md p-6 sm:p-8">
+                
+                <!-- Close Button -->
+                <button type="button" 
+                        @click="otpModalOpen = false" 
+                        class="absolute top-5 right-5 text-neutral-400 hover:text-white transition-colors">
+                    <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12"/></svg>
+                </button>
+
+                <!-- Modal Header -->
+                <div class="text-center space-y-3">
+                    <div class="w-12 h-12 rounded-2xl bg-neutral-900 border border-neutral-800 text-emerald-400 mx-auto flex items-center justify-center shadow-inner">
+                        <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 12l2 2 4-4m5.618-4.016A11.955 11.955 0 0112 2.944a11.955 11.955 0 01-8.618 3.04A12.02 12.02 0 003 9c0 5.591 3.824 10.29 9 11.622 5.176-1.332 9-6.03 9-11.622 0-1.042-.133-2.052-.382-3.016z"/></svg>
+                    </div>
+
+                    <div class="inline-block px-3 py-1 rounded-full bg-indigo-950/80 border border-indigo-800 text-[10px] font-bold tracking-widest text-indigo-300 uppercase">
+                        2FA Acquisition Protocol
+                    </div>
+
+                    <h3 class="text-lg font-bold text-white tracking-tight">Authorize Your Acquisition</h3>
+                    
+                    <p class="text-xs text-neutral-400 leading-relaxed">
+                        A single-use 6-digit passcode has been dispatched to:
+                        <span class="block mt-1 font-mono font-bold text-white truncate" x-text="targetEmail"></span>
+                    </p>
+                </div>
+
+                <!-- Error Alert -->
+                <div x-show="otpError" x-cloak class="mt-4 p-3 rounded-xl bg-rose-950/50 border border-rose-800/80 text-xs text-rose-300 font-medium text-center">
+                    <span x-text="otpError"></span>
+                </div>
+
+                <!-- Success Alert -->
+                <div x-show="otpSuccessMsg" x-cloak class="mt-4 p-3 rounded-xl bg-emerald-950/40 border border-emerald-800/80 text-xs text-emerald-300 font-medium text-center">
+                    <span x-text="otpSuccessMsg"></span>
+                </div>
+
+                <!-- 6-Box OTP Input -->
+                <div class="mt-6 flex justify-between gap-2 max-w-xs mx-auto">
+                    <template x-for="(digit, idx) in otpDigits" :key="idx">
+                        <input type="text" 
+                               maxlength="1" 
+                               inputmode="numeric" 
+                               pattern="[0-9]*" 
+                               class="w-11 h-13 text-center text-xl font-bold font-mono rounded-xl bg-[#1c1d21] border border-[#2e3036] text-white focus:outline-none focus:border-indigo-500 focus:ring-1 focus:ring-indigo-500 transition-all selection:bg-indigo-500"
+                               :x-ref="'otp' + idx"
+                               x-model="otpDigits[idx]"
+                               @input="handleDigitInput(idx, $event)"
+                               @keydown.backspace="handleBackspace(idx, $event)"
+                               @paste="handlePaste($event)">
+                    </template>
+                </div>
+
+                <!-- Actions -->
+                <div class="mt-6 space-y-3">
+                    <button type="button" 
+                            @click="confirmOrderWithOtp()" 
+                            :disabled="otpSubmitting || fullOtp.length !== 6" 
+                            class="w-full py-3.5 rounded-xl bg-white text-black font-bold text-xs uppercase tracking-wider hover:bg-neutral-200 transition-all flex items-center justify-center gap-2 disabled:opacity-40 disabled:cursor-not-allowed shadow-lg">
+                        <template x-if="!otpSubmitting">
+                            <span>Confirm & Authorize Order</span>
+                        </template>
+                        <template x-if="otpSubmitting">
+                            <span class="flex items-center gap-2">
+                                <svg class="animate-spin w-4 h-4 text-black" fill="none" viewBox="0 0 24 24"><circle class="opacity-25" cx="12" cy="12" r="10" stroke="currentColor" stroke-width="4"></circle><path class="opacity-75" fill="currentColor" d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4z"></path></svg>
+                                <span>Verifying Authorization...</span>
+                            </span>
+                        </template>
+                    </button>
+
+                    <!-- Resend / Cooldown -->
+                    <div class="text-center text-xs text-neutral-400">
+                        <span x-show="timerSeconds > 0">
+                            Resend code in <strong class="text-white font-mono" x-text="timerSeconds"></strong>s
+                        </span>
+                        <button type="button" 
+                                x-show="timerSeconds === 0" 
+                                @click="resendOrderOtp()" 
+                                class="text-indigo-400 hover:text-indigo-300 font-semibold underline">
+                            Resend 6-Digit Passcode
+                        </button>
+                    </div>
+
+                    <!-- Cancel / Return -->
+                    <button type="button" 
+                            @click="otpModalOpen = false" 
+                            class="w-full py-2 text-[11px] text-neutral-500 hover:text-neutral-300 text-center transition-colors">
+                        Modify Delivery Information
+                    </button>
+                </div>
+
+            </div>
+        </div>
+    </div>
+
 </div>
 @endsection

@@ -183,10 +183,18 @@
                         </div>
                     </div>
 
-                    <a href="{{ route('checkout.index') }}" class="w-full py-4 rounded-2xl bg-neutral-950 text-white font-bold text-xs uppercase tracking-widest hover:bg-neutral-800 transition-all flex items-center justify-center gap-2 shadow-xl">
-                        <span>Proceed to Secure Checkout</span>
-                        <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M14 5l7 7m0 0l-7 7m7-7H3"/></svg>
-                    </a>
+                    @auth('web')
+                        <a href="{{ route('checkout.index') }}" class="w-full py-4 rounded-2xl bg-neutral-950 text-white font-bold text-xs uppercase tracking-widest hover:bg-neutral-800 transition-all flex items-center justify-center gap-2 shadow-xl">
+                            <span>Proceed to Secure Checkout</span>
+                            <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M14 5l7 7m0 0l-7 7m7-7H3"/></svg>
+                        </a>
+                    @else
+                        <a href="{{ route('login', ['redirect' => 'checkout']) }}" class="w-full py-4 rounded-2xl bg-neutral-950 text-white font-bold text-xs uppercase tracking-widest hover:bg-neutral-800 transition-all flex items-center justify-center gap-2 shadow-xl">
+                            <svg class="w-4 h-4 text-emerald-400" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 15v2m-6 4h12a2 2 0 002-2v-6a2 2 0 00-2-2H6a2 2 0 00-2 2v6a2 2 0 002 2zm10-10V7a4 4 0 00-8 0v4h8z"/></svg>
+                            <span>Sign In to Complete Acquisition</span>
+                        </a>
+                        <p class="text-[11px] text-neutral-500 text-center">Account registration & 2FA passcode required to place order.</p>
+                    @endauth
 
                     <div class="text-[11px] text-neutral-400 text-center space-y-1">
                         <p>256-Bit Encrypted Secure Checkout</p>
