@@ -114,8 +114,8 @@ class OtpAndAuthTest extends TestCase
         $user = User::where('email', 'customer@example.com')->first();
         $this->actingAs($user);
 
-        $product = Product::active()->first();
-        $variant = $product->variants->first();
+        $product = Product::active()->whereHas('variants.inventory', fn($q) => $q->where('quantity', '>', 0))->first();
+        $variant = $product->variants->first(fn($v) => $v->inventory && $v->inventory->quantity > 0);
 
         // Add item to cart
         $this->postJson('/cart/add', [

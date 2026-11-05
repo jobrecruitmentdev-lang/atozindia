@@ -61,8 +61,8 @@ class EcommerceFlowTest extends TestCase
      */
     public function test_cart_add_and_drawer_api(): void
     {
-        $product = Product::active()->first();
-        $variant = $product->variants->first();
+        $product = Product::active()->whereHas('variants.inventory', fn($q) => $q->where('quantity', '>=', 5))->first();
+        $variant = $product->variants()->whereHas('inventory', fn($q) => $q->where('quantity', '>=', 5))->first();
 
         // Add to cart via AJAX
         $response = $this->postJson('/cart/add', [
@@ -101,8 +101,8 @@ class EcommerceFlowTest extends TestCase
             $user->cart->items()->delete();
         }
 
-        $product = Product::active()->first();
-        $variant = $product->variants->first();
+        $product = Product::active()->whereHas('variants.inventory', fn($q) => $q->where('quantity', '>=', 5))->first();
+        $variant = $product->variants()->whereHas('inventory', fn($q) => $q->where('quantity', '>=', 5))->first();
 
         // 1. Add item to cart
         $this->postJson('/cart/add', [

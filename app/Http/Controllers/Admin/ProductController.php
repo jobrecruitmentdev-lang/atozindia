@@ -142,8 +142,13 @@ class ProductController extends Controller
             $product = Product::create($data);
             $product->categories()->sync($categories);
 
-            // If an image was uploaded directly during creation, save it as primary thumbnail
-            if ($request->hasFile('primary_image')) {
+            // 1. Process multi-color swatches with multi-pose images and variants (Availsmart style)
+            if ($request->filled('color_count') && (int)$request->input('color_count') > 0) {
+                $this->processColorSwatches($request, $product);
+            }
+
+            // 2. If single fallback primary image was uploaded
+            if ($request->hasFile('primary_image') && !$product->images()->exists()) {
                 $path = $request->file('primary_image')->store('products', 'public');
                 ProductImage::create([
                     'product_id' => $product->id,
@@ -154,8 +159,8 @@ class ProductController extends Controller
                 ]);
             }
 
-            // If not variable, create a single default variant
-            if (!$product->is_variable) {
+            // 3. If no variants were created via color swatches and product is not variable, create single default variant
+            if (!$product->is_variable && !$product->variants()->exists()) {
                 $variant = ProductVariant::create([
                     'product_id' => $product->id,
                     'sku' => $product->base_sku,
@@ -211,7 +216,87 @@ class ProductController extends Controller
         $attributes = Attribute::with('values')->get();
         $currentStock = $product->variants->first()?->inventory?->quantity ?? 0;
 
-        return view('admin.products.edit', compact('product', 'brands', 'categories', 'rootCategories', 'attributes', 'currentStock'));
+        $colorAttr = Attribute::where('code', 'color')->first();
+        $productColors = [];
+
+        // Group existing images by color
+        foreach ($product->images as $img) {
+            $cVal = $img->colorValue;
+            $cId = $cVal ? $cVal->id : 0;
+            $cName = $cVal ? $cVal->value : 'Standard / Global';
+            $cHex = ($cVal && $cVal->color_hex) ? $cVal->color_hex : '#111110';
+
+            if (!isset($productColors[$cId])) {
+                $productColors[$cId] = [
+                    'id' => $cId,
+                    'name' => $cName,
+                    'hex' => $cHex,
+                    'existing_images' => [],
+                    'new_previews' => [],
+                    'variants' => [],
+                ];
+            }
+
+            $productColors[$cId]['existing_images'][] = [
+                'id' => $img->id,
+                'url' => $img->image_path,
+                'is_primary' => (bool) $img->is_primary,
+            ];
+        }
+
+        // Attach variants to their respective colors
+        foreach ($product->variants as $variant) {
+            $cVal = $colorAttr ? $variant->attributeValues->firstWhere('attribute_id', $colorAttr->id) : null;
+            $sVal = $colorAttr ? $variant->attributeValues->first(fn($v) => $v->attribute_id !== $colorAttr->id) : $variant->attributeValues->first();
+
+            $cId = $cVal ? $cVal->id : 0;
+            $cName = $cVal ? $cVal->value : 'Standard / Global';
+            $cHex = ($cVal && $cVal->color_hex) ? $cVal->color_hex : '#111110';
+
+            if (!isset($productColors[$cId])) {
+                $productColors[$cId] = [
+                    'id' => $cId,
+                    'name' => $cName,
+                    'hex' => $cHex,
+                    'existing_images' => [],
+                    'new_previews' => [],
+                    'variants' => [],
+                ];
+            }
+
+            $productColors[$cId]['variants'][] = [
+                'id' => $variant->id,
+                'size' => $sVal ? $sVal->value : '',
+                'sku' => $variant->sku,
+                'price' => $variant->price_override ? (string) $variant->price_override : '',
+                'stock' => $variant->inventory ? $variant->inventory->quantity : 0,
+            ];
+        }
+
+        if (empty($productColors)) {
+            $productColors[] = [
+                'id' => null,
+                'name' => 'Obsidian Black',
+                'hex' => '#111110',
+                'existing_images' => [],
+                'new_previews' => [],
+                'variants' => [
+                    ['id' => null, 'size' => 'Standard', 'sku' => '', 'price' => '', 'stock' => 10],
+                ],
+            ];
+        }
+
+        $productColorsData = array_values($productColors);
+
+        return view('admin.products.edit', compact(
+            'product',
+            'brands',
+            'categories',
+            'rootCategories',
+            'attributes',
+            'currentStock',
+            'productColorsData'
+        ));
     }
 
     public function update(Request $request, Product $product)
@@ -272,7 +357,22 @@ class ProductController extends Controller
             $product->update($data);
             $product->categories()->sync($categories);
 
-            // If simple product, update single default variant stock directly
+            // 1. Delete selected images
+            if ($request->has('delete_images') && is_array($request->delete_images)) {
+                ProductImage::where('product_id', $product->id)->whereIn('id', $request->delete_images)->delete();
+            }
+
+            // 2. Delete selected variants
+            if ($request->has('delete_variants') && is_array($request->delete_variants)) {
+                ProductVariant::where('product_id', $product->id)->whereIn('id', $request->delete_variants)->delete();
+            }
+
+            // 3. Process multi-color swatches with multi-pose images and variants (Availsmart style)
+            if ($request->filled('color_count') && (int)$request->input('color_count') > 0) {
+                $this->processColorSwatches($request, $product);
+            }
+
+            // 4. If simple product, update single default variant stock directly
             if (!$product->is_variable && $stockQty !== null) {
                 $defaultVariant = $product->variants()->first();
                 if (!$defaultVariant) {
@@ -534,5 +634,172 @@ class ProductController extends Controller
 
         return redirect()->route('admin.products.edit', $newProduct->id)
             ->with('success', 'Product duplicated as draft successfully.');
+    }
+
+    /**
+     * Process dynamic multi-color sets, multiple images per color, and size variants (Availsmart Style).
+     */
+    protected function processColorSwatches(Request $request, Product $product): void
+    {
+        $colorCount = (int) $request->input('color_count', 0);
+        if ($colorCount <= 0) {
+            return;
+        }
+
+        $colorAttr = Attribute::firstOrCreate(['code' => 'color'], [
+            'name' => 'Colour',
+            'type' => 'color',
+        ]);
+
+        $sizeAttr = Attribute::firstOrCreate(['code' => 'size'], [
+            'name' => 'Size',
+            'type' => 'button',
+        ]);
+
+        $hasPrimaryImage = $product->images()->where('is_primary', true)->exists();
+        $totalVariantsCreated = 0;
+
+        for ($cIdx = 0; $cIdx < $colorCount; $cIdx++) {
+            $colorName = trim($request->input("color_name_{$cIdx}", ''));
+            $colorHex = trim($request->input("color_hex_{$cIdx}", '#111110'));
+
+            if (empty($colorName)) {
+                continue;
+            }
+
+            // 1. Find or create Color Attribute Value
+            $colorVal = AttributeValue::firstOrCreate(
+                ['attribute_id' => $colorAttr->id, 'value' => $colorName],
+                ['color_hex' => $colorHex, 'sort_order' => $cIdx + 1]
+            );
+            if ($colorHex && $colorVal->color_hex !== $colorHex) {
+                $colorVal->update(['color_hex' => $colorHex]);
+            }
+
+            // 2. Set existing primary image if selected via radio
+            $existingPrimaryId = $request->input("existing_primary_{$cIdx}");
+            if (!$existingPrimaryId && $colorVal) {
+                $existingPrimaryId = $request->input("existing_primary_{$colorVal->id}");
+            }
+            if ($existingPrimaryId) {
+                ProductImage::where('product_id', $product->id)->where('attribute_value_id', $colorVal->id)->update(['is_primary' => false]);
+                ProductImage::where('id', $existingPrimaryId)->where('product_id', $product->id)->update(['is_primary' => true]);
+                $hasPrimaryImage = true;
+            }
+
+            // 3. Upload multiple images for THIS color (Multi-Pose support)
+            $uploadedImages = $request->file("color_images_{$cIdx}") ?? [];
+            if (!is_array($uploadedImages) && $uploadedImages) {
+                $uploadedImages = [$uploadedImages];
+            }
+
+            $primaryImgIdx = (int) $request->input("primary_image_{$cIdx}", 0);
+
+            foreach ($uploadedImages as $imgOrder => $file) {
+                if ($file && $file->isValid()) {
+                    $path = $file->store('products', 'public');
+                    $isPrim = (!$hasPrimaryImage && $imgOrder === $primaryImgIdx);
+                    if ($isPrim) {
+                        $hasPrimaryImage = true;
+                    }
+
+                    ProductImage::create([
+                        'product_id' => $product->id,
+                        'attribute_value_id' => $colorVal->id,
+                        'image_path' => Storage::url($path),
+                        'alt_text' => "{$product->name} - {$colorName} (Pose " . ($imgOrder + 1) . ")",
+                        'is_primary' => $isPrim,
+                        'sort_order' => $imgOrder + 1,
+                    ]);
+                }
+            }
+
+            // 4. Handle Size Variants under this color
+            $vIds = $request->input("variant_id_{$cIdx}", []);
+            $vSizes = $request->input("variant_size_{$cIdx}", []);
+            $vSkus = $request->input("variant_sku_{$cIdx}", []);
+            $vPrices = $request->input("variant_price_{$cIdx}", []);
+            $vStocks = $request->input("variant_stock_{$cIdx}", []);
+
+            if (!empty($vSizes) && is_array($vSizes)) {
+                foreach ($vSizes as $idx => $sizeStr) {
+                    $sizeStr = trim($sizeStr);
+                    $skuVal = isset($vSkus[$idx]) ? trim($vSkus[$idx]) : '';
+                    $pVal = isset($vPrices[$idx]) && $vPrices[$idx] !== '' ? (float) $vPrices[$idx] : null;
+                    $stVal = isset($vStocks[$idx]) && $vStocks[$idx] !== '' ? (int) $vStocks[$idx] : 10;
+                    $vId = isset($vIds[$idx]) ? (int) $vIds[$idx] : null;
+
+                    if (empty($skuVal)) {
+                        $cleanSize = $sizeStr ? Str::slug($sizeStr) : 'STD';
+                        $skuVal = strtoupper("{$product->base_sku}-" . Str::slug($colorName) . "-{$cleanSize}");
+                        $uniqueSku = $skuVal;
+                        $counter = 1;
+                        while (ProductVariant::where('sku', $uniqueSku)->where('id', '!=', $vId)->exists()) {
+                            $uniqueSku = "{$skuVal}-" . $counter++;
+                        }
+                        $skuVal = $uniqueSku;
+                    }
+
+                    $attrValueIds = [$colorVal->id];
+                    if (!empty($sizeStr)) {
+                        $sizeVal = AttributeValue::firstOrCreate(
+                            ['attribute_id' => $sizeAttr->id, 'value' => $sizeStr],
+                            ['sort_order' => 1]
+                        );
+                        $attrValueIds[] = $sizeVal->id;
+                    }
+
+                    if ($vId) {
+                        $variant = ProductVariant::where('id', $vId)->where('product_id', $product->id)->first();
+                        if ($variant) {
+                            $variant->update([
+                                'sku' => $skuVal,
+                                'price_override' => $pVal,
+                            ]);
+                            $variant->attributeValues()->sync($attrValueIds);
+                            if ($variant->inventory) {
+                                $variant->inventory->update(['quantity' => $stVal]);
+                            } else {
+                                Inventory::create([
+                                    'product_variant_id' => $variant->id,
+                                    'quantity' => $stVal,
+                                    'reserved_quantity' => 0,
+                                    'low_stock_threshold' => 5,
+                                ]);
+                            }
+                            $totalVariantsCreated++;
+                        }
+                    } else {
+                        $variant = ProductVariant::create([
+                            'product_id' => $product->id,
+                            'sku' => $skuVal,
+                            'price_override' => $pVal,
+                            'status' => 'active',
+                        ]);
+                        $variant->attributeValues()->sync($attrValueIds);
+                        Inventory::create([
+                            'product_variant_id' => $variant->id,
+                            'quantity' => $stVal,
+                            'reserved_quantity' => 0,
+                            'low_stock_threshold' => 5,
+                        ]);
+                        $totalVariantsCreated++;
+                    }
+                }
+            }
+        }
+
+        // If product has no primary image marked, set the first available image as primary
+        if (!$product->images()->where('is_primary', true)->exists()) {
+            $firstImg = $product->images()->first();
+            if ($firstImg) {
+                $firstImg->update(['is_primary' => true]);
+            }
+        }
+
+        // Automatically set is_variable = true if multiple colors or variants exist
+        if ($colorCount > 1 || $totalVariantsCreated > 1) {
+            $product->update(['is_variable' => true]);
+        }
     }
 }

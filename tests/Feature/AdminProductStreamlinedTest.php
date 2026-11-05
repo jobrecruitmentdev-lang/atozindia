@@ -8,6 +8,7 @@ use App\Models\AttributeValue;
 use App\Models\Category;
 use App\Models\Product;
 use Illuminate\Foundation\Testing\RefreshDatabase;
+use Illuminate\Http\UploadedFile;
 use Tests\TestCase;
 
 class AdminProductStreamlinedTest extends TestCase
@@ -20,7 +21,7 @@ class AdminProductStreamlinedTest extends TestCase
         $response->assertStatus(200);
         $response->assertSee('Product Title *');
         $response->assertSee('Regular Price');
-        $response->assertSee('Primary Showcase Photo');
+        $response->assertSee('Multi-Pose Photos');
         $response->assertSee('Save & Publish Product', false);
     }
 
@@ -128,5 +129,65 @@ class AdminProductStreamlinedTest extends TestCase
         $fresh = $product->fresh();
         $this->assertEquals(888.00, $fresh->price);
         $this->assertEquals(77, $fresh->variants()->first()->inventory->quantity);
+    }
+
+    public function test_admin_can_create_product_with_multi_color_and_multiple_pose_photos_availsmart_style(): void
+    {
+        $admin = Admin::first() ?? Admin::factory()->create();
+        $category = Category::where('is_active', true)->first();
+
+        $postData = [
+            'name' => 'Signature Linen Shirt with Multi-Pose Photos',
+            'price' => '1299.00',
+            'status' => 'active',
+            'categories' => [$category->id],
+            'color_count' => 2,
+            
+            // Color 1: Obsidian Black with 3 poses
+            'color_name_0' => 'Obsidian Black',
+            'color_hex_0' => '#111110',
+            'color_images_0' => [
+                UploadedFile::fake()->image('black_front_pose.jpg'),
+                UploadedFile::fake()->image('black_back_pose.jpg'),
+                UploadedFile::fake()->image('black_detail_pose.jpg'),
+            ],
+            'primary_image_0' => 0,
+            'variant_size_0' => ['M', 'L'],
+            'variant_stock_0' => [15, 20],
+
+            // Color 2: Pure White with 2 poses
+            'color_name_1' => 'Pure White',
+            'color_hex_1' => '#FFFFFF',
+            'color_images_1' => [
+                UploadedFile::fake()->image('white_front_pose.jpg'),
+                UploadedFile::fake()->image('white_angle_pose.jpg'),
+            ],
+            'primary_image_1' => 0,
+            'variant_size_1' => ['M', 'L'],
+            'variant_stock_1' => [12, 18],
+        ];
+
+        $response = $this->actingAs($admin, 'admin')->post(route('admin.products.store'), $postData);
+        $response->assertRedirect();
+
+        $product = Product::where('name', 'Signature Linen Shirt with Multi-Pose Photos')->first();
+        $this->assertNotNull($product);
+        $this->assertTrue((bool) $product->is_variable);
+
+        // Check that 5 total images (3 black + 2 white) were created
+        $this->assertCount(5, $product->images);
+
+        $colorAttr = Attribute::where('code', 'color')->first();
+        $blackVal = AttributeValue::where('attribute_id', $colorAttr->id)->where('value', 'Obsidian Black')->first();
+        $whiteVal = AttributeValue::where('attribute_id', $colorAttr->id)->where('value', 'Pure White')->first();
+
+        $blackImages = $product->images()->where('attribute_value_id', $blackVal->id)->get();
+        $this->assertCount(3, $blackImages);
+
+        $whiteImages = $product->images()->where('attribute_value_id', $whiteVal->id)->get();
+        $this->assertCount(2, $whiteImages);
+
+        // Check size variants were created for both colors
+        $this->assertCount(4, $product->variants);
     }
 }
