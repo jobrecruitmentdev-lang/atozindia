@@ -36,7 +36,7 @@
     } else {
         $defaultGallery = [[
             'id' => 0,
-            'path' => 'https://images.unsplash.com/photo-1505740420928-5e560c06d30e?auto=format&fit=crop&w=1200&q=85',
+            'path' => asset('storage/banners/hero-banner-1.jpg'),
             'alt' => $product->name,
             'is_primary' => true,
         ]];

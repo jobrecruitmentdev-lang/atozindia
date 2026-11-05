@@ -27,6 +27,17 @@ use Illuminate\Support\Facades\Route;
 | Public Storefront Routes
 |--------------------------------------------------------------------------
 */
+// Media Storage Asset Handler (Supports non-symlink environments like FAT32/Hostinger)
+Route::get('/storage/{path}', function ($path) {
+    $filePath = storage_path('app/public/' . $path);
+    if (!file_exists($filePath)) {
+        abort(404);
+    }
+    return response()->file($filePath, [
+        'Cache-Control' => 'public, max-age=31536000',
+    ]);
+})->where('path', '.*')->name('storage.media');
+
 Route::get('/sitemap.xml', [SeoController::class, 'sitemap'])->name('sitemap');
 Route::get('/robots.txt', [SeoController::class, 'robots'])->name('robots');
 

@@ -2,7 +2,7 @@
 
 @php
     $images = $product->images;
-    $primaryImg = $product->primary_image ?? 'https://images.unsplash.com/photo-1505740420928-5e560c06d30e?auto=format&fit=crop&w=800&q=80';
+    $primaryImg = $product->primary_image ?? asset('storage/banners/hero-banner-1.jpg');
     $secondaryImg = $images->count() > 1 ? $images[1]->image_path : $primaryImg;
     
     // Check for color variants

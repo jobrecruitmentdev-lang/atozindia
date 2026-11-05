@@ -63,7 +63,7 @@
                 <div class="lg:col-span-5 relative flex justify-center">
                     <div class="relative w-full max-w-lg aspect-square rounded-[36px] overflow-hidden bg-neutral-900 border border-white/10 shadow-2xl group">
                         @php
-                            $heroImg = $heroBanners->first()?->desktop_image ?? 'https://images.unsplash.com/photo-1505740420928-5e560c06d30e?auto=format&fit=crop&w=1200&q=85';
+                            $heroImg = $heroBanners->first()?->desktop_image ?? asset('storage/banners/hero-banner-1.jpg');
                         @endphp
                         <img src="{{ $heroImg }}" 
                              alt="ATOZ Flagship Acoustic" 
@@ -168,7 +168,7 @@
             </div>
 
             <div class="lg:col-span-6 relative aspect-square sm:aspect-auto min-h-[350px] overflow-hidden">
-                <img src="https://images.unsplash.com/photo-1523275335684-37898b6baf30?auto=format&fit=crop&w=1200&q=85" 
+                <img src="{{ asset('storage/banners/hero-banner-2.jpg') }}" 
                      alt="Titanium Watch Engineering" 
                      class="w-full h-full object-cover">
             </div>
