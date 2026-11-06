@@ -22,7 +22,7 @@
             <button 
                 type="button" 
                 @click="submitForm()"
-                class="px-8 py-2.5 rounded-full bg-neutral-950 hover:bg-black text-white text-xs font-bold uppercase tracking-wider shadow-lg transition active:scale-95"
+                class="px-8 py-2.5 rounded-full btn-gold text-neutral-950 text-xs font-black uppercase tracking-wider shadow-md transition active:scale-95"
             >
                 Save & Publish Product
             </button>
@@ -153,9 +153,9 @@
                     <button 
                         type="button" 
                         @click="addColor()" 
-                        class="flex items-center gap-2 px-5 py-2.5 rounded-full bg-neutral-900 hover:bg-black text-white font-bold text-xs shadow transition active:scale-95 shrink-0"
+                        class="flex items-center gap-2 px-5 py-2.5 rounded-full btn-gold text-neutral-950 font-black text-xs shadow-md transition active:scale-95 shrink-0"
                     >
-                        <svg class="w-4 h-4 text-emerald-400" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2.5" d="M12 4v16m8-8H4"/></svg>
+                        <svg class="w-4 h-4 text-neutral-950" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2.5" d="M12 4v16m8-8H4"/></svg>
                         <span>+ Add Colour Swatch</span>
                     </button>
                 </div>
@@ -224,14 +224,14 @@
                                 </label>
 
                                 <!-- Multi-File Drag & Drop Zone -->
-                                <div class="border-2 border-dashed border-neutral-300 hover:border-black rounded-2xl p-4 bg-white text-center cursor-pointer transition">
+                                <div class="border-2 border-dashed border-neutral-300 hover:border-[#D4AF37] rounded-2xl p-4 bg-white text-center cursor-pointer transition">
                                     <input 
                                         type="file" 
                                         :name="'color_images_' + cIdx + '[]'" 
                                         multiple 
                                         accept="image/*"
                                         @change="previewImages($event, cIdx)"
-                                        class="w-full text-xs text-neutral-500 file:mr-4 file:py-2 file:px-4 file:rounded-full file:border-0 file:text-xs file:font-semibold file:bg-neutral-900 file:text-white hover:file:bg-black cursor-pointer"
+                                        class="w-full text-xs text-neutral-500 file:mr-4 file:py-2 file:px-4 file:rounded-full file:border-0 file:text-xs file:font-black file:btn-gold file:text-neutral-950 cursor-pointer"
                                     >
                                     <p class="text-[11px] text-neutral-400 mt-1">Select 4, 5 or more photos in different angles/poses for this colour swatch.</p>
                                 </div>
@@ -447,8 +447,8 @@
                 </div>
 
                 <!-- Primary Submit Action -->
-                <button type="submit" class="w-full py-4 rounded-2xl bg-neutral-950 hover:bg-black text-white text-xs font-bold uppercase tracking-wider shadow-lg transition-transform active:scale-95 flex items-center justify-center gap-2">
-                    <svg class="w-4 h-4 text-emerald-400" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 13l4 4L19 7"/></svg>
+                <button type="submit" class="w-full py-4 rounded-2xl btn-gold text-neutral-950 text-xs font-black uppercase tracking-wider shadow-lg transition-transform active:scale-95 flex items-center justify-center gap-2">
+                    <svg class="w-4 h-4 text-neutral-950" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2.5" d="M5 13l4 4L19 7"/></svg>
                     <span>Save & Publish Product</span>
                 </button>
             </div>

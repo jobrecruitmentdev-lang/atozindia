@@ -65,7 +65,7 @@
 
     @stack('styles')
 </head>
-<body class="bg-[#FBFBFA] text-neutral-900 font-sans antialiased selection:bg-neutral-900 selection:text-white"
+<body class="bg-[#FBFBFA] text-neutral-900 font-sans antialiased selection:bg-[#D4AF37] selection:text-neutral-950"
       x-data="globalApp()"
       @cart-updated.window="fetchCartDrawer()"
       @toast.window="addToast($event.detail.message, $event.detail.type || 'success')"
@@ -73,10 +73,10 @@
 
     <!-- Announcement Bar -->
     @if(\App\Models\StoreSetting::get('announcement_enabled', true))
-    <div class="bg-neutral-900 text-white text-[11px] sm:text-xs font-medium py-2 px-4 text-center tracking-wide uppercase transition-all flex items-center justify-center gap-2">
-        <span>{{ \App\Models\StoreSetting::get('announcement_text', 'Complimentary Express White-Glove Delivery on orders above ₹2,999') }}</span>
+    <div class="bg-gradient-to-r from-[#B38F2C] via-[#D4AF37] to-[#B38F2C] text-neutral-950 text-[11px] sm:text-xs font-bold py-2 px-4 text-center tracking-wide uppercase transition-all flex items-center justify-center gap-2 shadow-sm">
+        <span class="tracking-wider">{{ \App\Models\StoreSetting::get('announcement_text', 'Complimentary Express White-Glove Delivery on orders above ₹2,999') }}</span>
         @if(\App\Models\StoreSetting::get('announcement_link'))
-        <a href="{{ \App\Models\StoreSetting::get('announcement_link') }}" class="underline hover:text-neutral-300 ml-1 font-semibold">Shop Now &rarr;</a>
+        <a href="{{ \App\Models\StoreSetting::get('announcement_link') }}" class="underline hover:opacity-80 ml-1 font-extrabold">Shop Now &rarr;</a>
         @endif
     </div>
     @endif
@@ -90,7 +90,7 @@
             <!-- Mobile Menu Toggle -->
             <button @click="mobileMenuOpen = !mobileMenuOpen" 
                     type="button" 
-                    class="lg:hidden p-2 text-neutral-700 hover:text-black focus:outline-none" 
+                    class="lg:hidden p-2 text-neutral-700 hover:text-[#99772C] focus:outline-none" 
                     aria-label="Open menu">
                 <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                     <path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.75" d="M4 6h16M4 12h16M4 18h16"></path>
@@ -101,21 +101,21 @@
             <a href="{{ route('home') }}" class="flex items-center gap-3 group focus:outline-none shrink-0">
                 <img src="{{ asset('assets/images/logo.jpeg') }}" 
                      alt="ATOZ GADGETZ" 
-                     class="h-11 w-11 rounded-full object-cover border border-neutral-300/80 shadow-sm transition-transform duration-300 group-hover:scale-105">
+                     class="h-11 w-11 rounded-full object-cover border-2 border-[#D4AF37]/60 shadow-sm transition-transform duration-300 group-hover:scale-105 group-hover:border-[#D4AF37]">
                 <div class="flex flex-col">
                     <span class="font-extrabold text-lg sm:text-xl tracking-tight text-neutral-950 font-sans uppercase">ATOZ GADGETZ</span>
-                    <span class="text-[9px] tracking-[0.2em] font-semibold text-neutral-500 uppercase -mt-1">Architectural Tech</span>
+                    <span class="text-[9px] tracking-[0.2em] font-semibold text-[#99772C] uppercase -mt-1">Architectural Tech</span>
                 </div>
             </a>
 
             <!-- Navigation Links / Mega Menu (Desktop) -->
             <nav class="hidden lg:flex items-center gap-7 text-[13px] font-semibold tracking-wide uppercase">
-                <a href="{{ route('home') }}" class="text-neutral-900 hover:text-neutral-500 transition-colors {{ request()->routeIs('home') ? 'border-b-2 border-black pb-1' : '' }}">Home</a>
+                <a href="{{ route('home') }}" class="text-neutral-900 hover:text-[#99772C] transition-colors {{ request()->routeIs('home') ? 'border-b-2 border-[#D4AF37] text-neutral-950 font-bold pb-1' : '' }}">Home</a>
                 
                 <!-- Mega Menu Departments Dropdown & Link -->
                 <div class="relative" x-data="{ megaOpen: false, activeTab: '{{ $megaCategories->first()?->slug ?? 'fashion-clothing' }}' }" @mouseenter="megaOpen = true" @mouseleave="megaOpen = false">
                     <a href="{{ route('departments.index') }}" 
-                       class="flex items-center gap-1.5 text-neutral-900 hover:text-neutral-500 transition-colors uppercase font-bold {{ request()->routeIs('departments.index') ? 'border-b-2 border-black pb-1' : '' }}">
+                       class="flex items-center gap-1.5 text-neutral-900 hover:text-[#99772C] transition-colors uppercase font-bold {{ request()->routeIs('departments.index') ? 'border-b-2 border-[#D4AF37] text-neutral-950 pb-1' : '' }}">
                         <span>Departments</span>
                         <svg class="w-3.5 h-3.5 transition-transform duration-200" :class="{ 'rotate-180': megaOpen }" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 9l-7 7-7-7"/></svg>
                     </a>
@@ -133,15 +133,15 @@
                         
                         <!-- Left Side: 18 Departments -->
                         <div class="w-64 bg-neutral-50/70 p-4 overflow-y-auto space-y-1">
-                            <span class="text-[10px] font-bold uppercase tracking-widest text-neutral-400 px-3 block mb-2 font-mono">18 Departments</span>
+                            <span class="text-[10px] font-bold uppercase tracking-widest text-[#99772C] px-3 block mb-2 font-mono">18 Departments</span>
                             @foreach($megaCategories as $parent)
                                 <button type="button" 
                                         @mouseenter="activeTab = '{{ $parent->slug }}'"
                                         @click="activeTab = '{{ $parent->slug }}'"
-                                        :class="activeTab === '{{ $parent->slug }}' ? 'bg-white shadow-sm text-neutral-950 font-bold border-l-2 border-black' : 'text-neutral-600 hover:text-black hover:bg-neutral-100/60'"
+                                        :class="activeTab === '{{ $parent->slug }}' ? 'bg-[#FDF9EE] shadow-sm text-neutral-950 font-bold border-l-2 border-[#D4AF37]' : 'text-neutral-600 hover:text-black hover:bg-neutral-100/60'"
                                         class="w-full text-left px-3 py-2 rounded-xl text-xs transition-all flex items-center justify-between group">
                                     <span class="truncate">{{ $parent->name }}</span>
-                                    <svg class="w-3.5 h-3.5 text-neutral-400 group-hover:text-black shrink-0 ml-1" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 5l7 7-7 7"/></svg>
+                                    <svg class="w-3.5 h-3.5 text-neutral-400 group-hover:text-[#99772C] shrink-0 ml-1" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 5l7 7-7 7"/></svg>
                                 </button>
                             @endforeach
                         </div>
@@ -155,7 +155,7 @@
                                             <h3 class="text-base font-bold text-neutral-950">{{ $parent->name }}</h3>
                                             <p class="text-xs text-neutral-500 mt-0.5">{{ $parent->description }}</p>
                                         </div>
-                                        <a href="{{ route('shop.index', ['category' => $parent->slug]) }}" @click="megaOpen = false" class="text-xs font-bold uppercase tracking-wider text-black underline underline-offset-4 hover:text-neutral-600 shrink-0">
+                                        <a href="{{ route('shop.index', ['category' => $parent->slug]) }}" @click="megaOpen = false" class="text-xs font-bold uppercase tracking-wider text-[#99772C] underline underline-offset-4 hover:text-neutral-950 shrink-0">
                                             View Department &rarr;
                                         </a>
                                     </div>
@@ -165,8 +165,8 @@
                                         @foreach($parent->children as $sub)
                                             <a href="{{ route('shop.index', ['category' => $sub->slug]) }}" 
                                                @click="megaOpen = false"
-                                               class="group p-2.5 rounded-xl hover:bg-neutral-50 border border-transparent hover:border-neutral-200 transition-all block">
-                                                <div class="text-xs font-bold text-neutral-900 group-hover:text-black truncate flex items-center justify-between">
+                                               class="group p-2.5 rounded-xl hover:bg-[#FDF9EE] border border-transparent hover:border-[#D4AF37]/30 transition-all block">
+                                                <div class="text-xs font-bold text-neutral-900 group-hover:text-[#99772C] truncate flex items-center justify-between">
                                                     <span>{{ $sub->name }}</span>
                                                     <span class="text-[10px] text-neutral-400 group-hover:translate-x-0.5 transition-transform">&rarr;</span>
                                                 </div>
@@ -180,7 +180,7 @@
                             <div class="pt-4 border-t border-neutral-100 flex items-center justify-between text-[11px] text-neutral-400 mt-6">
                                 <span>Verified genuine authentic products &bull; Express delivery</span>
                                 <div class="flex items-center gap-4">
-                                    <a href="{{ route('departments.index') }}" @click="megaOpen = false" class="font-bold text-neutral-900 underline hover:text-black">All 18 Departments Page &rarr;</a>
+                                    <a href="{{ route('departments.index') }}" @click="megaOpen = false" class="font-bold text-neutral-900 underline hover:text-[#99772C]">All 18 Departments Page &rarr;</a>
                                     <a href="{{ route('shop.index') }}" @click="megaOpen = false" class="font-bold text-neutral-600 hover:text-black">Full Catalogue &rarr;</a>
                                 </div>
                             </div>
@@ -188,10 +188,10 @@
                     </div>
                 </div>
 
-                <a href="{{ route('shop.index') }}" class="text-neutral-900 hover:text-neutral-500 transition-colors {{ request()->routeIs('shop.index') && !request('category') ? 'border-b-2 border-black pb-1' : '' }}">All Products</a>
-                <a href="{{ route('shop.index', ['category' => 'electronics-technology']) }}" class="text-neutral-900 hover:text-neutral-500 transition-colors">Tech</a>
-                <a href="{{ route('shop.index', ['category' => 'watches-jewellery']) }}" class="text-neutral-900 hover:text-neutral-500 transition-colors">Horology</a>
-                <a href="{{ route('shop.index', ['category' => 'home-living']) }}" class="text-neutral-900 hover:text-neutral-500 transition-colors">Living</a>
+                <a href="{{ route('shop.index') }}" class="text-neutral-900 hover:text-[#99772C] transition-colors {{ request()->routeIs('shop.index') && !request('category') ? 'border-b-2 border-[#D4AF37] text-neutral-950 font-bold pb-1' : '' }}">All Products</a>
+                <a href="{{ route('shop.index', ['category' => 'electronics-technology']) }}" class="text-neutral-900 hover:text-[#99772C] transition-colors">Tech</a>
+                <a href="{{ route('shop.index', ['category' => 'watches-jewellery']) }}" class="text-neutral-900 hover:text-[#99772C] transition-colors">Horology</a>
+                <a href="{{ route('shop.index', ['category' => 'home-living']) }}" class="text-neutral-900 hover:text-[#99772C] transition-colors">Living</a>
             </nav>
 
             <!-- Smart Search Bar (Desktop & Tablet) -->
@@ -304,12 +304,12 @@
                 <!-- Cart Drawer Trigger Button -->
                 <button @click="cartDrawerOpen = true; fetchCartDrawer()" 
                         type="button" 
-                        class="flex items-center gap-2 bg-neutral-900 hover:bg-black text-white px-4 py-2.5 rounded-full text-xs font-semibold shadow-sm transition-transform active:scale-95 focus:outline-none">
-                    <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.75" d="M16 11V7a4 4 0 00-8 0v4M5 9h14l1 12H4L5 9z"></path>
+                        class="flex items-center gap-2 btn-gold px-4 py-2.5 rounded-full text-xs font-bold shadow-md transition-transform active:scale-95 focus:outline-none">
+                    <svg class="w-4 h-4 text-neutral-950" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M16 11V7a4 4 0 00-8 0v4M5 9h14l1 12H4L5 9z"></path>
                     </svg>
-                    <span class="hidden sm:inline">Bag</span>
-                    <span class="bg-white/20 text-white rounded-full px-1.5 py-0.2 text-[11px] font-bold" x-text="cart.items_count">0</span>
+                    <span class="hidden sm:inline tracking-wider">Bag</span>
+                    <span class="bg-neutral-950 text-[#D4AF37] rounded-full px-2 py-0.5 text-[11px] font-black" x-text="cart.items_count">0</span>
                 </button>
             </div>
         </div>
@@ -435,12 +435,12 @@
                 </div>
 
                 <!-- Free Shipping Tier Bar -->
-                <div class="px-6 py-3 bg-neutral-50 border-b border-neutral-100 text-xs text-neutral-600">
+                <div class="px-6 py-3 bg-[#FDF9EE] border-b border-[#D4AF37]/20 text-xs text-neutral-700">
                     <template x-if="cart.remaining_for_free_shipping > 0">
                         <div>
-                            Add <span class="font-bold text-neutral-900" x-text="'₹' + Number(cart.remaining_for_free_shipping).toFixed(2)"></span> more for <strong>Free Express Shipping</strong>
+                            Add <span class="font-extrabold text-neutral-950" x-text="'₹' + Number(cart.remaining_for_free_shipping).toFixed(2)"></span> more for <strong class="text-[#99772C]">Free Express Shipping</strong>
                             <div class="w-full bg-neutral-200 h-1.5 rounded-full mt-2 overflow-hidden">
-                                <div class="bg-neutral-900 h-full transition-all duration-300" 
+                                <div class="bg-gradient-to-r from-[#DFBA53] to-[#D4AF37] h-full transition-all duration-300" 
                                      :style="'width: ' + Math.min(100, ((cart.free_shipping_threshold - cart.remaining_for_free_shipping) / cart.free_shipping_threshold) * 100) + '%'"></div>
                             </div>
                         </div>
@@ -524,13 +524,13 @@
 
                         @auth('web')
                         <a href="{{ route('checkout.index') }}" 
-                           class="w-full bg-neutral-950 hover:bg-black text-white text-xs font-bold uppercase tracking-wider py-3.5 rounded-full text-center flex items-center justify-center gap-2 shadow-lg hover:shadow-xl transition-all">
+                           class="w-full btn-gold text-neutral-950 text-xs font-black uppercase tracking-wider py-3.5 rounded-full text-center flex items-center justify-center gap-2 shadow-lg hover:shadow-xl transition-all">
                             <span>Proceed to Checkout</span>
                             <span>&rarr;</span>
                         </a>
                         @else
                         <a href="{{ route('login', ['redirect' => 'checkout']) }}" 
-                           class="w-full bg-neutral-950 hover:bg-black text-white text-xs font-bold uppercase tracking-wider py-3.5 rounded-full text-center flex items-center justify-center gap-2 shadow-lg hover:shadow-xl transition-all">
+                           class="w-full btn-gold text-neutral-950 text-xs font-black uppercase tracking-wider py-3.5 rounded-full text-center flex items-center justify-center gap-2 shadow-lg hover:shadow-xl transition-all">
                             <span>Sign In to Checkout</span>
                             <span>&rarr;</span>
                         </a>
@@ -547,46 +547,46 @@
     </main>
 
     <!-- Premium Luxury Footer -->
-    <footer class="bg-neutral-950 text-white mt-24 border-t border-neutral-900">
+    <footer class="bg-[#0f0e0b] text-white mt-24 border-t-2 border-[#D4AF37]/40 shadow-2xl">
         <!-- Global Trust / Guarantee Bar -->
-        <div class="border-b border-neutral-900/80">
+        <div class="border-b border-neutral-900/90">
             <div class="max-w-[1400px] mx-auto px-4 sm:px-6 lg:px-8 py-10 grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-8 text-center sm:text-left">
                 <div class="flex items-center gap-4">
-                    <div class="w-12 h-12 rounded-2xl bg-neutral-900 flex items-center justify-center shrink-0 text-white border border-neutral-800">
-                        <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.5" d="M5 13l4 4L19 7"></path></svg>
+                    <div class="w-12 h-12 rounded-2xl bg-[#1A1917] flex items-center justify-center shrink-0 text-[#D4AF37] border border-[#D4AF37]/30 shadow-md">
+                        <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.75" d="M5 13l4 4L19 7"></path></svg>
                     </div>
                     <div>
-                        <h4 class="text-xs font-bold uppercase tracking-wider text-white">Genuine Craftsmanship</h4>
+                        <h4 class="text-xs font-bold uppercase tracking-wider text-[#D4AF37]">Genuine Craftsmanship</h4>
                         <p class="text-xs text-neutral-400 mt-0.5">100% certified authentic luxury electronics.</p>
                     </div>
                 </div>
 
                 <div class="flex items-center gap-4">
-                    <div class="w-12 h-12 rounded-2xl bg-neutral-900 flex items-center justify-center shrink-0 text-white border border-neutral-800">
-                        <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.5" d="M12 8v4l3 3m6-3a9 9 0 11-18 0 9 9 0 0118 0z"></path></svg>
+                    <div class="w-12 h-12 rounded-2xl bg-[#1A1917] flex items-center justify-center shrink-0 text-[#D4AF37] border border-[#D4AF37]/30 shadow-md">
+                        <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.75" d="M12 8v4l3 3m6-3a9 9 0 11-18 0 9 9 0 0118 0z"></path></svg>
                     </div>
                     <div>
-                        <h4 class="text-xs font-bold uppercase tracking-wider text-white">Express White-Glove</h4>
+                        <h4 class="text-xs font-bold uppercase tracking-wider text-[#D4AF37]">Express White-Glove</h4>
                         <p class="text-xs text-neutral-400 mt-0.5">Insured air transit on all premium orders.</p>
                     </div>
                 </div>
 
                 <div class="flex items-center gap-4">
-                    <div class="w-12 h-12 rounded-2xl bg-neutral-900 flex items-center justify-center shrink-0 text-white border border-neutral-800">
-                        <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.5" d="M9 12l2 2 4-4m5.618-4.016A11.955 11.955 0 0112 2.944a11.955 11.955 0 01-8.618 3.04A12.02 12.02 0 003 9c0 5.591 3.824 10.29 9 11.622 5.176-1.332 9-6.03 9-11.622 0-1.042-.133-2.052-.382-3.016z"></path></svg>
+                    <div class="w-12 h-12 rounded-2xl bg-[#1A1917] flex items-center justify-center shrink-0 text-[#D4AF37] border border-[#D4AF37]/30 shadow-md">
+                        <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.75" d="M9 12l2 2 4-4m5.618-4.016A11.955 11.955 0 0112 2.944a11.955 11.955 0 01-8.618 3.04A12.02 12.02 0 003 9c0 5.591 3.824 10.29 9 11.622 5.176-1.332 9-6.03 9-11.622 0-1.042-.133-2.052-.382-3.016z"></path></svg>
                     </div>
                     <div>
-                        <h4 class="text-xs font-bold uppercase tracking-wider text-white">Global 2-Year Warranty</h4>
+                        <h4 class="text-xs font-bold uppercase tracking-wider text-[#D4AF37]">Global 2-Year Warranty</h4>
                         <p class="text-xs text-neutral-400 mt-0.5">Comprehensive hardware protection & repair.</p>
                     </div>
                 </div>
 
                 <div class="flex items-center gap-4">
-                    <div class="w-12 h-12 rounded-2xl bg-neutral-900 flex items-center justify-center shrink-0 text-white border border-neutral-800">
-                        <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.5" d="M18.364 5.636l-3.536 3.536m0 5.656l3.536 3.536M9.172 9.172L5.636 5.636m3.536 9.192l-3.536 3.536M21 12a9 9 0 11-18 0 9 9 0 0118 0zm-5 0a4 4 0 11-8 0 4 4 0 018 0z"></path></svg>
+                    <div class="w-12 h-12 rounded-2xl bg-[#1A1917] flex items-center justify-center shrink-0 text-[#D4AF37] border border-[#D4AF37]/30 shadow-md">
+                        <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.75" d="M18.364 5.636l-3.536 3.536m0 5.656l3.536 3.536M9.172 9.172L5.636 5.636m3.536 9.192l-3.536 3.536M21 12a9 9 0 11-18 0 9 9 0 0118 0zm-5 0a4 4 0 11-8 0 4 4 0 018 0z"></path></svg>
                     </div>
                     <div>
-                        <h4 class="text-xs font-bold uppercase tracking-wider text-white">Concierge Support</h4>
+                        <h4 class="text-xs font-bold uppercase tracking-wider text-[#D4AF37]">Concierge Support</h4>
                         <p class="text-xs text-neutral-400 mt-0.5">24/7 dedicated acoustic & gadget advisors.</p>
                     </div>
                 </div>
@@ -597,50 +597,50 @@
         <div class="max-w-[1400px] mx-auto px-4 sm:px-6 lg:px-8 py-16 grid grid-cols-1 md:grid-cols-2 lg:grid-cols-5 gap-12 text-xs">
             <div class="lg:col-span-2 space-y-4">
                 <div class="flex items-center gap-3">
-                    <img src="{{ asset('assets/images/logo.jpeg') }}" class="w-9 h-9 rounded-full object-cover border border-neutral-800" alt="ATOZ GADGETZ">
-                    <span class="font-extrabold text-lg tracking-tight uppercase">ATOZ GADGETZ</span>
+                    <img src="{{ asset('assets/images/logo.jpeg') }}" class="w-9 h-9 rounded-full object-cover border-2 border-[#D4AF37]" alt="ATOZ GADGETZ">
+                    <span class="font-extrabold text-lg tracking-tight uppercase text-white">ATOZ GADGETZ</span>
                 </div>
-                <p class="text-neutral-400 text-xs leading-relaxed max-w-sm">
+                <p class="text-neutral-300 text-xs leading-relaxed max-w-sm">
                     Curating high-performance acoustic instruments, luxury biometric wearables, and architectural desk hardware. Designed for purists of material and form.
                 </p>
                 <div class="pt-2">
-                    <p class="text-[11px] text-neutral-500 uppercase tracking-wider font-semibold">Join the Private Society</p>
+                    <p class="text-[11px] text-[#D4AF37] uppercase tracking-wider font-bold">Join the Private Society</p>
                     <div class="flex gap-2 mt-2 max-w-sm">
-                        <input type="email" placeholder="Enter your email address" class="bg-neutral-900 border border-neutral-800 rounded-full px-4 py-2.5 text-xs text-white focus:outline-none focus:border-white flex-1 placeholder:text-neutral-500">
-                        <button type="button" class="bg-white text-black font-bold uppercase px-4 py-2.5 rounded-full text-xs hover:bg-neutral-200">Join</button>
+                        <input type="email" placeholder="Enter your email address" class="bg-neutral-900 border border-neutral-800 rounded-full px-4 py-2.5 text-xs text-white focus:outline-none focus:border-[#D4AF37] flex-1 placeholder:text-neutral-500">
+                        <button type="button" class="btn-gold px-5 py-2.5 rounded-full text-xs font-bold uppercase">Join</button>
                     </div>
                 </div>
             </div>
 
             <div>
-                <h5 class="font-bold uppercase tracking-wider text-white mb-4">Curations</h5>
+                <h5 class="font-bold uppercase tracking-wider text-[#D4AF37] mb-4">Curations</h5>
                 <ul class="space-y-2.5 text-neutral-400">
-                    <li><a href="{{ route('shop.index', ['category' => 'audio-acoustics']) }}" class="hover:text-white transition-colors">Over-Ear Studio</a></li>
-                    <li><a href="{{ route('shop.index', ['category' => 'wearables']) }}" class="hover:text-white transition-colors">Titanium Timepieces</a></li>
-                    <li><a href="{{ route('shop.index', ['category' => 'workspace-architecture']) }}" class="hover:text-white transition-colors">Desk Architecture</a></li>
-                    <li><a href="{{ route('shop.index', ['category' => 'optics-cameras']) }}" class="hover:text-white transition-colors">Rangefinder Optics</a></li>
-                    <li><a href="{{ route('shop.index', ['sort' => 'newest']) }}" class="hover:text-white transition-colors">New Releases</a></li>
+                    <li><a href="{{ route('shop.index', ['category' => 'audio-acoustics']) }}" class="hover:text-[#D4AF37] transition-colors">Over-Ear Studio</a></li>
+                    <li><a href="{{ route('shop.index', ['category' => 'wearables']) }}" class="hover:text-[#D4AF37] transition-colors">Titanium Timepieces</a></li>
+                    <li><a href="{{ route('shop.index', ['category' => 'workspace-architecture']) }}" class="hover:text-[#D4AF37] transition-colors">Desk Architecture</a></li>
+                    <li><a href="{{ route('shop.index', ['category' => 'optics-cameras']) }}" class="hover:text-[#D4AF37] transition-colors">Rangefinder Optics</a></li>
+                    <li><a href="{{ route('shop.index', ['sort' => 'newest']) }}" class="hover:text-[#D4AF37] transition-colors">New Releases</a></li>
                 </ul>
             </div>
 
             <div>
-                <h5 class="font-bold uppercase tracking-wider text-white mb-4">Concierge</h5>
+                <h5 class="font-bold uppercase tracking-wider text-[#D4AF37] mb-4">Concierge</h5>
                 <ul class="space-y-2.5 text-neutral-400">
-                    <li><a href="#" class="hover:text-white transition-colors">Order Tracking</a></li>
-                    <li><a href="#" class="hover:text-white transition-colors">White-Glove Delivery</a></li>
-                    <li><a href="#" class="hover:text-white transition-colors">Concierge Returns</a></li>
-                    <li><a href="#" class="hover:text-white transition-colors">Warranty & Care</a></li>
-                    <li><a href="#" class="hover:text-white transition-colors">Acoustic Consultation</a></li>
+                    <li><a href="#" class="hover:text-[#D4AF37] transition-colors">Order Tracking</a></li>
+                    <li><a href="#" class="hover:text-[#D4AF37] transition-colors">White-Glove Delivery</a></li>
+                    <li><a href="#" class="hover:text-[#D4AF37] transition-colors">Concierge Returns</a></li>
+                    <li><a href="#" class="hover:text-[#D4AF37] transition-colors">Warranty & Care</a></li>
+                    <li><a href="#" class="hover:text-[#D4AF37] transition-colors">Acoustic Consultation</a></li>
                 </ul>
             </div>
 
             <div>
-                <h5 class="font-bold uppercase tracking-wider text-white mb-4">Society</h5>
+                <h5 class="font-bold uppercase tracking-wider text-[#D4AF37] mb-4">Society</h5>
                 <ul class="space-y-2.5 text-neutral-400">
-                    <li><a href="#" class="hover:text-white transition-colors">Our Design Philosophy</a></li>
-                    <li><a href="#" class="hover:text-white transition-colors">Material Manifesto</a></li>
-                    <li><a href="#" class="hover:text-white transition-colors">Sustainability Standards</a></li>
-                    <li><a href="{{ route('admin.login') }}" class="hover:text-white transition-colors text-neutral-500">Staff Portal</a></li>
+                    <li><a href="#" class="hover:text-[#D4AF37] transition-colors">Our Design Philosophy</a></li>
+                    <li><a href="#" class="hover:text-[#D4AF37] transition-colors">Material Manifesto</a></li>
+                    <li><a href="#" class="hover:text-[#D4AF37] transition-colors">Sustainability Standards</a></li>
+                    <li><a href="{{ route('admin.login') }}" class="hover:text-[#D4AF37] transition-colors text-neutral-400">Staff Portal</a></li>
                 </ul>
             </div>
         </div>
@@ -650,9 +650,9 @@
             <div class="max-w-[1400px] mx-auto px-4 sm:px-6 lg:px-8 flex flex-col sm:flex-row items-center justify-between gap-4">
                 <p>&copy; {{ date('Y') }} ATOZ GADGETZ. All architectural rights reserved.</p>
                 <div class="flex items-center gap-6">
-                    <a href="#" class="hover:text-white">Privacy Protocol</a>
-                    <a href="#" class="hover:text-white">Terms of Curatorship</a>
-                    <a href="#" class="hover:text-white">Security Disclosures</a>
+                    <a href="#" class="hover:text-[#D4AF37]">Privacy Protocol</a>
+                    <a href="#" class="hover:text-[#D4AF37]">Terms of Curatorship</a>
+                    <a href="#" class="hover:text-[#D4AF37]">Security Disclosures</a>
                 </div>
             </div>
         </div>
@@ -703,7 +703,7 @@
                              :alt="quickViewProduct.name" 
                              class="w-full max-h-[380px] object-contain rounded-2xl">
                         
-                        <div class="absolute bottom-4 left-6 text-[10px] uppercase font-mono tracking-widest text-neutral-400">
+                        <div class="absolute bottom-4 left-6 text-[10px] uppercase font-mono tracking-widest text-[#99772C]">
                             SKU: <span x-text="quickViewProduct.sku"></span>
                         </div>
                     </div>
@@ -712,7 +712,7 @@
                     <div class="p-8 sm:p-10 flex flex-col justify-between space-y-6">
                         <div class="space-y-4">
                             <div>
-                                <span class="text-[10px] font-bold uppercase tracking-widest text-neutral-400 block font-mono" x-text="quickViewProduct.brand"></span>
+                                <span class="text-[10px] font-bold uppercase tracking-widest text-[#99772C] block font-mono" x-text="quickViewProduct.brand"></span>
                                 <h2 class="text-xl sm:text-2xl font-extrabold text-neutral-950 mt-1 leading-snug" x-text="quickViewProduct.name"></h2>
                             </div>
 
@@ -730,7 +730,7 @@
                             <!-- Specifications Badges -->
                             <template x-if="quickViewProduct.specs && Object.keys(quickViewProduct.specs).length > 0">
                                 <div class="space-y-2 pt-2 border-t border-neutral-100">
-                                    <span class="text-[10px] font-bold uppercase tracking-widest text-neutral-400 block font-mono">Precision Metrics</span>
+                                    <span class="text-[10px] font-bold uppercase tracking-widest text-[#99772C] block font-mono">Precision Metrics</span>
                                     <div class="grid grid-cols-2 gap-2 text-xs">
                                         <template x-for="(specVal, specKey) in quickViewProduct.specs" :key="specKey">
                                             <div class="p-2 rounded-xl bg-neutral-50 border border-neutral-100">
@@ -756,8 +756,17 @@
                                 <!-- Add to Bag -->
                                 <button type="button"
                                         @click="addToCart(quickViewProduct.id, quickViewProduct.variant_id, quickViewQty); closeQuickView();"
-                                        class="flex-1 py-3 px-6 rounded-full bg-neutral-950 hover:bg-neutral-800 text-white font-bold text-xs uppercase tracking-widest transition-all shadow-lg flex items-center justify-center gap-2">
-                                    <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M16 11V7a4 4 0 00-8 0v4M5 9h14l1 12H4L5 9z"/></svg>
+                                        class="flex-1 py-3 px-6 rounded-full btn-gold font-extrabold text-xs uppercase tracking-widest transition-all shadow-lg flex items-center justify-center gap-2">
+                                    <svg class="w-4 h-4 text-neutral-950" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M16 11V7a4 4 0 00-8 0v4M5 9h14l1 12H4L5 9z"/></svg>
+                                    <span>Add to Bag</span>
+                                </button>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </template>
+        </div>
+    </div>
                                     <span>Add to Bag</span>
                                 </button>
                             </div>

@@ -44,9 +44,9 @@
                 <input type="password" name="password_confirmation" required class="w-full text-xs bg-neutral-50 border border-neutral-200 rounded-xl p-3 focus:outline-none focus:border-black">
             </div>
 
-            <button type="submit" class="w-full py-3.5 rounded-full bg-neutral-950 text-white font-bold text-xs uppercase tracking-widest hover:bg-neutral-800 transition-colors shadow-lg mt-2 flex items-center justify-center gap-2">
+            <button type="submit" class="w-full py-3.5 rounded-full btn-gold text-neutral-950 font-black text-xs uppercase tracking-widest shadow-lg mt-2 flex items-center justify-center gap-2">
                 <span>Continue to 6-Digit Email Verification</span>
-                <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M14 5l7 7m0 0l-7 7m7-7H3"/></svg>
+                <svg class="w-4 h-4 text-neutral-950" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2.5" d="M14 5l7 7m0 0l-7 7m7-7H3"/></svg>
             </button>
             <p class="text-[10px] text-neutral-400 text-center">A 6-digit cryptographic security code will be dispatched to your email for authentication.</p>
         </form>

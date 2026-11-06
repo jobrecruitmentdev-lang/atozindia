@@ -87,19 +87,19 @@
     </div>
 
     <!-- Quick Actions Bar -->
-    <div class="bg-neutral-900 text-white rounded-3xl p-6 flex flex-col sm:flex-row items-center justify-between gap-4">
+    <div class="bg-[#0f0e0b] border border-[#D4AF37]/30 text-white rounded-3xl p-6 flex flex-col sm:flex-row items-center justify-between gap-4 shadow-xl">
         <div>
-            <h3 class="text-sm font-bold uppercase tracking-wider">Quick Dispatch & Catalogue Management</h3>
+            <h3 class="text-sm font-black uppercase tracking-wider text-[#D4AF37]">Quick Dispatch & Catalogue Management</h3>
             <p class="text-xs text-neutral-400 mt-0.5">Rapidly add products, calibrate inventory levels, or review order queues.</p>
         </div>
         <div class="flex items-center gap-3 shrink-0">
-            <a href="{{ route('admin.products.create') }}" class="bg-white hover:bg-neutral-200 text-black text-xs font-bold uppercase px-4 py-2.5 rounded-full shadow transition-all">
+            <a href="{{ route('admin.products.create') }}" class="btn-gold text-neutral-950 text-xs font-black uppercase px-5 py-2.5 rounded-full shadow-md transition-all">
                 + Add Product
             </a>
-            <a href="{{ route('admin.inventory.index') }}" class="bg-neutral-800 hover:bg-neutral-700 text-white text-xs font-bold uppercase px-4 py-2.5 rounded-full border border-neutral-700 transition-all">
+            <a href="{{ route('admin.inventory.index') }}" class="bg-[#1A1917] hover:bg-[#D4AF37]/20 hover:text-[#D4AF37] text-neutral-300 text-xs font-bold uppercase px-4 py-2.5 rounded-full border border-[#D4AF37]/30 transition-all">
                 Adjust Stock
             </a>
-            <a href="{{ route('admin.orders.index') }}" class="bg-neutral-800 hover:bg-neutral-700 text-white text-xs font-bold uppercase px-4 py-2.5 rounded-full border border-neutral-700 transition-all">
+            <a href="{{ route('admin.orders.index') }}" class="bg-[#1A1917] hover:bg-[#D4AF37]/20 hover:text-[#D4AF37] text-neutral-300 text-xs font-bold uppercase px-4 py-2.5 rounded-full border border-[#D4AF37]/30 transition-all">
                 View Orders
             </a>
         </div>

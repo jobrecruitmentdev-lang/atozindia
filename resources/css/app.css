@@ -10,10 +10,17 @@
     
     --color-brand-black: #111110;
     --color-brand-charcoal: #1a1917;
+    --color-brand-obsidian: #0f0e0b;
+    --color-brand-gold: #D4AF37;
+    --color-brand-gold-hover: #C5A059;
+    --color-brand-gold-dark: #99772C;
+    --color-brand-gold-light: #FBF6E9;
+    --color-brand-gold-border: #D4AF37;
+    
     --color-surface-card: #ffffff;
     --color-surface-muted: #f8f9fa;
     --color-border-subtle: #e5e7eb;
-    --color-border-focus: #111110;
+    --color-border-focus: #D4AF37;
     --color-text-primary: #111827;
     --color-text-secondary: #4b5563;
     --color-text-tertiary: #9ca3af;
@@ -21,6 +28,45 @@
 
 [x-cloak] {
     display: none !important;
+}
+
+/* Luxury Royal Gold Gradients & Accents */
+.btn-gold {
+    background: linear-gradient(135deg, #DFBA53 0%, #D4AF37 50%, #B38F2C 100%);
+    color: #111110 !important;
+    font-weight: 700;
+    transition: all 0.25s cubic-bezier(0.4, 0, 0.2, 1);
+    box-shadow: 0 4px 14px 0 rgba(212, 175, 55, 0.28);
+}
+.btn-gold:hover {
+    background: linear-gradient(135deg, #E6CA65 0%, #DFBA53 50%, #C5A059 100%);
+    box-shadow: 0 6px 20px rgba(212, 175, 55, 0.4);
+    transform: translateY(-1px);
+}
+.btn-gold:active {
+    transform: translateY(0);
+}
+
+.text-gold-gradient {
+    background: linear-gradient(135deg, #DFBA53 0%, #C5A059 50%, #99772C 100%);
+    -webkit-background-clip: text;
+    -webkit-text-fill-color: transparent;
+}
+
+.bg-gold-surface {
+    background-color: #FDF9EE;
+}
+
+.border-gold-subtle {
+    border-color: rgba(212, 175, 55, 0.35);
+}
+
+.border-gold {
+    border-color: #D4AF37;
+}
+
+.shadow-gold {
+    box-shadow: 0 4px 20px -2px rgba(212, 175, 55, 0.25);
 }
 
 /* Custom Scrollbar for Luxury Aesthetic */

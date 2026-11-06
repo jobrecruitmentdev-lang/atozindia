@@ -110,12 +110,12 @@
             <div class="bg-white rounded-2xl border border-neutral-200/80 p-3.5 shadow-sm flex items-center gap-2 overflow-x-auto scrollbar-none">
                 <span class="text-[11px] font-bold uppercase tracking-wider text-neutral-400 shrink-0 font-mono mr-1">In {{ $activeCategory->name }}:</span>
                 <a href="{{ route('shop.index', ['category' => $activeCategory->slug]) }}" 
-                   class="px-3.5 py-1.5 rounded-full text-xs font-semibold whitespace-nowrap transition-all shrink-0 {{ request('category') === $activeCategory->slug ? 'bg-neutral-950 text-white shadow-sm' : 'bg-neutral-100 text-neutral-700 hover:bg-neutral-200' }}">
+                   class="px-3.5 py-1.5 rounded-full text-xs font-semibold whitespace-nowrap transition-all shrink-0 {{ request('category') === $activeCategory->slug ? 'bg-[#D4AF37] text-neutral-950 font-black shadow-sm' : 'bg-neutral-100 text-neutral-700 hover:bg-neutral-200' }}">
                     All {{ $activeCategory->name }}
                 </a>
                 @foreach($activeCategory->children as $sub)
                     <a href="{{ route('shop.index', ['category' => $sub->slug]) }}" 
-                       class="px-3.5 py-1.5 rounded-full text-xs font-semibold whitespace-nowrap transition-all shrink-0 {{ request('category') === $sub->slug ? 'bg-neutral-950 text-white shadow-sm' : 'bg-neutral-100 text-neutral-700 hover:bg-neutral-200' }}">
+                       class="px-3.5 py-1.5 rounded-full text-xs font-semibold whitespace-nowrap transition-all shrink-0 {{ request('category') === $sub->slug ? 'bg-[#D4AF37] text-neutral-950 font-black shadow-sm' : 'bg-neutral-100 text-neutral-700 hover:bg-neutral-200' }}">
                         {{ $sub->name }}
                         @if($sub->products_count > 0)
                             <span class="font-mono text-[10px] opacity-75">({{ $sub->products_count }})</span>
@@ -132,7 +132,7 @@
                 </a>
                 @foreach($activeCategory->parent->children as $sub)
                     <a href="{{ route('shop.index', ['category' => $sub->slug]) }}" 
-                       class="px-3.5 py-1.5 rounded-full text-xs font-semibold whitespace-nowrap transition-all shrink-0 {{ request('category') === $sub->slug ? 'bg-neutral-950 text-white shadow-sm' : 'bg-neutral-100 text-neutral-700 hover:bg-neutral-200' }}">
+                       class="px-3.5 py-1.5 rounded-full text-xs font-semibold whitespace-nowrap transition-all shrink-0 {{ request('category') === $sub->slug ? 'bg-[#D4AF37] text-neutral-950 font-black shadow-sm' : 'bg-neutral-100 text-neutral-700 hover:bg-neutral-200' }}">
                         {{ $sub->name }}
                         @if($sub->products_count > 0)
                             <span class="font-mono text-[10px] opacity-75">({{ $sub->products_count }})</span>
@@ -246,7 +246,7 @@
                 </div>
 
                 <!-- Submit Button -->
-                <button type="submit" class="w-full py-3 rounded-full bg-neutral-950 text-white font-bold text-xs uppercase tracking-widest hover:bg-neutral-800 transition-colors shadow">
+                <button type="submit" class="w-full py-3 rounded-full btn-gold text-neutral-950 font-black text-xs uppercase tracking-widest shadow">
                     Apply Refinements
                 </button>
             </form>
@@ -261,7 +261,7 @@
                     </div>
                     <h3 class="text-base font-bold text-neutral-950">No Instruments Match This Refinement</h3>
                     <p class="text-xs text-neutral-500 max-w-sm mx-auto">Try clearing selected filters, widening the price range, or searching for alternative specifications.</p>
-                    <a href="{{ route('shop.index') }}" class="inline-block px-6 py-2.5 rounded-full bg-neutral-950 text-white font-bold text-xs uppercase tracking-wider hover:bg-neutral-800 transition-colors">
+                    <a href="{{ route('shop.index') }}" class="inline-block px-6 py-2.5 rounded-full btn-gold text-neutral-950 font-black text-xs uppercase tracking-wider">
                         Reset All Filters
                     </a>
                 </div>
@@ -348,7 +348,7 @@
                             </label>
                         </div>
 
-                        <button type="submit" class="w-full py-3.5 rounded-full bg-neutral-950 text-white font-bold text-xs uppercase tracking-widest">
+                        <button type="submit" class="w-full py-3.5 rounded-full btn-gold text-neutral-950 font-black text-xs uppercase tracking-widest">
                             Apply Refinements
                         </button>
                     </form>

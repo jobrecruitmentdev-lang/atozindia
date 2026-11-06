@@ -12,7 +12,7 @@
             <h2 class="text-xl font-extrabold text-neutral-950 uppercase tracking-tight">All Products ({{ $products->total() }})</h2>
             <p class="text-xs text-neutral-500">Simple and variable products with multi-colour image support</p>
         </div>
-        <a href="{{ route('admin.products.create') }}" class="bg-neutral-900 hover:bg-black text-white text-xs font-bold uppercase tracking-wider px-5 py-3 rounded-full shadow transition-all flex items-center justify-center gap-2 self-start sm:self-auto">
+        <a href="{{ route('admin.products.create') }}" class="btn-gold text-neutral-950 text-xs font-black uppercase tracking-wider px-5 py-3 rounded-full shadow-md flex items-center justify-center gap-2 self-start sm:self-auto">
             <span>+ Create New Product</span>
         </a>
     </div>
@@ -21,11 +21,11 @@
     <div class="bg-white rounded-3xl border border-neutral-200/80 p-4 sm:p-5 shadow-sm">
         <form method="GET" action="{{ route('admin.products.index') }}" class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-5 gap-3">
             <div class="lg:col-span-2">
-                <input type="text" name="search" value="{{ request('search') }}" placeholder="Search by name, SKU, or barcode..." class="w-full text-xs bg-neutral-50 border border-neutral-200 rounded-2xl px-4 py-2.5 focus:outline-none focus:border-black">
+                <input type="text" name="search" value="{{ request('search') }}" placeholder="Search by name, SKU, or barcode..." class="w-full text-xs bg-neutral-50 border border-neutral-200 rounded-2xl px-4 py-2.5 focus:outline-none focus:border-[#D4AF37]">
             </div>
 
             <div>
-                <select name="status" class="w-full text-xs bg-neutral-50 border border-neutral-200 rounded-2xl px-3 py-2.5 focus:outline-none focus:border-black">
+                <select name="status" class="w-full text-xs bg-neutral-50 border border-neutral-200 rounded-2xl px-3 py-2.5 focus:outline-none focus:border-[#D4AF37]">
                     <option value="">All Statuses</option>
                     <option value="active" {{ request('status') === 'active' ? 'selected' : '' }}>Active</option>
                     <option value="draft" {{ request('status') === 'draft' ? 'selected' : '' }}>Draft</option>
@@ -34,7 +34,7 @@
             </div>
 
             <div>
-                <select name="brand_id" class="w-full text-xs bg-neutral-50 border border-neutral-200 rounded-2xl px-3 py-2.5 focus:outline-none focus:border-black">
+                <select name="brand_id" class="w-full text-xs bg-neutral-50 border border-neutral-200 rounded-2xl px-3 py-2.5 focus:outline-none focus:border-[#D4AF37]">
                     <option value="">All Brands</option>
                     @foreach($brands as $b)
                         <option value="{{ $b->id }}" {{ request('brand_id') == $b->id ? 'selected' : '' }}>{{ $b->name }}</option>
@@ -43,7 +43,7 @@
             </div>
 
             <div class="flex gap-2">
-                <button type="submit" class="flex-1 bg-neutral-900 hover:bg-black text-white text-xs font-bold uppercase rounded-2xl px-4 py-2.5 transition-colors">
+                <button type="submit" class="flex-1 btn-gold text-neutral-950 text-xs font-black uppercase rounded-2xl px-4 py-2.5 transition-colors shadow">
                     Filter
                 </button>
                 @if(request()->anyFilled(['search', 'status', 'brand_id', 'category_id']))

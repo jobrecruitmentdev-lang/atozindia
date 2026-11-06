@@ -226,7 +226,7 @@
             <div class="bg-white rounded-3xl border border-neutral-200/80 p-6 sm:p-8 shadow-sm space-y-4">
                 <div class="flex items-center justify-between border-b border-neutral-100 pb-3">
                     <div class="flex items-center gap-2.5">
-                        <span class="w-6 h-6 rounded-full bg-neutral-950 text-white text-[11px] font-bold flex items-center justify-center">1</span>
+                        <span class="w-6 h-6 rounded-full bg-[#D4AF37] text-neutral-950 text-[11px] font-black flex items-center justify-center shadow-sm">1</span>
                         <h3 class="text-sm font-bold uppercase tracking-wider text-neutral-950">Concierge Collector Account</h3>
                     </div>
                     <span class="inline-flex items-center gap-1.5 px-3 py-1 rounded-full bg-emerald-50 border border-emerald-200 text-[11px] font-bold text-emerald-800">
@@ -244,7 +244,7 @@
 
                     <div>
                         <label class="block text-xs font-bold uppercase tracking-wider text-neutral-700 mb-1.5">Contact Phone *</label>
-                        <input type="tel" name="phone" value="{{ old('phone', auth()->user()?->phone) }}" required placeholder="+91 98765 43210" class="w-full text-xs font-mono bg-neutral-50 border border-neutral-200 rounded-xl p-3 focus:outline-none focus:border-black">
+                        <input type="tel" name="phone" value="{{ old('phone', auth()->user()?->phone) }}" required placeholder="+91 98765 43210" class="w-full text-xs font-mono bg-neutral-50 border border-neutral-200 rounded-xl p-3 focus:outline-none focus:border-[#D4AF37]">
                         <span class="text-[10px] text-neutral-400 mt-1 block">For courier coordination.</span>
                     </div>
                 </div>
@@ -253,7 +253,7 @@
             <!-- 2. Shipping Destination -->
             <div class="bg-white rounded-3xl border border-neutral-200/80 p-6 sm:p-8 shadow-sm space-y-4">
                 <div class="flex items-center gap-2.5 border-b border-neutral-100 pb-3">
-                    <span class="w-6 h-6 rounded-full bg-neutral-950 text-white text-[11px] font-bold flex items-center justify-center">2</span>
+                    <span class="w-6 h-6 rounded-full bg-[#D4AF37] text-neutral-950 text-[11px] font-black flex items-center justify-center shadow-sm">2</span>
                     <h3 class="text-sm font-bold uppercase tracking-wider text-neutral-950">Shipping Destination</h3>
                 </div>
 
@@ -334,15 +334,15 @@
             <!-- 3. Payment Method -->
             <div class="bg-white rounded-3xl border border-neutral-200/80 p-6 sm:p-8 shadow-sm space-y-4">
                 <div class="flex items-center gap-2.5 border-b border-neutral-100 pb-3">
-                    <span class="w-6 h-6 rounded-full bg-neutral-950 text-white text-[11px] font-bold flex items-center justify-center">3</span>
+                    <span class="w-6 h-6 rounded-full bg-[#D4AF37] text-neutral-950 text-[11px] font-black flex items-center justify-center shadow-sm">3</span>
                     <h3 class="text-sm font-bold uppercase tracking-wider text-neutral-950">Payment Protocol</h3>
                 </div>
 
                 <div class="space-y-3">
                     <!-- COD Option -->
                     <label class="flex items-start gap-3 p-4 rounded-2xl border cursor-pointer transition-all"
-                           :class="paymentMethod === 'cod' ? 'border-neutral-950 bg-neutral-50/80 ring-1 ring-neutral-950' : 'border-neutral-200 bg-white hover:bg-neutral-50/50'">
-                        <input type="radio" name="payment_method" value="cod" x-model="paymentMethod" class="mt-0.5 text-black">
+                           :class="paymentMethod === 'cod' ? 'border-[#D4AF37] bg-[#FDF9EE] ring-1 ring-[#D4AF37]' : 'border-neutral-200 bg-white hover:bg-neutral-50/50'">
+                        <input type="radio" name="payment_method" value="cod" x-model="paymentMethod" class="mt-0.5 text-[#D4AF37] focus:ring-[#D4AF37]">
                         <div>
                             <span class="text-xs font-bold text-neutral-900 block">Cash on Delivery (COD)</span>
                             <span class="text-[11px] text-neutral-500 block mt-0.5">Pay upon white-glove arrival via cash, mobile UPI, or card on the courier terminal.</span>
@@ -351,8 +351,8 @@
 
                     <!-- Direct Wire Option -->
                     <label class="flex items-start gap-3 p-4 rounded-2xl border cursor-pointer transition-all"
-                           :class="paymentMethod === 'wire' ? 'border-neutral-950 bg-neutral-50/80 ring-1 ring-neutral-950' : 'border-neutral-200 bg-white hover:bg-neutral-50/50'">
-                        <input type="radio" name="payment_method" value="wire" x-model="paymentMethod" class="mt-0.5 text-black">
+                           :class="paymentMethod === 'wire' ? 'border-[#D4AF37] bg-[#FDF9EE] ring-1 ring-[#D4AF37]' : 'border-neutral-200 bg-white hover:bg-neutral-50/50'">
+                        <input type="radio" name="payment_method" value="wire" x-model="paymentMethod" class="mt-0.5 text-[#D4AF37] focus:ring-[#D4AF37]">
                         <div>
                             <span class="text-xs font-bold text-neutral-900 block">Atelier Direct Bank Wire (NEFT / RTGS / IMPS)</span>
                             <span class="text-[11px] text-neutral-500 block mt-0.5">Wire transfer instructions & corporate account coordinates provided immediately upon order reservation.</span>
@@ -363,7 +363,7 @@
                 <!-- Notes for Courier -->
                 <div class="pt-4 border-t border-neutral-100">
                     <label class="block text-xs font-bold uppercase tracking-wider text-neutral-700 mb-1.5">Special Courier Dispatch Notes (Optional)</label>
-                    <textarea name="notes" rows="2" placeholder="e.g. Gate security code, leave at reception, call before delivery" class="w-full text-xs bg-neutral-50 border border-neutral-200 rounded-xl p-3 focus:outline-none focus:border-black"></textarea>
+                    <textarea name="notes" rows="2" placeholder="e.g. Gate security code, leave at reception, call before delivery" class="w-full text-xs bg-neutral-50 border border-neutral-200 rounded-xl p-3 focus:outline-none focus:border-[#D4AF37]"></textarea>
                 </div>
             </div>
 
@@ -434,16 +434,16 @@
                 <button type="button" 
                         @click="requestOrderOtp()" 
                         :disabled="otpSending" 
-                        class="w-full py-4 rounded-2xl bg-neutral-950 text-white font-bold text-xs uppercase tracking-widest hover:bg-neutral-800 transition-all shadow-xl flex items-center justify-center gap-2 disabled:opacity-50 disabled:cursor-not-allowed">
+                        class="w-full py-4 rounded-2xl btn-gold text-neutral-950 font-black text-xs uppercase tracking-widest shadow-xl flex items-center justify-center gap-2 disabled:opacity-50 disabled:cursor-not-allowed">
                     <template x-if="!otpSending">
                         <span class="flex items-center gap-2">
-                            <svg class="w-4 h-4 text-emerald-400" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 12l2 2 4-4m5.618-4.016A11.955 11.955 0 0112 2.944a11.955 11.955 0 01-8.618 3.04A12.02 12.02 0 003 9c0 5.591 3.824 10.29 9 11.622 5.176-1.332 9-6.03 9-11.622 0-1.042-.133-2.052-.382-3.016z"/></svg>
+                            <svg class="w-4 h-4 text-neutral-950" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2.5" d="M9 12l2 2 4-4m5.618-4.016A11.955 11.955 0 0112 2.944a11.955 11.955 0 01-8.618 3.04A12.02 12.02 0 003 9c0 5.591 3.824 10.29 9 11.622 5.176-1.332 9-6.03 9-11.622 0-1.042-.133-2.052-.382-3.016z"/></svg>
                             <span>Authorize & Place Order (2FA)</span>
                         </span>
                     </template>
                     <template x-if="otpSending">
                         <span class="flex items-center gap-2">
-                            <svg class="animate-spin w-4 h-4 text-white" fill="none" viewBox="0 0 24 24"><circle class="opacity-25" cx="12" cy="12" r="10" stroke="currentColor" stroke-width="4"></circle><path class="opacity-75" fill="currentColor" d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4z"></path></svg>
+                            <svg class="animate-spin w-4 h-4 text-neutral-950" fill="none" viewBox="0 0 24 24"><circle class="opacity-25" cx="12" cy="12" r="10" stroke="currentColor" stroke-width="4"></circle><path class="opacity-75" fill="currentColor" d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4z"></path></svg>
                             <span>Dispatching Security Code...</span>
                         </span>
                     </template>
@@ -500,11 +500,11 @@
 
                 <!-- Modal Header -->
                 <div class="text-center space-y-3">
-                    <div class="w-12 h-12 rounded-2xl bg-neutral-900 border border-neutral-800 text-emerald-400 mx-auto flex items-center justify-center shadow-inner">
+                    <div class="w-12 h-12 rounded-2xl bg-[#1A1917] border border-[#D4AF37]/40 text-[#D4AF37] mx-auto flex items-center justify-center shadow-inner">
                         <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 12l2 2 4-4m5.618-4.016A11.955 11.955 0 0112 2.944a11.955 11.955 0 01-8.618 3.04A12.02 12.02 0 003 9c0 5.591 3.824 10.29 9 11.622 5.176-1.332 9-6.03 9-11.622 0-1.042-.133-2.052-.382-3.016z"/></svg>
                     </div>
 
-                    <div class="inline-block px-3 py-1 rounded-full bg-indigo-950/80 border border-indigo-800 text-[10px] font-bold tracking-widest text-indigo-300 uppercase">
+                    <div class="inline-block px-3 py-1 rounded-full bg-[#1A1917] border border-[#D4AF37]/40 text-[10px] font-bold tracking-widest text-[#D4AF37] uppercase">
                         2FA Acquisition Protocol
                     </div>
 
@@ -564,13 +564,13 @@
                     <button type="button" 
                             @click="confirmOrderWithOtp()" 
                             :disabled="otpSubmitting || fullOtp.length !== 6" 
-                            class="w-full py-3.5 rounded-xl bg-white text-black font-bold text-xs uppercase tracking-wider hover:bg-neutral-200 transition-all flex items-center justify-center gap-2 disabled:opacity-40 disabled:cursor-not-allowed shadow-lg">
+                            class="w-full py-3.5 rounded-xl btn-gold text-neutral-950 font-black text-xs uppercase tracking-wider transition-all flex items-center justify-center gap-2 disabled:opacity-40 disabled:cursor-not-allowed shadow-lg">
                         <template x-if="!otpSubmitting">
                             <span>Confirm & Authorize Order</span>
                         </template>
                         <template x-if="otpSubmitting">
                             <span class="flex items-center gap-2">
-                                <svg class="animate-spin w-4 h-4 text-black" fill="none" viewBox="0 0 24 24"><circle class="opacity-25" cx="12" cy="12" r="10" stroke="currentColor" stroke-width="4"></circle><path class="opacity-75" fill="currentColor" d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4z"></path></svg>
+                                <svg class="animate-spin w-4 h-4 text-neutral-950" fill="none" viewBox="0 0 24 24"><circle class="opacity-25" cx="12" cy="12" r="10" stroke="currentColor" stroke-width="4"></circle><path class="opacity-75" fill="currentColor" d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4z"></path></svg>
                                 <span>Verifying Authorization...</span>
                             </span>
                         </template>

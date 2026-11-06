@@ -10,10 +10,10 @@
         
         <!-- Atelier Brand Monogram -->
         <div class="text-center space-y-3">
-            <div class="w-14 h-14 rounded-2xl bg-neutral-950 text-white mx-auto flex items-center justify-center font-bold tracking-widest text-xs uppercase shadow-md">
+            <div class="w-14 h-14 rounded-2xl bg-[#1A1917] border border-[#D4AF37]/40 text-[#D4AF37] mx-auto flex items-center justify-center font-black tracking-widest text-xs uppercase shadow-md">
                 ATOZ
             </div>
-            <span class="text-[10px] font-bold uppercase tracking-[0.2em] text-neutral-400 block font-mono">Security Gateway</span>
+            <span class="text-[10px] font-bold uppercase tracking-[0.2em] text-[#99772C] block font-mono">Security Gateway</span>
             <h1 class="text-2xl sm:text-3xl font-extrabold tracking-tight text-neutral-950">Verify Your Identity</h1>
             <p class="text-xs sm:text-sm text-neutral-500 max-w-sm mx-auto leading-relaxed">
                 We have dispatched a 6-digit authentication passcode to<br>
@@ -68,7 +68,7 @@
                                inputmode="numeric"
                                pattern="[0-9]*"
                                autocomplete="one-time-code"
-                               class="w-11 h-14 sm:w-12 sm:h-16 text-center text-2xl font-mono font-extrabold rounded-2xl border border-neutral-300 focus:border-black focus:ring-2 focus:ring-black focus:outline-none transition-all shadow-sm bg-neutral-50/50"
+                               class="w-11 h-14 sm:w-12 sm:h-16 text-center text-2xl font-mono font-extrabold rounded-2xl border border-neutral-300 focus:border-[#D4AF37] focus:ring-2 focus:ring-[#D4AF37] focus:outline-none transition-all shadow-sm bg-neutral-50/50"
                                :id="'otp-input-' + index"
                                x-model="digits[index]"
                                @input="handleInput(index, $event)"
@@ -84,8 +84,8 @@
             <!-- Submit Button -->
             <button type="submit" 
                     :disabled="fullOtp.length !== 6 || loading"
-                    :class="fullOtp.length === 6 && !loading ? 'bg-neutral-950 hover:bg-black text-white shadow-xl' : 'bg-neutral-200 text-neutral-400 cursor-not-allowed'"
-                    class="w-full py-4 rounded-full font-bold text-xs uppercase tracking-widest transition-all duration-300 flex items-center justify-center gap-2">
+                    :class="fullOtp.length === 6 && !loading ? 'btn-gold text-neutral-950 font-black shadow-xl' : 'bg-neutral-200 text-neutral-400 cursor-not-allowed'"
+                    class="w-full py-4 rounded-full font-black text-xs uppercase tracking-widest transition-all duration-300 flex items-center justify-center gap-2">
                 <span x-show="!loading">Authenticate & Activate Account &rarr;</span>
                 <span x-show="loading" x-cloak>Verifying Passcode...</span>
             </button>

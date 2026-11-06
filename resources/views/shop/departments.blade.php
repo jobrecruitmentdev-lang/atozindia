@@ -34,19 +34,19 @@
                 <!-- Quick Stats Badges -->
                 <div class="flex items-center gap-3 shrink-0">
                     <a href="{{ route('shop.index') }}" 
-                       class="px-5 py-3 rounded-full bg-neutral-950 text-white font-bold text-xs uppercase tracking-wider hover:bg-neutral-800 transition-all shadow-md flex items-center gap-2">
+                       class="px-5 py-3 rounded-full btn-gold text-neutral-950 font-black text-xs uppercase tracking-wider shadow-md flex items-center gap-2">
                         <span>Browse Entire Catalogue</span>
-                        <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M14 5l7 7m0 0l-7 7m7-7H3"/></svg>
+                        <svg class="w-4 h-4 text-neutral-950" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2.5" d="M14 5l7 7m0 0l-7 7m7-7H3"/></svg>
                     </a>
                 </div>
             </div>
 
             <!-- Sticky Quick-Jump Floating Bar -->
             <div class="pt-6 border-t border-neutral-100 overflow-x-auto scrollbar-none flex items-center gap-2">
-                <span class="text-[11px] font-bold uppercase tracking-wider text-neutral-400 shrink-0 mr-1 font-mono">Jump To:</span>
+                <span class="text-[11px] font-bold uppercase tracking-wider text-[#99772C] shrink-0 mr-1 font-mono">Jump To:</span>
                 @foreach($departments as $dept)
                     <a href="#dept-{{ $dept->slug }}" 
-                       class="px-3.5 py-1.5 rounded-full bg-neutral-100 hover:bg-neutral-950 hover:text-white text-neutral-700 text-xs font-semibold whitespace-nowrap transition-all shrink-0">
+                       class="px-3.5 py-1.5 rounded-full bg-neutral-100 hover:bg-[#D4AF37] hover:text-neutral-950 text-neutral-700 text-xs font-semibold whitespace-nowrap transition-all shrink-0">
                         {{ $dept->name }}
                     </a>
                 @endforeach
@@ -83,7 +83,7 @@
 
                     <div class="flex items-center gap-3 z-10 shrink-0">
                         <a href="{{ route('shop.index', ['category' => $dept->slug]) }}" 
-                           class="px-5 py-3 rounded-full bg-neutral-100 hover:bg-neutral-950 hover:text-white text-neutral-900 font-bold text-xs uppercase tracking-wider transition-all flex items-center gap-2 group border border-neutral-200/80">
+                           class="px-5 py-3 rounded-full bg-neutral-100 hover:bg-[#D4AF37] hover:border-[#D4AF37] hover:text-neutral-950 text-neutral-900 font-bold text-xs uppercase tracking-wider transition-all flex items-center gap-2 group border border-neutral-200/80">
                             <span>Explore Department</span>
                             <span class="group-hover:translate-x-1 transition-transform">&rarr;</span>
                         </a>
@@ -99,16 +99,16 @@
                 <div class="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-4 lg:grid-cols-5 gap-3 sm:gap-4">
                     @foreach($dept->children as $sub)
                         <a href="{{ route('shop.index', ['category' => $sub->slug]) }}" 
-                           class="group bg-white rounded-2xl border border-neutral-200/80 p-4 hover:border-black hover:shadow-md transition-all flex flex-col justify-between min-h-[95px]">
+                           class="group bg-white rounded-2xl border border-neutral-200/80 p-4 hover:border-[#D4AF37] hover:shadow-gold transition-all flex flex-col justify-between min-h-[95px]">
                             <div class="space-y-1">
-                                <span class="text-xs font-bold text-neutral-900 group-hover:text-black line-clamp-1 block">
+                                <span class="text-xs font-bold text-neutral-900 group-hover:text-[#99772C] line-clamp-1 block">
                                     {{ $sub->name }}
                                 </span>
                                 <span class="text-[10px] text-neutral-400 group-hover:text-neutral-600 line-clamp-1 block">
                                     {{ $sub->products_count }} product(s) available
                                 </span>
                             </div>
-                            <div class="flex items-center justify-between text-[11px] font-bold text-neutral-400 group-hover:text-black pt-2 mt-auto border-t border-neutral-100">
+                            <div class="flex items-center justify-between text-[11px] font-bold text-neutral-400 group-hover:text-[#99772C] pt-2 mt-auto border-t border-neutral-100">
                                 <span>Browse</span>
                                 <svg class="w-3.5 h-3.5 group-hover:translate-x-1 transition-transform" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 5l7 7-7 7"/></svg>
                             </div>

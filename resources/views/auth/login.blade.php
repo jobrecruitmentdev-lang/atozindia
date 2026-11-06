@@ -38,7 +38,7 @@
                 </label>
             </div>
 
-            <button type="submit" class="w-full py-3.5 rounded-full bg-neutral-950 text-white font-bold text-xs uppercase tracking-widest hover:bg-neutral-800 transition-colors shadow-lg">
+            <button type="submit" class="w-full py-3.5 rounded-full btn-gold text-neutral-950 font-black text-xs uppercase tracking-widest shadow-lg">
                 Authenticate
             </button>
         </form>

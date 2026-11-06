@@ -136,14 +136,14 @@
                         </span>
                     @endif
                     @if($product->is_bestseller)
-                        <span class="px-3 py-1 rounded-full text-[10px] font-bold tracking-wider uppercase bg-neutral-950 text-white shadow">
+                        <span class="px-3 py-1 rounded-full text-[10px] font-black tracking-wider uppercase bg-gradient-to-r from-[#DFBA53] to-[#D4AF37] text-neutral-950 shadow-md">
                             Atelier Bestseller
                         </span>
                     @endif
                 </div>
 
                 <!-- Gallery Count Pill -->
-                <div class="absolute bottom-6 right-6 px-3 py-1 rounded-full bg-neutral-900/70 backdrop-blur-md text-white text-[10px] font-mono tracking-wider">
+                <div class="absolute bottom-6 right-6 px-3 py-1 rounded-full bg-[#141310]/80 border border-[#D4AF37]/30 backdrop-blur-md text-[#D4AF37] text-[10px] font-mono tracking-wider">
                     <span x-text="activeGalleryIndex + 1"></span> / <span x-text="currentGallery.length"></span>
                 </div>
             </div>
@@ -153,7 +153,7 @@
                 <template x-for="(img, idx) in currentGallery" :key="img.id || idx">
                     <button type="button" 
                             @click="selectImage(img.path, idx)" 
-                            :class="activeImage === img.path ? 'border-neutral-950 ring-2 ring-neutral-950/20' : 'border-neutral-200 hover:border-neutral-400 opacity-70 hover:opacity-100'" 
+                            :class="activeImage === img.path ? 'border-[#D4AF37] ring-2 ring-[#D4AF37]/40 shadow-sm' : 'border-neutral-200 hover:border-[#D4AF37]/50 opacity-70 hover:opacity-100'" 
                             class="relative w-20 h-20 rounded-2xl overflow-hidden bg-white border p-1 transition-all shrink-0 focus:outline-none">
                         <img :src="img.path" :alt="img.alt" class="w-full h-full object-cover rounded-xl">
                     </button>
@@ -226,7 +226,7 @@
                                     @foreach($group['values'] as $val)
                                         <button type="button" 
                                                 @click="selectAttribute('{{ $code }}', {{ $val->id }}, '{{ addslashes($val->value) }}')"
-                                                :class="selectedAttributes['{{ $code }}'] == {{ $val->id }} ? 'ring-2 ring-neutral-950 ring-offset-2 scale-110' : 'hover:scale-105 border-neutral-300'"
+                                                :class="selectedAttributes['{{ $code }}'] == {{ $val->id }} ? 'ring-2 ring-[#D4AF37] ring-offset-2 scale-110 shadow-md' : 'hover:scale-105 border-neutral-300'"
                                                 class="relative w-8 h-8 rounded-full border transition-all focus:outline-none"
                                                 title="{{ $val->value }}"
                                                 style="background-color: {{ $val->code_or_hex ?? '#000000' }};">
@@ -239,7 +239,7 @@
                                     @foreach($group['values'] as $val)
                                         <button type="button" 
                                                 @click="selectAttribute('{{ $code }}', {{ $val->id }}, '{{ addslashes($val->value) }}')"
-                                                :class="selectedAttributes['{{ $code }}'] == {{ $val->id }} ? 'bg-neutral-950 text-white border-neutral-950 font-bold' : 'bg-white text-neutral-700 border-neutral-200 hover:border-black'"
+                                                :class="selectedAttributes['{{ $code }}'] == {{ $val->id }} ? 'bg-[#D4AF37] text-neutral-950 border-[#D4AF37] font-black shadow-md' : 'bg-white text-neutral-700 border-neutral-200 hover:border-[#D4AF37]'"
                                                 class="px-4 py-2 rounded-xl text-xs font-semibold border transition-all focus:outline-none">
                                             {{ $val->value }}
                                         </button>
@@ -281,9 +281,9 @@
                     <button type="button" 
                             @click="submitToCart()" 
                             :disabled="!isAvailable"
-                            :class="!isAvailable ? 'bg-neutral-300 cursor-not-allowed text-neutral-500' : 'bg-neutral-950 hover:bg-neutral-800 text-white shadow-xl transform hover:-translate-y-0.5'"
-                            class="flex-1 py-4 px-8 rounded-2xl font-bold text-xs uppercase tracking-widest transition-all duration-300 flex items-center justify-center gap-2">
-                        <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M16 11V7a4 4 0 00-8 0v4M5 9h14l1 12H4L5 9z"/></svg>
+                            :class="!isAvailable ? 'bg-neutral-300 cursor-not-allowed text-neutral-500' : 'btn-gold text-neutral-950 font-black shadow-xl transform hover:-translate-y-0.5'"
+                            class="flex-1 py-4 px-8 rounded-2xl font-black text-xs uppercase tracking-widest transition-all duration-300 flex items-center justify-center gap-2">
+                        <svg class="w-4 h-4 text-neutral-950" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M16 11V7a4 4 0 00-8 0v4M5 9h14l1 12H4L5 9z"/></svg>
                         <span>Add to Bag</span>
                     </button>
 
@@ -320,13 +320,13 @@
         
         <!-- Tab Bar -->
         <div class="flex items-center gap-8 border-b border-neutral-200 pb-4 text-xs font-bold uppercase tracking-wider">
-            <button type="button" @click="sectionTab = 'specs'" :class="sectionTab === 'specs' ? 'text-black border-b-2 border-black pb-4 -mb-4' : 'text-neutral-400 hover:text-black'" class="transition-colors">
+            <button type="button" @click="sectionTab = 'specs'" :class="sectionTab === 'specs' ? 'text-[#99772C] border-b-2 border-[#D4AF37] font-extrabold pb-4 -mb-4' : 'text-neutral-400 hover:text-[#99772C]'" class="transition-colors">
                 Specifications & Engineering
             </button>
-            <button type="button" @click="sectionTab = 'story'" :class="sectionTab === 'story' ? 'text-black border-b-2 border-black pb-4 -mb-4' : 'text-neutral-400 hover:text-black'" class="transition-colors">
+            <button type="button" @click="sectionTab = 'story'" :class="sectionTab === 'story' ? 'text-[#99772C] border-b-2 border-[#D4AF37] font-extrabold pb-4 -mb-4' : 'text-neutral-400 hover:text-[#99772C]'" class="transition-colors">
                 Design Philosophy
             </button>
-            <button type="button" @click="sectionTab = 'reviews'" :class="sectionTab === 'reviews' ? 'text-black border-b-2 border-black pb-4 -mb-4' : 'text-neutral-400 hover:text-black'" class="transition-colors">
+            <button type="button" @click="sectionTab = 'reviews'" :class="sectionTab === 'reviews' ? 'text-[#99772C] border-b-2 border-[#D4AF37] font-extrabold pb-4 -mb-4' : 'text-neutral-400 hover:text-[#99772C]'" class="transition-colors">
                 Client Testimonials ({{ $product->reviews->count() }})
             </button>
         </div>
@@ -420,7 +420,7 @@
                         <textarea name="comment" rows="3" required placeholder="Detail the tonal balance, physical weight, and material feel..." class="w-full text-xs bg-neutral-50 border border-neutral-200 rounded-xl p-2.5 focus:outline-none focus:border-black"></textarea>
                     </div>
 
-                    <button type="submit" class="px-6 py-2.5 rounded-xl bg-neutral-950 text-white font-bold text-xs uppercase tracking-wider hover:bg-neutral-800 transition-colors shadow">
+                    <button type="submit" class="px-6 py-2.5 rounded-xl btn-gold text-neutral-950 font-black text-xs uppercase tracking-wider shadow">
                         Submit Review
                     </button>
                 </form>

@@ -26,7 +26,7 @@
                 <h2 class="text-xl font-bold text-neutral-950">Your Shopping Bag is Currently Empty</h2>
                 <p class="text-xs text-neutral-500 max-w-sm mx-auto">Explore our curated collection of acoustic instruments, titanium wearables, and desk architectures.</p>
             </div>
-            <a href="{{ route('shop.index') }}" class="inline-block px-8 py-4 rounded-full bg-neutral-950 text-white font-bold text-xs uppercase tracking-widest hover:bg-neutral-800 transition-colors shadow-lg">
+            <a href="{{ route('shop.index') }}" class="inline-block px-8 py-4 rounded-full btn-gold text-neutral-950 font-black text-xs uppercase tracking-widest shadow-lg">
                 Explore Catalogue
             </a>
         </div>
@@ -35,7 +35,7 @@
         <div class="bg-white rounded-3xl border border-neutral-200/80 p-6 shadow-sm space-y-2">
             <div class="flex items-center justify-between text-xs font-semibold">
                 @if($totals['remaining_for_free_shipping'] > 0)
-                    <span class="text-neutral-700">Add <strong class="font-mono text-black">₹{{ number_format($totals['remaining_for_free_shipping'], 2) }}</strong> more to unlock <strong class="text-emerald-700 uppercase">Complimentary Express Delivery</strong></span>
+                    <span class="text-neutral-700">Add <strong class="font-mono text-black">₹{{ number_format($totals['remaining_for_free_shipping'], 2) }}</strong> more to unlock <strong class="text-[#99772C] uppercase">Complimentary Express Delivery</strong></span>
                 @else
                     <span class="text-emerald-700 font-bold flex items-center gap-1.5">
                         <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 13l4 4L19 7"/></svg>
@@ -48,7 +48,7 @@
                 $pct = min(100, round(($totals['subtotal'] / ($totals['free_shipping_threshold'] ?: 2999)) * 100));
             @endphp
             <div class="w-full h-2 rounded-full bg-neutral-100 overflow-hidden">
-                <div class="h-full bg-neutral-900 transition-all duration-500 rounded-full" style="width: {{ $pct }}%"></div>
+                <div class="h-full bg-gradient-to-r from-[#DFBA53] to-[#D4AF37] transition-all duration-500 rounded-full" style="width: {{ $pct }}%"></div>
             </div>
         </div>
 
@@ -132,8 +132,8 @@
                     <h3 class="text-xs font-bold uppercase tracking-wider text-neutral-950">Promotional Privileges</h3>
                     <form method="POST" action="{{ route('cart.coupon.apply') }}" class="flex gap-2">
                         @csrf
-                        <input type="text" name="code" value="{{ $cart->coupon_code }}" placeholder="Enter code (e.g. WELCOME10)" class="flex-1 text-xs font-mono uppercase bg-neutral-50 border border-neutral-200 rounded-xl p-2.5 focus:outline-none focus:border-black font-semibold">
-                        <button type="submit" class="px-4 py-2.5 rounded-xl bg-neutral-950 text-white font-bold text-xs uppercase tracking-wider hover:bg-neutral-800 transition-colors">
+                        <input type="text" name="code" value="{{ $cart->coupon_code }}" placeholder="Enter code (e.g. WELCOME10)" class="flex-1 text-xs font-mono uppercase bg-neutral-50 border border-neutral-200 rounded-xl p-2.5 focus:outline-none focus:border-[#D4AF37] font-semibold">
+                        <button type="submit" class="px-4 py-2.5 rounded-xl btn-gold text-neutral-950 font-black text-xs uppercase tracking-wider">
                             Apply
                         </button>
                     </form>
@@ -184,13 +184,13 @@
                     </div>
 
                     @auth('web')
-                        <a href="{{ route('checkout.index') }}" class="w-full py-4 rounded-2xl bg-neutral-950 text-white font-bold text-xs uppercase tracking-widest hover:bg-neutral-800 transition-all flex items-center justify-center gap-2 shadow-xl">
+                        <a href="{{ route('checkout.index') }}" class="w-full py-4 rounded-2xl btn-gold text-neutral-950 font-black text-xs uppercase tracking-widest flex items-center justify-center gap-2 shadow-xl">
                             <span>Proceed to Secure Checkout</span>
-                            <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M14 5l7 7m0 0l-7 7m7-7H3"/></svg>
+                            <svg class="w-4 h-4 text-neutral-950" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2.5" d="M14 5l7 7m0 0l-7 7m7-7H3"/></svg>
                         </a>
                     @else
-                        <a href="{{ route('login', ['redirect' => 'checkout']) }}" class="w-full py-4 rounded-2xl bg-neutral-950 text-white font-bold text-xs uppercase tracking-widest hover:bg-neutral-800 transition-all flex items-center justify-center gap-2 shadow-xl">
-                            <svg class="w-4 h-4 text-emerald-400" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 15v2m-6 4h12a2 2 0 002-2v-6a2 2 0 00-2-2H6a2 2 0 00-2 2v6a2 2 0 002 2zm10-10V7a4 4 0 00-8 0v4h8z"/></svg>
+                        <a href="{{ route('login', ['redirect' => 'checkout']) }}" class="w-full py-4 rounded-2xl btn-gold text-neutral-950 font-black text-xs uppercase tracking-widest flex items-center justify-center gap-2 shadow-xl">
+                            <svg class="w-4 h-4 text-neutral-950" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2.5" d="M12 15v2m-6 4h12a2 2 0 002-2v-6a2 2 0 00-2-2H6a2 2 0 00-2 2v6a2 2 0 002 2zm10-10V7a4 4 0 00-8 0v4h8z"/></svg>
                             <span>Sign In to Complete Acquisition</span>
                         </a>
                         <p class="text-[11px] text-neutral-500 text-center">Account registration & 2FA passcode required to place order.</p>
