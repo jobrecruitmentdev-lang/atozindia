@@ -761,28 +761,17 @@
                                     <span>Add to Bag</span>
                                 </button>
                             </div>
-                        </div>
-                    </div>
-                </div>
-            </template>
-        </div>
-    </div>
-                                    <span>Add to Bag</span>
-                                </button>
-                            </div>
 
-                            <div class="text-center">
-                                <a :href="quickViewProduct.url" class="text-xs font-bold text-neutral-900 hover:text-neutral-600 uppercase tracking-wider inline-flex items-center gap-1 transition-colors">
+                            <div class="text-center pt-1">
+                                <a :href="quickViewProduct.url" class="text-xs font-bold text-neutral-900 hover:text-[#99772C] uppercase tracking-wider inline-flex items-center gap-1 transition-colors">
                                     <span>Open Full Technical Dossier</span>
                                     <span>&rarr;</span>
                                 </a>
                             </div>
                         </div>
-
                     </div>
                 </div>
             </template>
-
         </div>
     </div>
 
