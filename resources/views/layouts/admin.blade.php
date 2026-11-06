@@ -23,15 +23,15 @@
              class="fixed inset-0 z-40 bg-black/60 backdrop-blur-sm lg:hidden"></div>
 
         <!-- Sidebar Panel -->
-        <aside class="fixed inset-y-0 left-0 z-50 w-64 bg-gradient-to-b from-[#F7EED8] via-[#ECD492] to-[#D6B664] border-r-2 border-[#B89338] text-neutral-900 flex flex-col transition-transform duration-300 ease-in-out lg:static lg:translate-x-0"
+        <aside class="fixed inset-y-0 left-0 z-50 w-64 bg-gradient-to-b from-[#FAF8F5] via-[#F4EDE0] to-[#EAE0CD] border-r border-[#D4AF37]/35 text-neutral-900 flex flex-col transition-transform duration-300 ease-in-out lg:static lg:translate-x-0"
                :class="sidebarOpen ? 'translate-x-0' : '-translate-x-full'">
             
             <!-- Sidebar Header -->
-            <div class="h-20 flex items-center px-6 border-b border-neutral-900/15 gap-3">
+            <div class="h-20 flex items-center px-6 border-b border-[#D4AF37]/20 gap-3">
                 <img src="{{ asset('assets/images/logo.jpeg') }}" class="w-10 h-10 rounded-full object-cover border-2 border-neutral-950 shadow-md shrink-0" alt="ATOZ">
                 <div class="flex flex-col">
                     <span class="font-black text-sm tracking-tight text-neutral-950 uppercase">ATOZ GADGETZ</span>
-                    <span class="text-[9px] tracking-widest text-neutral-800 uppercase font-black">Concierge Studio</span>
+                    <span class="text-[9px] tracking-widest text-[#99772C] uppercase font-black">Concierge Studio</span>
                 </div>
             </div>
 
@@ -40,7 +40,7 @@
                 
                 <!-- Overview -->
                 <div>
-                    <div class="text-[10px] uppercase font-black tracking-wider text-neutral-950 px-3 mb-2 font-mono">Overview</div>
+                    <div class="text-[10px] uppercase font-black tracking-wider text-[#99772C] px-3 mb-2 font-mono">Overview</div>
                     <div class="space-y-1">
                         <a href="{{ route('admin.dashboard') }}" 
                            class="flex items-center gap-3 px-3 py-2.5 rounded-xl transition-colors {{ request()->routeIs('admin.dashboard') ? 'bg-neutral-950 text-[#DFBA53] font-black shadow-lg' : 'hover:bg-neutral-950/10 text-neutral-800 hover:text-neutral-950 font-bold' }}">
@@ -52,7 +52,7 @@
 
                 <!-- Catalogue -->
                 <div>
-                    <div class="text-[10px] uppercase font-black tracking-wider text-neutral-950 px-3 mb-2 font-mono">Catalogue</div>
+                    <div class="text-[10px] uppercase font-black tracking-wider text-[#99772C] px-3 mb-2 font-mono">Catalogue</div>
                     <div class="space-y-1">
                         <a href="{{ route('admin.products.index') }}" 
                            class="flex items-center gap-3 px-3 py-2.5 rounded-xl transition-colors {{ request()->routeIs('admin.products.*') ? 'bg-neutral-950 text-[#DFBA53] font-black shadow-lg' : 'hover:bg-neutral-950/10 text-neutral-800 hover:text-neutral-950 font-bold' }}">
@@ -144,7 +144,7 @@
             </nav>
 
             <!-- Admin Profile / Logout Footer -->
-            <div class="p-4 border-t border-neutral-900/15 bg-neutral-950/10 flex items-center justify-between">
+            <div class="p-4 border-t border-[#D4AF37]/20 bg-black/5 flex items-center justify-between">
                 <div class="flex items-center gap-3 min-w-0">
                     <div class="w-8 h-8 rounded-full bg-neutral-950 text-[#DFBA53] flex items-center justify-center font-black text-xs shrink-0 shadow-sm border border-neutral-900">
                         {{ substr(auth('admin')->user()->name, 0, 1) }}

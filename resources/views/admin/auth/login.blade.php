@@ -10,11 +10,11 @@
     @vite(['resources/css/app.css', 'resources/js/app.js'])
 </head>
 <body class="bg-gold-hero min-h-screen flex items-center justify-center p-4 antialiased text-neutral-950 font-sans selection:bg-neutral-950 selection:text-[#DFBA53]">
-    <div class="w-full max-w-md bg-white/95 rounded-3xl border-2 border-[#A37D28] p-8 sm:p-10 shadow-2xl backdrop-blur-md">
+    <div class="w-full max-w-md bg-white/95 rounded-3xl border border-[#D4AF37]/35 p-8 sm:p-10 shadow-xl backdrop-blur-md">
         <div class="text-center mb-8">
             <img src="{{ asset('assets/images/logo.jpeg') }}" class="w-16 h-16 rounded-full mx-auto mb-4 border-2 border-neutral-950 shadow-md" alt="ATOZ Logo">
             <h1 class="text-xl font-black tracking-tight uppercase text-neutral-950">Staff Concierge</h1>
-            <p class="text-xs text-neutral-800 mt-1 font-bold">Authorized Administrative Access Only</p>
+            <p class="text-xs text-[#99772C] mt-1 font-bold">Authorized Administrative Access Only</p>
         </div>
 
         @if($errors->any())

@@ -6,10 +6,10 @@
 @section('content')
 <div class="space-y-24 sm:space-y-32 pb-24">
 
-    <!-- 1. HERO SECTION (Radiant Royal Gold Masterpiece) -->
-    <section class="relative bg-gold-hero text-neutral-950 overflow-hidden rounded-b-[40px] sm:rounded-b-[56px] shadow-2xl border-b-4 border-[#A37D28]">
+    <!-- 1. HERO SECTION (Radiant Champagne Silk & Milled Gold Masterpiece) -->
+    <section class="relative bg-gold-hero text-neutral-950 overflow-hidden rounded-b-[40px] sm:rounded-b-[56px] shadow-xl border-b border-[#D4AF37]/35">
         <!-- Ambient Subtle Metallic Sheen Glow -->
-        <div class="absolute inset-0 bg-[radial-gradient(circle_at_top_right,rgba(255,255,255,0.4),transparent_60%)] pointer-events-none"></div>
+        <div class="absolute inset-0 bg-[radial-gradient(ellipse_at_top,rgba(255,255,255,0.6),transparent_70%)] pointer-events-none"></div>
 
         <div class="max-w-[1400px] mx-auto px-6 sm:px-10 lg:px-12 py-16 sm:py-24 lg:py-32 relative z-10">
             <div class="grid grid-cols-1 lg:grid-cols-12 gap-12 lg:gap-8 items-center">
@@ -28,40 +28,40 @@
                         </span>
                     </h1>
 
-                    <p class="text-base sm:text-lg text-neutral-900 max-w-xl font-medium leading-relaxed">
+                    <p class="text-base sm:text-lg text-neutral-800 max-w-xl font-medium leading-relaxed">
                         Engineered for the discerning audiophile and designer. Milled titanium, anodized aluminum, and bespoke planar acoustic drivers assembled with zero compromise.
                     </p>
 
                     <div class="flex flex-wrap items-center gap-4 pt-4">
-                        <a href="{{ route('shop.index') }}" class="px-8 py-4 rounded-full btn-onyx text-xs uppercase tracking-widest transition-all duration-300 transform hover:-translate-y-0.5 shadow-2xl flex items-center gap-2">
+                        <a href="{{ route('shop.index') }}" class="px-8 py-4 rounded-full btn-onyx text-xs uppercase tracking-widest transition-all duration-300 transform hover:-translate-y-0.5 shadow-xl flex items-center gap-2">
                             <span>Explore Catalogue</span>
                             <svg class="w-4 h-4 text-[#DFBA53]" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2.5" d="M14 5l7 7m0 0l-7 7m7-7H3"/></svg>
                         </a>
-                        <a href="{{ route('shop.index', ['category' => 'audio-acoustics']) }}" class="px-8 py-4 rounded-full bg-white/70 hover:bg-white text-neutral-950 font-black text-xs uppercase tracking-widest border-2 border-neutral-900/80 hover:border-neutral-950 transition-all duration-300 shadow-sm">
+                        <a href="{{ route('shop.index', ['category' => 'audio-acoustics']) }}" class="px-8 py-4 rounded-full bg-white/80 hover:bg-white text-neutral-950 font-black text-xs uppercase tracking-widest border border-[#D4AF37]/50 hover:border-[#D4AF37] transition-all duration-300 shadow-sm">
                             Audio Atelier
                         </a>
                     </div>
 
                     <!-- Client Trust Badges -->
-                    <div class="pt-8 border-t border-neutral-900/15 grid grid-cols-3 gap-6 text-left">
+                    <div class="pt-8 border-t border-[#D4AF37]/25 grid grid-cols-3 gap-6 text-left">
                         <div>
                             <span class="block text-2xl sm:text-3xl font-black tracking-tight text-neutral-950 font-mono">100%</span>
-                            <span class="text-[11px] uppercase tracking-wider text-neutral-800 font-bold">Authentic Milled</span>
+                            <span class="text-[11px] uppercase tracking-wider text-neutral-700 font-bold">Authentic Milled</span>
                         </div>
                         <div>
                             <span class="block text-2xl sm:text-3xl font-black tracking-tight text-neutral-950 font-mono">3-Yr</span>
-                            <span class="text-[11px] uppercase tracking-wider text-neutral-800 font-bold">Bespoke Warranty</span>
+                            <span class="text-[11px] uppercase tracking-wider text-neutral-700 font-bold">Bespoke Warranty</span>
                         </div>
                         <div>
                             <span class="block text-2xl sm:text-3xl font-black tracking-tight text-neutral-950 font-mono">Free</span>
-                            <span class="text-[11px] uppercase tracking-wider text-neutral-800 font-bold">Express Delivery</span>
+                            <span class="text-[11px] uppercase tracking-wider text-neutral-700 font-bold">Express Delivery</span>
                         </div>
                     </div>
                 </div>
 
                 <!-- Right Hero Visual (5 Cols) -->
                 <div class="lg:col-span-5 relative flex justify-center">
-                    <div class="relative w-full max-w-lg aspect-square rounded-[36px] overflow-hidden bg-white/60 border-2 border-neutral-900/20 shadow-2xl group">
+                    <div class="relative w-full max-w-lg aspect-square rounded-[36px] overflow-hidden bg-white/80 border border-[#D4AF37]/35 shadow-xl group">
                         @php
                             $heroImg = $heroBanners->first()?->desktop_image ?? asset('storage/banners/hero-banner-1.jpg');
                         @endphp
@@ -146,7 +146,7 @@
 
     <!-- 4. EDITORIAL SPLIT CAMPAIGN BANNER -->
     <section class="max-w-[1400px] mx-auto px-6 sm:px-10 lg:px-12">
-        <div class="bg-gold-campaign border-2 border-[#A37D28] rounded-[36px] sm:rounded-[48px] overflow-hidden text-neutral-950 grid grid-cols-1 lg:grid-cols-12 shadow-2xl">
+        <div class="bg-gold-campaign border border-[#D4AF37]/35 rounded-[36px] sm:rounded-[48px] overflow-hidden text-neutral-950 grid grid-cols-1 lg:grid-cols-12 shadow-xl">
             <div class="lg:col-span-6 p-8 sm:p-14 lg:p-16 flex flex-col justify-between space-y-8">
                 <div class="space-y-4">
                     <span class="px-4 py-1.5 rounded-full text-[10px] font-mono uppercase tracking-widest bg-neutral-950 text-[#DFBA53] border border-neutral-900 inline-block font-extrabold shadow-sm">
@@ -155,19 +155,19 @@
                     <h3 class="text-3xl sm:text-5xl font-black tracking-tight leading-tight text-neutral-950">
                         PRECISION SOLID TITANIUM. ZERO RESONANCE.
                     </h3>
-                    <p class="text-sm sm:text-base text-neutral-900 leading-relaxed max-w-md font-medium">
+                    <p class="text-sm sm:text-base text-neutral-800 leading-relaxed max-w-md font-medium">
                         Every dial, bezel, and ear-cup chassis is milled from grade 5 aerospace titanium ingots, delivering an acoustic enclosure with non-existent harmonic distortion.
                     </p>
                 </div>
 
                 <div class="flex items-center gap-4">
-                    <a href="{{ route('shop.index') }}" class="px-8 py-4 rounded-full btn-onyx text-xs uppercase tracking-widest transition-colors shadow-2xl">
+                    <a href="{{ route('shop.index') }}" class="px-8 py-4 rounded-full btn-onyx text-xs uppercase tracking-widest transition-colors shadow-xl">
                         Shop Titanium Range
                     </a>
                 </div>
             </div>
 
-            <div class="lg:col-span-6 relative aspect-square sm:aspect-auto min-h-[350px] overflow-hidden border-t lg:border-t-0 lg:border-l-2 border-[#A37D28]/40">
+            <div class="lg:col-span-6 relative aspect-square sm:aspect-auto min-h-[350px] overflow-hidden border-t lg:border-t-0 lg:border-l border-[#D4AF37]/25">
                 <img src="{{ asset('storage/banners/hero-banner-2.jpg') }}" 
                      alt="Titanium Watch Engineering" 
                      class="w-full h-full object-cover">
@@ -277,15 +277,15 @@
 
     <!-- 8. PRIVATE SOCIETY NEWSLETTER -->
     <section class="max-w-[1400px] mx-auto px-6 sm:px-10 lg:px-12">
-        <div class="bg-gold-card border-2 border-[#A37D28] text-neutral-950 rounded-[36px] sm:rounded-[48px] p-8 sm:p-16 text-center max-w-4xl mx-auto shadow-2xl space-y-6">
-            <span class="text-xs font-black uppercase tracking-[0.2em] text-neutral-950 block">Private Invitations</span>
+        <div class="bg-gold-card border border-[#D4AF37]/35 text-neutral-950 rounded-[36px] sm:rounded-[48px] p-8 sm:p-16 text-center max-w-4xl mx-auto shadow-xl space-y-6">
+            <span class="text-xs font-black uppercase tracking-[0.2em] text-[#99772C] block">Private Invitations</span>
             <h2 class="text-3xl sm:text-4xl font-black tracking-tight text-neutral-950">The ATOZ Collector's Circle</h2>
-            <p class="text-sm text-neutral-800 max-w-lg mx-auto leading-relaxed font-medium">
+            <p class="text-sm text-neutral-700 max-w-lg mx-auto leading-relaxed font-medium">
                 Receive private allocations of limited-run titanium editions, unannounced product drops, and invitations to private listening salons.
             </p>
 
             <form class="max-w-md mx-auto flex flex-col sm:flex-row gap-3 pt-2" onsubmit="event.preventDefault(); window.dispatchEvent(new CustomEvent('toast', { detail: { message: 'You have been enrolled in the Collector\'s Circle.' } })); this.reset();">
-                <input type="email" required placeholder="Enter your private email..." class="flex-1 bg-white/90 border border-neutral-400 rounded-full px-5 py-3 text-xs text-neutral-950 placeholder:text-neutral-500 focus:outline-none focus:border-neutral-950 shadow-inner">
+                <input type="email" required placeholder="Enter your private email..." class="flex-1 bg-white/95 border border-[#D4AF37]/30 rounded-full px-5 py-3 text-xs text-neutral-950 placeholder:text-neutral-500 focus:outline-none focus:border-[#D4AF37] shadow-sm">
                 <button type="submit" class="px-8 py-3 rounded-full btn-onyx text-xs uppercase tracking-widest shadow-xl">
                     Request Entry
                 </button>

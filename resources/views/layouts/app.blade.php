@@ -547,9 +547,9 @@
     </main>
 
     <!-- Premium Luxury Footer -->
-    <footer class="bg-gold-footer text-neutral-950 mt-24 border-t-4 border-[#A37D28] shadow-2xl">
+    <footer class="bg-gold-footer text-neutral-950 mt-24 border-t border-[#D4AF37]/35 shadow-xl">
         <!-- Global Trust / Guarantee Bar -->
-        <div class="border-b border-neutral-900/15">
+        <div class="border-b border-[#D4AF37]/20">
             <div class="max-w-[1400px] mx-auto px-4 sm:px-6 lg:px-8 py-10 grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-8 text-center sm:text-left">
                 <div class="flex items-center gap-4">
                     <div class="w-12 h-12 rounded-2xl bg-neutral-950 flex items-center justify-center shrink-0 text-[#DFBA53] border border-neutral-900 shadow-md">
@@ -557,7 +557,7 @@
                     </div>
                     <div>
                         <h4 class="text-xs font-black uppercase tracking-wider text-neutral-950">Genuine Craftsmanship</h4>
-                        <p class="text-xs text-neutral-800 font-medium mt-0.5">100% certified authentic luxury electronics.</p>
+                        <p class="text-xs text-neutral-700 font-medium mt-0.5">100% certified authentic luxury electronics.</p>
                     </div>
                 </div>
 
@@ -567,7 +567,7 @@
                     </div>
                     <div>
                         <h4 class="text-xs font-black uppercase tracking-wider text-neutral-950">Express White-Glove</h4>
-                        <p class="text-xs text-neutral-800 font-medium mt-0.5">Insured air transit on all premium orders.</p>
+                        <p class="text-xs text-neutral-700 font-medium mt-0.5">Insured air transit on all premium orders.</p>
                     </div>
                 </div>
 
@@ -577,7 +577,7 @@
                     </div>
                     <div>
                         <h4 class="text-xs font-black uppercase tracking-wider text-neutral-950">Global 2-Year Warranty</h4>
-                        <p class="text-xs text-neutral-800 font-medium mt-0.5">Comprehensive hardware protection & repair.</p>
+                        <p class="text-xs text-neutral-700 font-medium mt-0.5">Comprehensive hardware protection & repair.</p>
                     </div>
                 </div>
 
@@ -587,7 +587,7 @@
                     </div>
                     <div>
                         <h4 class="text-xs font-black uppercase tracking-wider text-neutral-950">Concierge Support</h4>
-                        <p class="text-xs text-neutral-800 font-medium mt-0.5">24/7 dedicated acoustic & gadget advisors.</p>
+                        <p class="text-xs text-neutral-700 font-medium mt-0.5">24/7 dedicated acoustic & gadget advisors.</p>
                     </div>
                 </div>
             </div>
@@ -600,13 +600,13 @@
                     <img src="{{ asset('assets/images/logo.jpeg') }}" class="w-9 h-9 rounded-full object-cover border-2 border-neutral-950 shadow-md" alt="ATOZ GADGETZ">
                     <span class="font-black text-lg tracking-tight uppercase text-neutral-950">ATOZ GADGETZ</span>
                 </div>
-                <p class="text-neutral-900 text-xs font-medium leading-relaxed max-w-sm">
+                <p class="text-neutral-800 text-xs font-medium leading-relaxed max-w-sm">
                     Curating high-performance acoustic instruments, luxury biometric wearables, and architectural desk hardware. Designed for purists of material and form.
                 </p>
                 <div class="pt-2">
-                    <p class="text-[11px] text-neutral-950 uppercase tracking-wider font-black">Join the Private Society</p>
+                    <p class="text-[11px] text-[#99772C] uppercase tracking-wider font-black">Join the Private Society</p>
                     <div class="flex gap-2 mt-2 max-w-sm">
-                        <input type="email" placeholder="Enter your email address" class="bg-white/90 border border-neutral-400 rounded-full px-4 py-2.5 text-xs text-neutral-950 placeholder:text-neutral-500 focus:outline-none focus:border-neutral-950 flex-1 shadow-inner">
+                        <input type="email" placeholder="Enter your email address" class="bg-white/95 border border-[#D4AF37]/35 rounded-full px-4 py-2.5 text-xs text-neutral-950 placeholder:text-neutral-500 focus:outline-none focus:border-[#D4AF37] flex-1 shadow-sm">
                         <button type="button" class="btn-onyx px-5 py-2.5 rounded-full text-xs font-black uppercase shadow">Join</button>
                     </div>
                 </div>
@@ -614,7 +614,7 @@
 
             <div>
                 <h5 class="font-black uppercase tracking-wider text-neutral-950 mb-4">Curations</h5>
-                <ul class="space-y-2.5 text-neutral-800 font-semibold">
+                <ul class="space-y-2.5 text-neutral-700 font-semibold">
                     <li><a href="{{ route('shop.index', ['category' => 'audio-acoustics']) }}" class="hover:text-black transition-colors">Over-Ear Studio</a></li>
                     <li><a href="{{ route('shop.index', ['category' => 'wearables']) }}" class="hover:text-black transition-colors">Titanium Timepieces</a></li>
                     <li><a href="{{ route('shop.index', ['category' => 'workspace-architecture']) }}" class="hover:text-black transition-colors">Desk Architecture</a></li>
@@ -625,7 +625,7 @@
 
             <div>
                 <h5 class="font-black uppercase tracking-wider text-neutral-950 mb-4">Concierge</h5>
-                <ul class="space-y-2.5 text-neutral-800 font-semibold">
+                <ul class="space-y-2.5 text-neutral-700 font-semibold">
                     <li><a href="#" class="hover:text-black transition-colors">Order Tracking</a></li>
                     <li><a href="#" class="hover:text-black transition-colors">White-Glove Delivery</a></li>
                     <li><a href="#" class="hover:text-black transition-colors">Concierge Returns</a></li>
@@ -636,7 +636,7 @@
 
             <div>
                 <h5 class="font-black uppercase tracking-wider text-neutral-950 mb-4">Society</h5>
-                <ul class="space-y-2.5 text-neutral-800 font-semibold">
+                <ul class="space-y-2.5 text-neutral-700 font-semibold">
                     <li><a href="#" class="hover:text-black transition-colors">Our Design Philosophy</a></li>
                     <li><a href="#" class="hover:text-black transition-colors">Material Manifesto</a></li>
                     <li><a href="#" class="hover:text-black transition-colors">Sustainability Standards</a></li>
@@ -646,7 +646,7 @@
         </div>
 
         <!-- Copyright & Legal -->
-        <div class="border-t border-neutral-900/15 text-neutral-800 font-medium text-[11px] py-6">
+        <div class="border-t border-[#D4AF37]/20 text-neutral-700 font-medium text-[11px] py-6">
             <div class="max-w-[1400px] mx-auto px-4 sm:px-6 lg:px-8 flex flex-col sm:flex-row items-center justify-between gap-4">
                 <p>&copy; {{ date('Y') }} ATOZ GADGETZ. All architectural rights reserved.</p>
                 <div class="flex items-center gap-6">
