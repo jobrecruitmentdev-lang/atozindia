@@ -69,39 +69,40 @@
     box-shadow: 0 4px 20px -2px rgba(212, 175, 55, 0.25);
 }
 
-/* Haute Luxury Champagne Silk & Milled Gold Gradients */
+/* Rasta 1: Solid 24K Polished Gold Bullion Canvas & Accents */
 .bg-gold-hero {
-    background: radial-gradient(ellipse at 70% 30%, rgba(212, 175, 55, 0.15) 0%, transparent 65%),
-                linear-gradient(135deg, #FBF9F5 0%, #F5EDE0 45%, #EBE0CC 85%, #DFCBB0 100%);
+    background: radial-gradient(ellipse at 70% 30%, rgba(255, 235, 150, 0.45) 0%, transparent 60%),
+                linear-gradient(135deg, #F0CF68 0%, #DDB647 30%, #C99F30 70%, #99741B 100%);
 }
 
 .bg-gold-campaign {
-    background: radial-gradient(circle at 20% 50%, rgba(212, 175, 55, 0.12) 0%, transparent 60%),
-                linear-gradient(135deg, #FBF9F5 0%, #F4ECE0 50%, #E9DECA 100%);
+    background: radial-gradient(circle at 20% 50%, rgba(255, 235, 150, 0.4) 0%, transparent 60%),
+                linear-gradient(135deg, #F0CF68 0%, #D4AC38 45%, #B88E28 100%);
 }
 
 .bg-gold-card {
-    background: linear-gradient(135deg, #FCFAF7 0%, #F6EFE4 60%, #EDE2D0 100%);
+    background: radial-gradient(ellipse at center, rgba(255, 235, 150, 0.35) 0%, transparent 70%),
+                linear-gradient(135deg, #F5D87A 0%, #DFB744 50%, #BD9328 100%);
 }
 
 .bg-gold-footer {
-    background: linear-gradient(180deg, #FBF9F5 0%, #F5EFE4 40%, #EBE2D0 80%, #DECDB3 100%);
+    background: linear-gradient(180deg, #F5D97E 0%, #DDB748 35%, #C2992C 75%, #8C6A18 100%);
 }
 
 .btn-onyx {
-    background: #0f0e0b;
-    color: #F8F4EA !important;
-    border: 1.5px solid rgba(212, 175, 55, 0.5);
+    background: #000000;
+    color: #F5D87A !important;
+    border: 1.5px solid #000000;
     font-weight: 800;
     transition: all 0.25s cubic-bezier(0.4, 0, 0.2, 1);
-    box-shadow: 0 4px 16px rgba(15, 14, 11, 0.22);
+    box-shadow: 0 4px 16px rgba(0, 0, 0, 0.35);
 }
 .btn-onyx:hover {
-    background: #000000;
-    color: #DFBA53 !important;
-    border-color: #DFBA53;
+    background: #1a1917;
+    color: #FFFFFF !important;
+    border-color: #000000;
     transform: translateY(-1px);
-    box-shadow: 0 6px 22px rgba(212, 175, 55, 0.25);
+    box-shadow: 0 6px 22px rgba(0, 0, 0, 0.5);
 }
 
 /* Custom Scrollbar for Luxury Aesthetic */

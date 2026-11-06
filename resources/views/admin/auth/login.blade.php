@@ -9,12 +9,12 @@
     <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700;800&display=swap" rel="stylesheet">
     @vite(['resources/css/app.css', 'resources/js/app.js'])
 </head>
-<body class="bg-gold-hero min-h-screen flex items-center justify-center p-4 antialiased text-neutral-950 font-sans selection:bg-neutral-950 selection:text-[#DFBA53]">
-    <div class="w-full max-w-md bg-white/95 rounded-3xl border border-[#D4AF37]/35 p-8 sm:p-10 shadow-xl backdrop-blur-md">
+<body class="bg-gold-hero min-h-screen flex items-center justify-center p-4 antialiased text-black font-sans selection:bg-black selection:text-[#F5D87A]">
+    <div class="w-full max-w-md bg-white/95 rounded-3xl border-2 border-black/30 p-8 sm:p-10 shadow-2xl backdrop-blur-md">
         <div class="text-center mb-8">
-            <img src="{{ asset('assets/images/logo.jpeg') }}" class="w-16 h-16 rounded-full mx-auto mb-4 border-2 border-neutral-950 shadow-md" alt="ATOZ Logo">
-            <h1 class="text-xl font-black tracking-tight uppercase text-neutral-950">Staff Concierge</h1>
-            <p class="text-xs text-[#99772C] mt-1 font-bold">Authorized Administrative Access Only</p>
+            <img src="{{ asset('assets/images/logo.jpeg') }}" class="w-16 h-16 rounded-full mx-auto mb-4 border-2 border-black shadow-md" alt="ATOZ Logo">
+            <h1 class="text-xl font-black tracking-tight uppercase text-black">Staff Concierge</h1>
+            <p class="text-xs text-black mt-1 font-extrabold">Authorized Administrative Access Only</p>
         </div>
 
         @if($errors->any())
