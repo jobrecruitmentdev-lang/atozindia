@@ -546,48 +546,48 @@
         @yield('content')
     </main>
 
-    <!-- Premium Luxury Footer -->
-    <footer class="bg-gold-footer text-black mt-24 border-t-2 border-[#8C6A18] shadow-2xl">
+    <!-- Premium Luxury Footer (Rich Burnished 24K Royal Gold) -->
+    <footer class="bg-burnished-gold-footer text-[#0B0A08] mt-24 border-t-2 border-[#876211] shadow-2xl">
         <!-- Global Trust / Guarantee Bar -->
         <div class="border-b-2 border-black/15">
             <div class="max-w-[1400px] mx-auto px-4 sm:px-6 lg:px-8 py-10 grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-8 text-center sm:text-left">
                 <div class="flex items-center gap-4">
-                    <div class="w-12 h-12 rounded-2xl bg-black flex items-center justify-center shrink-0 text-[#F5D87A] border border-black shadow-md">
+                    <div class="w-12 h-12 rounded-2xl bg-[#0B0A08] flex items-center justify-center shrink-0 text-[#FCE08C] border border-black shadow-lg">
                         <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 13l4 4L19 7"></path></svg>
                     </div>
                     <div>
-                        <h4 class="text-xs font-black uppercase tracking-wider text-black">Genuine Craftsmanship</h4>
-                        <p class="text-xs text-black font-bold mt-0.5">100% certified authentic luxury electronics.</p>
+                        <h4 class="text-xs font-black uppercase tracking-wider text-[#0B0A08]">Genuine Craftsmanship</h4>
+                        <p class="text-xs text-[#1F1C14] font-bold mt-0.5">100% certified authentic luxury electronics.</p>
                     </div>
                 </div>
 
                 <div class="flex items-center gap-4">
-                    <div class="w-12 h-12 rounded-2xl bg-black flex items-center justify-center shrink-0 text-[#F5D87A] border border-black shadow-md">
+                    <div class="w-12 h-12 rounded-2xl bg-[#0B0A08] flex items-center justify-center shrink-0 text-[#FCE08C] border border-black shadow-lg">
                         <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 8v4l3 3m6-3a9 9 0 11-18 0 9 9 0 0118 0z"></path></svg>
                     </div>
                     <div>
-                        <h4 class="text-xs font-black uppercase tracking-wider text-black">Express White-Glove</h4>
-                        <p class="text-xs text-black font-bold mt-0.5">Insured air transit on all premium orders.</p>
+                        <h4 class="text-xs font-black uppercase tracking-wider text-[#0B0A08]">Express White-Glove</h4>
+                        <p class="text-xs text-[#1F1C14] font-bold mt-0.5">Insured air transit on all premium orders.</p>
                     </div>
                 </div>
 
                 <div class="flex items-center gap-4">
-                    <div class="w-12 h-12 rounded-2xl bg-black flex items-center justify-center shrink-0 text-[#F5D87A] border border-black shadow-md">
+                    <div class="w-12 h-12 rounded-2xl bg-[#0B0A08] flex items-center justify-center shrink-0 text-[#FCE08C] border border-black shadow-lg">
                         <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 12l2 2 4-4m5.618-4.016A11.955 11.955 0 0112 2.944a11.955 11.955 0 01-8.618 3.04A12.02 12.02 0 003 9c0 5.591 3.824 10.29 9 11.622 5.176-1.332 9-6.03 9-11.622 0-1.042-.133-2.052-.382-3.016z"></path></svg>
                     </div>
                     <div>
-                        <h4 class="text-xs font-black uppercase tracking-wider text-black">Global 2-Year Warranty</h4>
-                        <p class="text-xs text-black font-bold mt-0.5">Comprehensive hardware protection & repair.</p>
+                        <h4 class="text-xs font-black uppercase tracking-wider text-[#0B0A08]">Global 2-Year Warranty</h4>
+                        <p class="text-xs text-[#1F1C14] font-bold mt-0.5">Comprehensive hardware protection & repair.</p>
                     </div>
                 </div>
 
                 <div class="flex items-center gap-4">
-                    <div class="w-12 h-12 rounded-2xl bg-black flex items-center justify-center shrink-0 text-[#F5D87A] border border-black shadow-md">
+                    <div class="w-12 h-12 rounded-2xl bg-[#0B0A08] flex items-center justify-center shrink-0 text-[#FCE08C] border border-black shadow-lg">
                         <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M18.364 5.636l-3.536 3.536m0 5.656l3.536 3.536M9.172 9.172L5.636 5.636m3.536 9.192l-3.536 3.536M21 12a9 9 0 11-18 0 9 9 0 0118 0zm-5 0a4 4 0 11-8 0 4 4 0 018 0z"></path></svg>
                     </div>
                     <div>
-                        <h4 class="text-xs font-black uppercase tracking-wider text-black">Concierge Support</h4>
-                        <p class="text-xs text-black font-bold mt-0.5">24/7 dedicated acoustic & gadget advisors.</p>
+                        <h4 class="text-xs font-black uppercase tracking-wider text-[#0B0A08]">Concierge Support</h4>
+                        <p class="text-xs text-[#1F1C14] font-bold mt-0.5">24/7 dedicated acoustic & gadget advisors.</p>
                     </div>
                 </div>
             </div>
@@ -598,61 +598,61 @@
             <div class="lg:col-span-2 space-y-4">
                 <div class="flex items-center gap-3">
                     <img src="{{ asset('assets/images/logo.jpeg') }}" class="w-9 h-9 rounded-full object-cover border-2 border-black shadow-md" alt="ATOZ GADGETZ">
-                    <span class="font-black text-lg tracking-tight uppercase text-black">ATOZ GADGETZ</span>
+                    <span class="font-black text-lg tracking-tight uppercase text-[#0B0A08]">ATOZ GADGETZ</span>
                 </div>
-                <p class="text-black text-xs font-bold leading-relaxed max-w-sm">
+                <p class="text-[#1F1C14] text-xs font-bold leading-relaxed max-w-sm">
                     Curating high-performance acoustic instruments, luxury biometric wearables, and architectural desk hardware. Designed for purists of material and form.
                 </p>
                 <div class="pt-2">
-                    <p class="text-[11px] text-black uppercase tracking-wider font-black">Join the Private Society</p>
+                    <p class="text-[11px] text-[#0B0A08] uppercase tracking-wider font-black">Join the Private Society</p>
                     <div class="flex gap-2 mt-2 max-w-sm">
-                        <input type="email" placeholder="Enter your email address" class="bg-white border-2 border-black/30 rounded-full px-4 py-2.5 text-xs text-black placeholder:text-neutral-600 focus:outline-none focus:border-black flex-1 shadow-inner font-bold">
-                        <button type="button" class="btn-onyx px-5 py-2.5 rounded-full text-xs font-black uppercase shadow-xl">Join</button>
+                        <input type="email" placeholder="Enter your email address" class="bg-white/95 border-2 border-black/30 rounded-full px-4 py-2.5 text-xs text-[#0B0A08] placeholder-[#524D44] focus:outline-none focus:border-black flex-1 shadow-inner font-bold">
+                        <button type="button" class="btn-onyx-gold px-5 py-2.5 rounded-full text-xs font-black uppercase shadow-xl">Join</button>
                     </div>
                 </div>
             </div>
 
             <div>
-                <h5 class="font-black uppercase tracking-wider text-black mb-4">Curations</h5>
-                <ul class="space-y-2.5 text-black font-bold">
-                    <li><a href="{{ route('shop.index', ['category' => 'audio-acoustics']) }}" class="hover:text-neutral-800 transition-colors">Over-Ear Studio</a></li>
-                    <li><a href="{{ route('shop.index', ['category' => 'wearables']) }}" class="hover:text-neutral-800 transition-colors">Titanium Timepieces</a></li>
-                    <li><a href="{{ route('shop.index', ['category' => 'workspace-architecture']) }}" class="hover:text-neutral-800 transition-colors">Desk Architecture</a></li>
-                    <li><a href="{{ route('shop.index', ['category' => 'optics-cameras']) }}" class="hover:text-neutral-800 transition-colors">Rangefinder Optics</a></li>
-                    <li><a href="{{ route('shop.index', ['sort' => 'newest']) }}" class="hover:text-neutral-800 transition-colors">New Releases</a></li>
+                <h5 class="font-black uppercase tracking-wider text-[#0B0A08] mb-4 text-[11px]">Curations</h5>
+                <ul class="space-y-2.5 text-[#1F1C14] font-bold">
+                    <li><a href="{{ route('shop.index', ['category' => 'audio-acoustics']) }}" class="hover:text-black transition-colors">Over-Ear Studio</a></li>
+                    <li><a href="{{ route('shop.index', ['category' => 'wearables']) }}" class="hover:text-black transition-colors">Titanium Timepieces</a></li>
+                    <li><a href="{{ route('shop.index', ['category' => 'workspace-architecture']) }}" class="hover:text-black transition-colors">Desk Architecture</a></li>
+                    <li><a href="{{ route('shop.index', ['category' => 'optics-cameras']) }}" class="hover:text-black transition-colors">Rangefinder Optics</a></li>
+                    <li><a href="{{ route('shop.index', ['sort' => 'newest']) }}" class="hover:text-black transition-colors">New Releases</a></li>
                 </ul>
             </div>
 
             <div>
-                <h5 class="font-black uppercase tracking-wider text-black mb-4">Concierge</h5>
-                <ul class="space-y-2.5 text-black font-bold">
-                    <li><a href="#" class="hover:text-neutral-800 transition-colors">Order Tracking</a></li>
-                    <li><a href="#" class="hover:text-neutral-800 transition-colors">White-Glove Delivery</a></li>
-                    <li><a href="#" class="hover:text-neutral-800 transition-colors">Concierge Returns</a></li>
-                    <li><a href="#" class="hover:text-neutral-800 transition-colors">Warranty & Care</a></li>
-                    <li><a href="#" class="hover:text-neutral-800 transition-colors">Acoustic Consultation</a></li>
+                <h5 class="font-black uppercase tracking-wider text-[#0B0A08] mb-4 text-[11px]">Concierge</h5>
+                <ul class="space-y-2.5 text-[#1F1C14] font-bold">
+                    <li><a href="#" class="hover:text-black transition-colors">Order Tracking</a></li>
+                    <li><a href="#" class="hover:text-black transition-colors">White-Glove Delivery</a></li>
+                    <li><a href="#" class="hover:text-black transition-colors">Concierge Returns</a></li>
+                    <li><a href="#" class="hover:text-black transition-colors">Warranty & Care</a></li>
+                    <li><a href="#" class="hover:text-black transition-colors">Acoustic Consultation</a></li>
                 </ul>
             </div>
 
             <div>
-                <h5 class="font-black uppercase tracking-wider text-black mb-4">Society</h5>
-                <ul class="space-y-2.5 text-black font-bold">
-                    <li><a href="#" class="hover:text-neutral-800 transition-colors">Our Design Philosophy</a></li>
-                    <li><a href="#" class="hover:text-neutral-800 transition-colors">Material Manifesto</a></li>
-                    <li><a href="#" class="hover:text-neutral-800 transition-colors">Sustainability Standards</a></li>
-                    <li><a href="{{ route('admin.login') }}" class="hover:text-neutral-800 transition-colors">Staff Portal</a></li>
+                <h5 class="font-black uppercase tracking-wider text-[#0B0A08] mb-4 text-[11px]">Society</h5>
+                <ul class="space-y-2.5 text-[#1F1C14] font-bold">
+                    <li><a href="#" class="hover:text-black transition-colors">Our Design Philosophy</a></li>
+                    <li><a href="#" class="hover:text-black transition-colors">Material Manifesto</a></li>
+                    <li><a href="#" class="hover:text-black transition-colors">Sustainability Standards</a></li>
+                    <li><a href="{{ route('admin.login') }}" class="hover:text-black transition-colors">Staff Portal</a></li>
                 </ul>
             </div>
         </div>
 
         <!-- Copyright & Legal -->
-        <div class="border-t-2 border-black/15 text-black font-bold text-[11px] py-6">
+        <div class="border-t-2 border-black/15 text-[#1F1C14] font-bold text-[11px] py-6">
             <div class="max-w-[1400px] mx-auto px-4 sm:px-6 lg:px-8 flex flex-col sm:flex-row items-center justify-between gap-4">
                 <p>&copy; {{ date('Y') }} ATOZ GADGETZ. All architectural rights reserved.</p>
                 <div class="flex items-center gap-6">
-                    <a href="#" class="hover:text-neutral-800 font-extrabold transition-colors">Privacy Protocol</a>
-                    <a href="#" class="hover:text-neutral-800 font-extrabold transition-colors">Terms of Curatorship</a>
-                    <a href="#" class="hover:text-neutral-800 font-extrabold transition-colors">Security Disclosures</a>
+                    <a href="#" class="hover:text-black font-extrabold transition-colors">Privacy Protocol</a>
+                    <a href="#" class="hover:text-black font-extrabold transition-colors">Terms of Curatorship</a>
+                    <a href="#" class="hover:text-black font-extrabold transition-colors">Security Disclosures</a>
                 </div>
             </div>
         </div>

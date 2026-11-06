@@ -32,25 +32,63 @@
 
 /* Luxury Royal Gold Gradients & Accents */
 .btn-gold {
-    background: linear-gradient(135deg, #DFBA53 0%, #D4AF37 50%, #B38F2C 100%);
+    background: linear-gradient(135deg, #F3D072 0%, #DFBA53 35%, #D4AF37 70%, #B8922C 100%);
     color: #111110 !important;
-    font-weight: 700;
+    font-weight: 800;
     transition: all 0.25s cubic-bezier(0.4, 0, 0.2, 1);
-    box-shadow: 0 4px 14px 0 rgba(212, 175, 55, 0.28);
+    box-shadow: 0 4px 18px 0 rgba(212, 175, 55, 0.35);
 }
 .btn-gold:hover {
-    background: linear-gradient(135deg, #E6CA65 0%, #DFBA53 50%, #C5A059 100%);
-    box-shadow: 0 6px 20px rgba(212, 175, 55, 0.4);
+    background: linear-gradient(135deg, #FCE08C 0%, #E8CA66 35%, #DEB949 70%, #C49F38 100%);
+    box-shadow: 0 6px 24px rgba(212, 175, 55, 0.5);
     transform: translateY(-1px);
 }
 .btn-gold:active {
     transform: translateY(0);
 }
 
-.text-gold-gradient {
-    background: linear-gradient(135deg, #DFBA53 0%, #C5A059 50%, #99772C 100%);
+.btn-silk-gold {
+    background: #FFFFFF;
+    color: #8A6818 !important;
+    border: 1.5px solid #D4AF37;
+    font-weight: 800;
+    transition: all 0.25s cubic-bezier(0.4, 0, 0.2, 1);
+    box-shadow: 0 4px 14px rgba(212, 175, 55, 0.18);
+}
+.btn-silk-gold:hover {
+    background: #FAF6ED;
+    border-color: #C5A059;
+    color: #6E5210 !important;
+    transform: translateY(-1px);
+    box-shadow: 0 6px 20px rgba(212, 175, 55, 0.3);
+}
+
+.btn-obsidian-gold {
+    background: rgba(14, 13, 10, 0.85);
+    color: #FFE89E !important;
+    border: 1.5px solid rgba(212, 175, 55, 0.5);
+    font-weight: 800;
+    transition: all 0.25s cubic-bezier(0.4, 0, 0.2, 1);
+    backdrop-filter: blur(8px);
+    box-shadow: 0 4px 16px rgba(0, 0, 0, 0.4);
+}
+.btn-obsidian-gold:hover {
+    background: rgba(212, 175, 55, 0.15);
+    border-color: #D4AF37;
+    color: #FFFFFF !important;
+    transform: translateY(-1px);
+    box-shadow: 0 6px 22px rgba(212, 175, 55, 0.25);
+}
+
+.text-gold-gradient, .text-liquid-gold {
+    background: linear-gradient(135deg, #B38F2C 0%, #D4AF37 35%, #9E791E 70%, #755510 100%);
     -webkit-background-clip: text;
     -webkit-text-fill-color: transparent;
+    display: inline-block;
+}
+
+.text-champagne-oyster {
+    color: #D6CEBE;
 }
 
 .bg-gold-surface {
@@ -69,40 +107,71 @@
     box-shadow: 0 4px 20px -2px rgba(212, 175, 55, 0.25);
 }
 
-/* Rasta 1: Solid 24K Polished Gold Bullion Canvas & Accents */
-.bg-gold-hero {
-    background: radial-gradient(ellipse at 70% 30%, rgba(255, 235, 150, 0.45) 0%, transparent 60%),
-                linear-gradient(135deg, #F0CF68 0%, #DDB647 30%, #C99F30 70%, #99741B 100%);
+/* Rich Burnished 24K Royal Gold Masterpiece */
+.bg-burnished-gold-hero, .bg-alabaster-hero, .bg-obsidian-hero, .bg-gold-hero {
+    background-color: #C49B2C;
+    background-image: 
+        radial-gradient(ellipse at 75% 25%, rgba(255, 235, 160, 0.45) 0%, transparent 55%),
+        radial-gradient(circle at 15% 80%, rgba(255, 225, 130, 0.35) 0%, transparent 50%),
+        linear-gradient(135deg, #E2BC50 0%, #C99F2E 35%, #B08520 70%, #876211 100%);
 }
 
-.bg-gold-campaign {
-    background: radial-gradient(circle at 20% 50%, rgba(255, 235, 150, 0.4) 0%, transparent 60%),
-                linear-gradient(135deg, #F0CF68 0%, #D4AC38 45%, #B88E28 100%);
+.bg-burnished-gold-campaign, .bg-alabaster-campaign, .bg-obsidian-campaign, .bg-gold-campaign {
+    background-color: #BD9428;
+    background-image: 
+        radial-gradient(circle at 20% 50%, rgba(255, 235, 160, 0.4) 0%, transparent 60%),
+        linear-gradient(135deg, #DEB748 0%, #C49B2C 40%, #A87D1B 100%);
 }
 
-.bg-gold-card {
-    background: radial-gradient(ellipse at center, rgba(255, 235, 150, 0.35) 0%, transparent 70%),
-                linear-gradient(135deg, #F5D87A 0%, #DFB744 50%, #BD9328 100%);
+.bg-burnished-gold-card, .bg-alabaster-card, .bg-obsidian-card, .bg-gold-card {
+    background-color: #C49B2C;
+    background-image: 
+        radial-gradient(ellipse at center, rgba(255, 235, 160, 0.4) 0%, transparent 70%),
+        linear-gradient(135deg, #E2BC50 0%, #C99F2E 50%, #9C7418 100%);
 }
 
-.bg-gold-footer {
-    background: linear-gradient(180deg, #F5D97E 0%, #DDB748 35%, #C2992C 75%, #8C6A18 100%);
+.bg-burnished-gold-footer, .bg-luxury-footer, .bg-obsidian-footer, .bg-gold-footer {
+    background-color: #B58B24;
+    background-image: 
+        radial-gradient(ellipse at 50% 0%, rgba(255, 235, 160, 0.35) 0%, transparent 60%),
+        linear-gradient(180deg, #D4AC38 0%, #B88E24 35%, #9E7418 75%, #6B4E0C 100%);
+}
+
+.bg-burnished-gold-sidebar, .bg-obsidian-sidebar {
+    background-color: #B88E24;
+    background-image: linear-gradient(180deg, #DEB748 0%, #B88E24 45%, #8C6514 100%);
+}
+
+.btn-onyx-gold, .btn-onyx {
+    background: #0B0A08;
+    color: #FCE08C !important;
+    border: 1.5px solid #000000;
+    font-weight: 800;
+    transition: all 0.25s cubic-bezier(0.4, 0, 0.2, 1);
+    box-shadow: 0 4px 18px rgba(0, 0, 0, 0.35);
+}
+.btn-onyx-gold:hover, .btn-onyx:hover {
+    background: #1C1914;
+    color: #FFFFFF !important;
+    border-color: #000000;
+    transform: translateY(-1px);
+    box-shadow: 0 6px 22px rgba(0, 0, 0, 0.5);
 }
 
 .btn-onyx {
     background: #000000;
     color: #F5D87A !important;
-    border: 1.5px solid #000000;
+    border: 1.5px solid rgba(212, 175, 55, 0.5);
     font-weight: 800;
     transition: all 0.25s cubic-bezier(0.4, 0, 0.2, 1);
-    box-shadow: 0 4px 16px rgba(0, 0, 0, 0.35);
+    box-shadow: 0 4px 16px rgba(0, 0, 0, 0.5);
 }
 .btn-onyx:hover {
     background: #1a1917;
     color: #FFFFFF !important;
-    border-color: #000000;
+    border-color: #D4AF37;
     transform: translateY(-1px);
-    box-shadow: 0 6px 22px rgba(0, 0, 0, 0.5);
+    box-shadow: 0 6px 22px rgba(212, 175, 55, 0.3);
 }
 
 /* Custom Scrollbar for Luxury Aesthetic */
