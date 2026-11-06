@@ -1,14 +1,18 @@
 # ========================================================
-# Hostinger Shared Hosting Root .htaccess Router & Firewall
+# XAMPP Apache & Production Root .htaccess Router & Firewall
 # ========================================================
 <IfModule mod_rewrite.c>
+    <IfModule mod_negotiation.c>
+        Options -MultiViews -Indexes
+    </IfModule>
+
     RewriteEngine On
 
     # Prevent direct access to sensitive system directories & config files
-    RewriteRule ^(\.env|composer\.(json|lock)|package\.(json|lock)|artisan|phpunit\.xml) - [F,L,NC]
+    RewriteRule ^(\.env|\.git|composer\.(json|lock)|package\.(json|lock)|artisan|phpunit\.xml) - [F,L,NC]
     RewriteRule ^(app|bootstrap|config|database|resources|routes|storage|tests|vendor)(/.*)?$ - [F,L,NC]
 
-    # Rewrite all external requests into the public directory
-    RewriteCond %{REQUEST_URI} !^/public/
+    # Rewrite all external requests into the public directory (supports root and subfolder like /atozindia)
+    RewriteCond %{REQUEST_URI} !/public/
     RewriteRule ^(.*)$ public/$1 [L]
 </IfModule>
