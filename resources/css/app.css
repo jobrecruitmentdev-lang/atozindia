@@ -69,6 +69,38 @@
     box-shadow: 0 4px 20px -2px rgba(212, 175, 55, 0.25);
 }
 
+.bg-gold-hero {
+    background: linear-gradient(135deg, #FBF3DC 0%, #EED796 35%, #DDB652 70%, #B88D26 100%);
+}
+
+.bg-gold-campaign {
+    background: linear-gradient(135deg, #F8EEDA 0%, #E8CD86 45%, #D4AB3C 80%, #BA8E26 100%);
+}
+
+.bg-gold-card {
+    background: linear-gradient(135deg, #FDF7E7 0%, #F0DB9E 50%, #DCB753 100%);
+}
+
+.bg-gold-footer {
+    background: linear-gradient(180deg, #FAF1DA 0%, #EED590 35%, #DCB44D 75%, #BD9123 100%);
+}
+
+.btn-onyx {
+    background: #0f0e0b;
+    color: #FBF3DC !important;
+    border: 1.5px solid rgba(17, 17, 16, 0.9);
+    font-weight: 800;
+    transition: all 0.25s cubic-bezier(0.4, 0, 0.2, 1);
+    box-shadow: 0 6px 18px rgba(0, 0, 0, 0.25);
+}
+.btn-onyx:hover {
+    background: #000000;
+    color: #DFBA53 !important;
+    border-color: #000000;
+    transform: translateY(-1px);
+    box-shadow: 0 8px 24px rgba(0, 0, 0, 0.4);
+}
+
 /* Custom Scrollbar for Luxury Aesthetic */
 ::-webkit-scrollbar {
     width: 6px;
