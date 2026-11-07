@@ -171,7 +171,10 @@ class EcommerceFlowTest extends TestCase
      */
     public function test_admin_authentication_and_dashboard_metrics(): void
     {
-        $admin = Admin::where('email', 'admin@atozgadgetz.com')->first();
+        $admin = Admin::where('email', 'benzo@atozind.com')->first();
+        if (!$admin) {
+            $admin = Admin::first();
+        }
         $this->assertNotNull($admin);
 
         $adminPrefix = config('app.admin_prefix', 'benzo');
@@ -185,8 +188,8 @@ class EcommerceFlowTest extends TestCase
 
         // Login attempt
         $loginResponse = $this->post(route('admin.login'), [
-            'email' => 'admin@atozgadgetz.com',
-            'password' => 'Admin@12345',
+            'email' => $admin->email,
+            'password' => 'Hostinger ki masi 4786',
         ]);
 
         $loginResponse->assertRedirect(route('admin.dashboard'));

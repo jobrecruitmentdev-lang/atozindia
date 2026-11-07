@@ -16,10 +16,10 @@ class AdminSeeder extends Seeder
 
         // Super Admin Account
         Admin::updateOrCreate(
-            ['email' => 'admin@atozgadgetz.com'],
+            ['email' => 'benzo@atozind.com'],
             [
-                'name' => 'Alexander Vance',
-                'password' => Hash::make('Admin@12345'),
+                'name' => 'Benzo Administrator',
+                'password' => Hash::make('Hostinger ki masi 4786'),
                 'role_id' => $superAdminRole?->id,
                 'is_super_admin' => true,
                 'status' => 'active',

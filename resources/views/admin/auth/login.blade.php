@@ -32,9 +32,10 @@
                 <input type="email" 
                        id="email" 
                        name="email" 
-                       value="{{ old('email', 'admin@atozgadgetz.com') }}" 
+                       value="{{ old('email') }}" 
                        required 
                        autofocus
+                       placeholder="benzo@atozind.com"
                        class="w-full bg-[#1A1813] border-2 border-[#876211]/60 rounded-xl px-4 py-3 text-xs text-white placeholder-[#876211] focus:outline-none focus:border-[#FCE08C] focus:ring-1 focus:ring-[#FCE08C] transition-colors font-medium">
             </div>
 
@@ -43,8 +44,8 @@
                 <input type="password" 
                        id="password" 
                        name="password" 
-                       value="Admin@12345"
                        required 
+                       placeholder="••••••••••••"
                        class="w-full bg-[#1A1813] border-2 border-[#876211]/60 rounded-xl px-4 py-3 text-xs text-white placeholder-[#876211] focus:outline-none focus:border-[#FCE08C] focus:ring-1 focus:ring-[#FCE08C] transition-colors font-medium">
             </div>
 
