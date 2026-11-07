@@ -167,54 +167,60 @@ class EcommerceFlowTest extends TestCase
     }
 
     /**
-     * Test Admin authentication and dashboard KPIs.
+     * Test Admin authentication, cloaked 404 on legacy /admin, and dashboard KPIs.
      */
     public function test_admin_authentication_and_dashboard_metrics(): void
     {
         $admin = Admin::where('email', 'admin@atozgadgetz.com')->first();
         $this->assertNotNull($admin);
 
-        // Admin login page
-        $this->get('/admin/login')->assertStatus(200);
+        $adminPrefix = config('app.admin_prefix', 'benzo');
+
+        // High Security Cloaking: Verify legacy /admin returns 404
+        $this->get('/admin')->assertStatus(404);
+        $this->get('/admin/login')->assertStatus(404);
+
+        // Secret Admin login page (/benzo/login)
+        $this->get(route('admin.login'))->assertStatus(200);
 
         // Login attempt
-        $loginResponse = $this->post('/admin/login', [
+        $loginResponse = $this->post(route('admin.login'), [
             'email' => 'admin@atozgadgetz.com',
             'password' => 'Admin@12345',
         ]);
 
-        $loginResponse->assertRedirect('/admin/dashboard');
+        $loginResponse->assertRedirect(route('admin.dashboard'));
 
         // Access dashboard as authenticated admin
-        $dashboardResponse = $this->actingAs($admin, 'admin')->get('/admin/dashboard');
+        $dashboardResponse = $this->actingAs($admin, 'admin')->get(route('admin.dashboard'));
         $dashboardResponse->assertStatus(200);
         $dashboardResponse->assertSee('Operational Overview');
         $dashboardResponse->assertSee('Gross Revenue');
 
         // Admin products index
-        $productsResponse = $this->actingAs($admin, 'admin')->get('/admin/products');
+        $productsResponse = $this->actingAs($admin, 'admin')->get(route('admin.products.index'));
         $productsResponse->assertStatus(200);
         $productsResponse->assertSee('Product Catalogue');
 
         // Admin product editor
         $firstProduct = Product::first();
-        $editResponse = $this->actingAs($admin, 'admin')->get("/admin/products/{$firstProduct->id}/edit");
+        $editResponse = $this->actingAs($admin, 'admin')->get(route('admin.products.edit', $firstProduct->id));
         $editResponse->assertStatus(200);
         $editResponse->assertSee('Colour Galleries');
         $editResponse->assertSee('Variants Matrix');
 
         // Admin inventory
-        $inventoryResponse = $this->actingAs($admin, 'admin')->get('/admin/inventory');
+        $inventoryResponse = $this->actingAs($admin, 'admin')->get(route('admin.inventory.index'));
         $inventoryResponse->assertStatus(200);
         $inventoryResponse->assertSee('Active Stock Holdings');
 
         // Admin orders
-        $ordersResponse = $this->actingAs($admin, 'admin')->get('/admin/orders');
+        $ordersResponse = $this->actingAs($admin, 'admin')->get(route('admin.orders.index'));
         $ordersResponse->assertStatus(200);
         $ordersResponse->assertSee('Order Fulfillment & Sales');
 
         // Admin audit logs
-        $logsResponse = $this->actingAs($admin, 'admin')->get('/admin/audit-logs');
+        $logsResponse = $this->actingAs($admin, 'admin')->get(route('admin.audit-logs.index'));
         $logsResponse->assertStatus(200);
         $logsResponse->assertSee('Security Audit Events');
     }

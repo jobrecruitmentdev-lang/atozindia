@@ -6,6 +6,9 @@ use App\Http\Controllers\Controller;
 use App\Models\AuditLog;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
+use Illuminate\Support\Facades\RateLimiter;
+use Illuminate\Support\Str;
+use Illuminate\Validation\ValidationException;
 
 class AuthController extends Controller
 {
@@ -25,9 +28,26 @@ class AuthController extends Controller
             'password' => ['required', 'string'],
         ]);
 
+        // High Security: Anti-Brute Force Throttling (Max 5 attempts, 15-min lockout)
+        $throttleKey = Str::transliterate(Str::lower($request->input('email')) . '|' . $request->ip());
+
+        if (RateLimiter::tooManyAttempts($throttleKey, 5)) {
+            $seconds = RateLimiter::availableIn($throttleKey);
+            AuditLog::log('brute_force_blocked', 'Admin', null, null, [
+                'email' => $request->input('email'),
+                'ip' => $request->ip(),
+                'lockout_seconds' => $seconds,
+            ]);
+
+            throw ValidationException::withMessages([
+                'email' => "Security Lockout: Too many failed authentication attempts. Access from this IP is temporarily suspended for {$seconds} seconds.",
+            ]);
+        }
+
         $remember = (bool) $request->boolean('remember');
 
         if (Auth::guard('admin')->attempt($credentials, $remember)) {
+            RateLimiter::clear($throttleKey);
             $request->session()->regenerate();
 
             $admin = Auth::guard('admin')->user();
@@ -44,6 +64,13 @@ class AuthController extends Controller
 
             return redirect()->intended(route('admin.dashboard'));
         }
+
+        RateLimiter::hit($throttleKey, 900);
+        AuditLog::log('failed_login_attempt', 'Admin', null, null, [
+            'email' => $request->input('email'),
+            'ip' => $request->ip(),
+            'attempts' => RateLimiter::attempts($throttleKey),
+        ]);
 
         return back()->withErrors([
             'email' => 'The provided credentials do not match our records.',

@@ -106,10 +106,15 @@ Route::middleware('auth:web')->prefix('account')->name('customer.')->group(funct
 
 /*
 |--------------------------------------------------------------------------
-| Admin Authentication Routes
+| High Security Admin / Concierge Routes (Prefix: /benzo)
 |--------------------------------------------------------------------------
 */
-Route::prefix('admin')->name('admin.')->group(function () {
+// Cloak & block all legacy /admin scanning attempts with instant 404
+Route::any('/admin/{any?}', function () {
+    abort(404);
+})->where('any', '.*');
+
+Route::prefix(config('app.admin_prefix', 'benzo'))->name('admin.')->group(function () {
     Route::middleware('admin.guest')->group(function () {
         Route::get('/login', [AdminAuthController::class, 'showLoginForm'])->name('login');
         Route::post('/login', [AdminAuthController::class, 'login']);

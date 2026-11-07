@@ -54,6 +54,8 @@ return [
 
     'url' => env('APP_URL', 'http://localhost'),
 
+    'admin_prefix' => env('ADMIN_PREFIX', 'benzo'),
+
     /*
     |--------------------------------------------------------------------------
     | Application Timezone
