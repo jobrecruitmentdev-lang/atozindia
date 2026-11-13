@@ -527,8 +527,11 @@ class MarketplaceCatalogSeeder extends Seeder
                     $product->categories()->syncWithoutDetaching($catIds);
                 }
 
-                // Add Primary Image
-                $imgUrl = $localImages[$item['image_idx'] % count($localImages)];
+                // Add Primary Image - Prefer dedicated product image
+                $dedicatedImg = '/storage/products/' . $product->slug . '/img-1-0.jpg';
+                $imgUrl = file_exists(public_path($dedicatedImg)) || file_exists(storage_path('app/public/products/' . $product->slug . '/img-1-0.jpg'))
+                    ? $dedicatedImg
+                    : $localImages[$item['image_idx'] % count($localImages)];
                 ProductImage::updateOrCreate(
                     [
                         'product_id' => $product->id,
